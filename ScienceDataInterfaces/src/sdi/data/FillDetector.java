@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package sdi.data;
 
 /**
@@ -10,7 +5,6 @@ package sdi.data;
  * @author jbf
  * @see XYData#getFillDetector() 
  */
-
 public interface FillDetector {
     /**
      * return true if the value at the index is fill and cannot be used.
