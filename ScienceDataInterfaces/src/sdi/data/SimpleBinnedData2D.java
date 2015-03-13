@@ -1,7 +1,9 @@
 package sdi.data;
 
-import com.google.common.base.Optional;
-
+/**
+ * two-index table of numbers.
+ * @author jbf
+ */
 public interface SimpleBinnedData2D {
   int sizeX();
   Bin getXBin(int i);
