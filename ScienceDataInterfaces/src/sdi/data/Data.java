@@ -12,5 +12,5 @@ package sdi.data;
  */
 public interface Data<T> {
     T getData();
-    Described getMetadata();
+    MetadataSrc getMetadata();
 }

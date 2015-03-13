@@ -11,7 +11,7 @@ import com.google.common.base.Optional;
  *
  * @author jbf
  */
-public interface ContiguousBinnedData1D extends SimpleContiguousBinnedData1D, Described<XYMetadata> {
+public interface ContiguousBinnedData1D extends SimpleContiguousBinnedData1D, MetadataSrc<XYMetadata> {
   Optional<FillDetector> getFillDetector();
   Optional<UncertaintyProvider> getUncertProvider();
 

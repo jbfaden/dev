@@ -11,7 +11,7 @@ import com.google.common.base.Optional;
  *
  * @author jbf
  */
-public interface XYZData extends SimpleXYZData, Described<XYZMetadata> {
+public interface XYZData extends SimpleXYZData, MetadataSrc<XYZMetadata> {
 
     /**
      * note that the fill data detector only works on Z; it is assumed that X

@@ -6,10 +6,10 @@
 package sdi.data;
 
 /**
- *
+ * A dataset that contains metadata is MetadataSrc.
  * @author jbf
- * @param <T> the type of metadata, such as XYMetadata
+ * @param <T> the metadata type
  */
-public interface Metadata<T> {
+public interface MetadataSrc<T> {
     T getMetadata();
 }

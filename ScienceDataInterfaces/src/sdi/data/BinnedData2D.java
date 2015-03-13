@@ -11,7 +11,7 @@ import com.google.common.base.Optional;
  *
  * @author jbf
  */
-public interface BinnedData2D extends SimpleBinnedData2D, Described<XYZMetadata> {
+public interface BinnedData2D extends SimpleBinnedData2D, MetadataSrc<XYZMetadata> {
   Optional<FillDetector2D> getFillDetector();
   Optional<UncertaintyProvider> getZUncertProvider();
 

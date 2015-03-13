@@ -11,7 +11,7 @@ import com.google.common.base.Optional;
  *
  * @author jbf
  */
-public interface XYData extends SimpleXYData, Described<XYMetadata> {
+public interface XYData extends SimpleXYData, MetadataSrc<XYMetadata> {
   Optional<FillDetector> getFillDetector();
   Optional<UncertaintyProvider> getXUncertProvider();
   Optional<UncertaintyProvider> getYUncertProvider();
