@@ -5,10 +5,10 @@ package sdi.data;
  * set of 2-index tables as the mode changes.
  * @author jbf
  */
-public interface SimpleMultiTable {
+public interface SimpleMultiBinnedData2D {
   
-    int tableCount();
+    int dataCount();
     
-    SimpleBinnedData2D getTable(int i);
+    SimpleBinnedData2D getData(int i);
   
 }

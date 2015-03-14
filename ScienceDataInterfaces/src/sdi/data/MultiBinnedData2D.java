@@ -9,10 +9,10 @@ package sdi.data;
  * </ul>
  * @author jbf
  */
-public interface MultiTable extends SimpleMultiTable {
+public interface MultiBinnedData2D extends SimpleMultiBinnedData2D {
     
     @Override
-    BinnedData2D getTable(int i);
+    BinnedData2D getData(int i);
     
     XYZMetadata getMetadata();      
 }
