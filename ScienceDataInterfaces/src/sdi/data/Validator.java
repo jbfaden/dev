@@ -58,11 +58,7 @@ public class Validator {
         d.getFillDetector(); // do something trivial
     }
 
-    public static void checkValid(Data d) {
-        System.err.println("checkValid base called for " + d);
-    }
-
-    public static boolean isValid(Data d) {
+    public static boolean isValid(ContiguousBinnedData1D d) {
         try {
             checkValid(d);
             return true;
