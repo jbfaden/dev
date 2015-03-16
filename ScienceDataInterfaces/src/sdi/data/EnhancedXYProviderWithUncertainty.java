@@ -9,7 +9,7 @@ import com.google.common.base.Optional;
 
 
 /**
- *
+ * TODO: I don't think this class is needed.
  * @author jbf
  */
 public interface EnhancedXYProviderWithUncertainty extends XYData {
