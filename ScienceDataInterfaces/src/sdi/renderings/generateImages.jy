@@ -1,0 +1,35 @@
+reset() 
+
+setCanvasSize(350,252)
+
+out= '/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/renderings/'
+
+## SimpleDataXY
+#plot( dataset([ 1,2,3,4,5]), dataset([1.5,3,4.5,2,3]) )
+#writeToPng( out + 'SimpleXYData.png' )
+#
+## DataXY
+#ds= putProperty(dataset([1.5,3,4.5,3.6,99,3,4,3.5,3.7]), QDataSet.FILL_VALUE, 99 )
+#ds= putProperty( ds, QDataSet.LABEL, 'Density' )
+#tt= dataset([ 1,2,3,4,5,6,7,8,9])*datum('1s')+datum('2015-03-17T10:47')
+#tt= putProperty( tt, QDataSet.LABEL, 'UTC' )
+#plot( tt, ds )
+#writeToPng( out + 'XYData.png' )
+#
+## DataXYZ
+#ds= putProperty(dataset([1.5,3,4.5,3.6,99,3,4,3.5,3.7]), QDataSet.FILL_VALUE, 99 )
+#ds= putProperty( ds, QDataSet.LABEL, 'Density' )
+#tt= dataset([ 1,2,3,4,5,6,7,8,9])*datum('1hr')+datum('2015-03-17T12:00')
+#tt= putProperty( tt, QDataSet.LABEL, 'UTC' )
+#zz= putProperty( copy(ds)+randu(9), QDataSet.LABEL, 'Radius (Rs)' )
+#plot( tt, ds, zz )
+#writeToPng( out + 'XYZData.png' )
+
+## ContiguousBinnedData1D
+#xx= [ 1,2,3,4,5,6,7,8,9 ]
+#yy= [ 1.5,3,4.5,3.6,99,3,2,2.1,1]
+#yy= putProperty(dataset(yy   ), QDataSet.FILL_VALUE, 99 )
+#plotx( xx, yy, renderType='stairSteps' , yrange=[0,5], xtitle='Density', ytitle='Normalized' )
+#from org.das2.graph.DefaultPlotSymbol import NONE
+#dom.plotElements[0].style.plotSymbol= NONE
+#writeToPng( out + 'ContiguousBinnedData1D.png' )
