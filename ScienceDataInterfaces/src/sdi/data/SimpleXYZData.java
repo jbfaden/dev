@@ -1,7 +1,7 @@
 package sdi.data;
 
 /**
- * 
+ * Simplest, least abstract data set has Z as a function of X and Y.
  * @author faden@cottagesystems.com
  */
 public interface SimpleXYZData {

@@ -8,7 +8,7 @@ package sdi.data;
 import com.google.common.base.Optional;
 
 /**
- *
+ * Z as a function of X and Y, possibly containing fill values and uncertainties.
  * @author faden@cottagesystems.com
  */
 public interface XYZData extends SimpleXYZData, MetadataSrc<XYZMetadata> {
