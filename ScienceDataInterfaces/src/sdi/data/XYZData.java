@@ -17,11 +17,10 @@ public interface XYZData extends SimpleXYZData, MetadataSrc<XYZMetadata> {
      * note that the fill data detector only works on Z; it is assumed that X
      * and Y are the dependent variables and they are never fill
      *
-     * @return the fill detector 
+     * @return the fill detector
      */
     Optional<FillDetector> getZFillDetector();
 
-    
     Optional<UncertaintyProvider> getXUncertProvider();
 
     Optional<UncertaintyProvider> getYUncertProvider();

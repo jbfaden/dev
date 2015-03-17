@@ -6,12 +6,14 @@
 package sdi.data;
 
 /**
- * 
+ *
  * @author jbf
  */
 public interface Named {
+
     /**
      * return the name
+     *
      * @return the name
      */
     String getName();

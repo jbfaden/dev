@@ -10,7 +10,10 @@ package sdi.data;
  * @author jbf
  */
 public interface XYZMetadata extends XYMetadata {
-  Units getZUnits();
-  String getZName();
-  String getZLabel();
+
+    Units getZUnits();
+
+    String getZName();
+
+    String getZLabel();
 }
