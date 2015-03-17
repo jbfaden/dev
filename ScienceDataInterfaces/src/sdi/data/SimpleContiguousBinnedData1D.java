@@ -1,6 +1,5 @@
-package sdi.data;
 
-import com.google.common.base.Optional;
+package sdi.data;
 
 /**
  * the bins are enforced to be contiguous;
@@ -10,14 +9,14 @@ public interface SimpleContiguousBinnedData1D {
 
   /**
    * the number of bins.
-   * @return 
+   * @return the number of bins.
    */
   int size();
   
   /**
    * Return the low boundary of the bin.  Note the high for each bin is the low 
    * of the next bin.
-   * @param i the bin index.
+   * @param i the index, 0 &le; i &lt; <code>size()</code>
    * @return the low boundary of the bin. 
    */
   double getXBinLo(int i);
@@ -25,7 +24,7 @@ public interface SimpleContiguousBinnedData1D {
   /**
    * The reference value for each bin, which will be within the bounds
    * of the bin.  
-   * @param i the bin index.
+   * @param i the index, 0 &le; i &lt; <code>size()</code>
    * @return the reference value for the bin.
    */
   double getXBinReference(int i);
@@ -38,7 +37,7 @@ public interface SimpleContiguousBinnedData1D {
   
   /**
    * get the Y value for the data.
-   * @param i
+   * @param i the index, 0 &le; i &lt; <code>size()</code>
    * @return the Y value for the data.
    */
   double getY(int i);
