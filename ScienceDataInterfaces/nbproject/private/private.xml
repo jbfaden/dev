@@ -4,26 +4,28 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group name="autoplot"/>
         <group name="ScienceDataInterfaces">
-            <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/XYData.java</file>
-            <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/Bin.java</file>
-            <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/SpectrogramData.java</file>
-            <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/EnhancedXYProviderWithUncertainty.java</file>
-            <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/XYZData.java</file>
-            <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/FillDetector2D.java</file>
             <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/SimpleXYData.java</file>
-            <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/FillDetector.java</file>
-            <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/MultiBinnedData2D.java</file>
-            <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/BinnedData2D.java</file>
-            <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/SimpleXYZData.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/SimpleBinnedData1D.java</file>
             <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/SimpleBinnedData2D.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/BinnedData2D.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/XYZMetadata.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/XYMetadata.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/BinnedData1D.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/FillDetector.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/FillDetector2D.java</file>
             <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/Validator.java</file>
             <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/MetadataSrc.java</file>
-            <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/XYMetadata.java</file>
-            <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/XYZMetadata.java</file>
-            <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/BinnedData1D.java</file>
-            <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/SimpleMultiBinnedData2D.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/EnhancedXYProviderWithUncertainty.java</file>
             <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/XMultiYData.java</file>
-            <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/SimpleBinnedData1D.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/XYData.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/Bin.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/XYZData.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/SimpleXYZData.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/ContiguousBinnedData1D.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/SimpleContiguousBinnedData1D.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/Named.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/UncertaintyProvider.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/package.html</file>
         </group>
     </open-files>
 </project-private>
