@@ -9,7 +9,7 @@ import com.google.common.base.Optional;
 
 /**
  *
- * @author jbf
+ * @author faden@cottagesystems.com
  */
 public interface XYZData extends SimpleXYZData, MetadataSrc<XYZMetadata> {
 

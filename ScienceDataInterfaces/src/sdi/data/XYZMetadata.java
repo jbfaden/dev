@@ -6,14 +6,26 @@
 package sdi.data;
 
 /**
- *
- * @author jbf
+ * Metadata for X, Y, and Z values.
+ * @author faden@cottagesystems.com
  */
 public interface XYZMetadata extends XYMetadata {
 
+    /**
+     * the Z units
+     * @return the Z units
+     */
     Units getZUnits();
 
+    /**
+     * Java-identifier that is useful for identifying the data.
+     * @return the name 
+     */
     String getZName();
 
+    /**
+     * Human-consumable label for the data.
+     * @return the label
+     */
     String getZLabel();
 }

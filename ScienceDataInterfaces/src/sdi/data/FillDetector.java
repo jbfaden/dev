@@ -3,7 +3,7 @@ package sdi.data;
 /**
  * Interface detects if the value at an index is fill.
  *
- * @author jbf
+ * @author faden@cottagesystems.com
  * @see XYData#getFillDetector()
  */
 public interface FillDetector {

@@ -13,7 +13,7 @@ public interface SimpleXYData {
     /**
      * get the size of the dataset.
      *
-     * @return the value at the index.
+     * @return the size of the dataset.
      */
     int size();
 
