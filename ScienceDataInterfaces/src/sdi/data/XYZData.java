@@ -14,19 +14,36 @@ import com.google.common.base.Optional;
 public interface XYZData extends SimpleXYZData, MetadataSrc<XYZMetadata> {
 
     /**
-     * note that the fill data detector only works on Z; it is assumed that X
-     * and Y are the dependent variables and they are never fill
+     * get the fill detector for the Z values.
+     * Note that the fill data detector only works on Z; it is assumed that X
+     * and Y are the dependent variables and they are never fill.
      *
      * @return the fill detector
      */
     Optional<FillDetector> getZFillDetector();
 
+    /**
+     * get the uncertainty provider for X values.
+     * @return the uncertainty provider for X values.
+     */    
     Optional<UncertaintyProvider> getXUncertProvider();
 
+    /**
+     * get the uncertainty provider for Y values.
+     * @return the uncertainty provider for Y values.
+     */    
     Optional<UncertaintyProvider> getYUncertProvider();
 
+    /**
+     * get the uncertainty provider for Z values.
+     * @return the uncertainty provider for Z values.
+     */    
     Optional<UncertaintyProvider> getZUncertProvider();
 
+    /**
+     * return the metadata for the object.
+     * @return the metadata 
+     */    
     @Override
     XYZMetadata getMetadata();
 

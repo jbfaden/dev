@@ -28,9 +28,8 @@ public interface ContiguousBinnedData1D extends SimpleContiguousBinnedData1D, Me
     Optional<UncertaintyProvider> getUncertProvider();
 
     /**
-     * return the metadata
-     *
-     * @return the metadata
+     * return the metadata for the object.
+     * @return the metadata 
      */
     @Override
     XYMetadata getMetadata();

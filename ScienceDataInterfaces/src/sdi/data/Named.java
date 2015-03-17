@@ -1,18 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package sdi.data;
 
 /**
- *
- * @author jbf
+ * Object that has a name, which is a valid Java identifier.
+ * @author faden@cottagesystems.com
  */
 public interface Named {
 
     /**
-     * return the name
+     * return the name, which is a valid Java identifier identifying the
+     * Named object.
      *
      * @return the name
      */

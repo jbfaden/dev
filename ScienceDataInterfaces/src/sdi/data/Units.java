@@ -8,7 +8,7 @@ package sdi.data;
  * <li>Times should be represented as UNIT since ISO8601, such as seconds since 2000-01-01.
  * <li>arbitrary units are allowed, such as "apples"
  * </ul>
- * @see http://en.wikipedia.org/wiki/SI_derived_unit
+ * @see <a href="http://en.wikipedia.org/wiki/SI_derived_unit">http://en.wikipedia.org/wiki/SI_derived_unit</a>
  * 
  * @author faden@cottagesystems.com
  */

@@ -11,7 +11,7 @@ public interface UncertaintyProvider {
     /**
      * returns the upper bound of the error bar in the data units.
      *
-     * @param i the index, 0 &le; i &lt size()
+     * @param i the index, 0 &le; i &lt; size()
      * @return the upper bound of the error bar.
      */
     double getUncertPlus(int i);
@@ -19,7 +19,7 @@ public interface UncertaintyProvider {
     /**
      * returns the lower bound of the error bar in the data units.
      *
-     * @param i the index, 0 &le; i &lt size()
+     * @param i the index, 0 &le; i &lt; size()
      * @return the lower bound of the error bar.
      */
     double getUncertMinus(int i);

@@ -1,9 +1,9 @@
 package sdi.data;
 
 /**
- * two-index table of numbers.
+ * two-index table of numbers, each tagged with an X and a Y bin.
  *
- * @author jbf
+ * @author faden@cottagesystems.com
  */
 public interface SimpleBinnedData2D {
 

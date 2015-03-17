@@ -8,6 +8,9 @@ package sdi.data;
  * @param <T> the metadata type
  */
 public interface MetadataSrc<T> {
-
+    /**
+     * return the metadata for the object.
+     * @return the metadata 
+     */
     T getMetadata();
 }

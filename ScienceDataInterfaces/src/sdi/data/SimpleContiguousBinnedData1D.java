@@ -1,8 +1,7 @@
 package sdi.data;
 
 /**
- * the bins are enforced to be contiguous; it is also expected that they are
- * increasing
+ * Data where the X bins are enforced to be contiguous and increasing.
  */
 public interface SimpleContiguousBinnedData1D {
 

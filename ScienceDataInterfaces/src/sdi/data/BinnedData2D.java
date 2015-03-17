@@ -8,7 +8,8 @@ package sdi.data;
 import com.google.common.base.Optional;
 
 /**
- *
+ * two-index table of numbers, each tagged with an X and a Y bin, and the
+ * Z value may be fill or have uncertainties.
  * @author jbf
  */
 public interface BinnedData2D extends SimpleBinnedData2D, MetadataSrc<XYZMetadata> {
@@ -17,6 +18,10 @@ public interface BinnedData2D extends SimpleBinnedData2D, MetadataSrc<XYZMetadat
 
     Optional<UncertaintyProvider> getZUncertProvider();
 
+    /**
+     * return the metadata for the object.
+     * @return the metadata 
+     */    
     @Override
     XYZMetadata getMetadata();
 }
