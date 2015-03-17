@@ -1,15 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package sdi.data;
 
 import com.google.common.base.Preconditions;
 
 /**
  * interval containing a reference location.  The reference must be somewhere
- * within the interval.
+ * within the interval.  When a bin cannot be used, for example if data located by
+ * the Bin is to be interpolated, then the reference value should be used.
+ * 
  * @author jbf
  */
 public interface Bin {

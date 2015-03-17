@@ -32,14 +32,14 @@ public interface SimpleContiguousBinnedData1D {
   
   /**
    * return the high bin edge of the last bin.
-   * @return 
+   * @return the high bin edge of the last bin.
    */
   double getLastXBinHi();
   
   /**
    * get the Y value for the data.
    * @param i
-   * @return 
+   * @return the Y value for the data.
    */
   double getY(int i);
 }
