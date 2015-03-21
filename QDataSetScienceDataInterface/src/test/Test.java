@@ -5,6 +5,7 @@ import com.google.common.base.Optional;
 import org.das2.datum.Units;
 import org.das2.sdi.Adapter;
 import org.virbo.dataset.QDataSet;
+import org.virbo.dataset.SemanticOps;
 import org.virbo.dataset.examples.Schemes;
 import sdi.data.FillDetector;
 import sdi.data.SimpleXYData;
@@ -43,8 +44,8 @@ public class Test {
         XYData data= new XYData() {
             double[] xx= { 1,2,3,4,5,6,7,8,9 };
             double[] yy= { 1.5,3,4.5,3.6,99,3,4,3.5,3.7 };
-            double[] dyyPlus= { 1,1,1,1,1,2,2,1,1 };
-            double[] dyyMinus= { 1,1,1,2,2,2,1,1,1 };
+            double[] dyyPlus= { 0.9,1,1,1,1,2,2,1,1 };
+            double[] dyyMinus= { 1.1,1,1,2,2,2,1,1,1 };
             
             @Override
             public Optional<FillDetector> getFillDetector() {
@@ -149,12 +150,37 @@ public class Test {
         }
     }
     
+    private static void printQDataSet( QDataSet y ) {  
+        QDataSet x= (QDataSet) y.property(QDataSet.DEPEND_0);
+        QDataSet dymn= (QDataSet) y.property( QDataSet.DELTA_MINUS );
+        QDataSet dyup= (QDataSet) y.property( QDataSet.DELTA_PLUS );
+        QDataSet wds= (QDataSet) SemanticOps.weightsDataSet(y);
+
+        Units u= SemanticOps.getUnits(x);
+        
+        if ( dymn!=null && dyup!=null ) {
+            for ( int i=0; i<y.length(); i++ ) {
+                if ( wds.value(i)==0 ) {
+                    System.err.printf("%s *** (***-***)\n", u.createDatum( x.value(i) ) );
+                } else {
+                    System.err.printf("%s %s (%f-%f)\n", u.createDatum( x.value(i) ), y.value(i), y.value(i)-dymn.value(i), y.value(i)+dyup.value(i));
+                }
+            }
+        } else {
+            for ( int i=0; i<y.length(); i++ ) {
+                System.err.printf("%s %s\n",  u.createDatum( x.value(i) ), wds.value(i)==0 ? "***" : y.value(i) );
+            }
+        }
+    }    
+    
     private static void test4() {
         System.err.println("== test4 ==");
         XYData data= demoXY();
         printXYData( data );
         QDataSet ds= Adapter.adapt(data);
-        System.err.println("==");
+        System.err.println("== xydata -> qdataset ==");
+        printQDataSet( ds );
+        System.err.println("== qdataset -> xydata ==");
         XYData xyds= Adapter.adapt(ds, XYData.class );
         printXYData( xyds );
     }

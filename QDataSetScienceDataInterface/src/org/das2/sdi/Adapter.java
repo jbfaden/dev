@@ -4,9 +4,13 @@ package org.das2.sdi;
 import com.google.common.base.Optional;
 import org.das2.datum.Units;
 import org.virbo.dataset.AbstractRank1DataSet;
+import org.virbo.dataset.ArrayDataSet;
+import org.virbo.dataset.DDataSet;
 import org.virbo.dataset.MutablePropertyDataSet;
 import org.virbo.dataset.QDataSet;
 import org.virbo.dataset.SemanticOps;
+import org.virbo.dataset.WeightsDataSet;
+import org.virbo.dsops.Ops;
 import sdi.data.FillDetector;
 import sdi.data.SimpleXYData;
 import sdi.data.UncertaintyProvider;
@@ -153,17 +157,11 @@ public class Adapter {
      * @return the FillDetector Optional.
      */
     public static Optional<FillDetector> getFillDetector(QDataSet ds) {
-        Number fill= (Number) ds.property(QDataSet.FILL_VALUE);
-        Number vmin= (Number) ds.property(QDataSet.VALID_MIN);
-        Number vmax= (Number) ds.property(QDataSet.VALID_MAX);
-        if ( fill==null ) {
-            if ( vmin==null && vmax==null ) {
-                return Optional.absent(); // optimization
-            } else {
-                return Optional.fromNullable( new FillDetectorImpl(ds) );
-            }
+        QDataSet wds= (QDataSet) SemanticOps.weightsDataSet(ds);
+        if ( wds instanceof WeightsDataSet.Finite || wds instanceof WeightsDataSet.AllValid ) {
+            return  Optional.absent();
         } else {
-            return Optional.fromNullable( new FillDetectorImpl(ds) );
+            return  Optional.fromNullable( new FillDetectorImpl(ds) );
         }
     }
     
@@ -175,8 +173,10 @@ public class Adapter {
     public static Optional<UncertaintyProvider> getUncertaintyProvider( QDataSet ds ) {
         QDataSet dxp= (QDataSet) ds.property(QDataSet.DELTA_PLUS);
         QDataSet dxm= (QDataSet) ds.property(QDataSet.DELTA_MINUS);
+        dxp= DDataSet.copy(dxp);
+        dxm= DDataSet.copy(dxm);
         if ( dxp!=null && dxm!=null ) {
-            return Optional.fromNullable( new UncertaintyProviderImpl( dxp, dxm ) );
+            return Optional.fromNullable( new UncertaintyProviderImpl( Ops.add( ds, dxp ), Ops.subtract( ds, dxm ) ) );
         } else {
             return Optional.absent();
         }
