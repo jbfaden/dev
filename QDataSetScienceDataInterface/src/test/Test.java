@@ -130,13 +130,17 @@ public class Test {
         if ( ofd.isPresent() ) {
             fd= ofd.get();
         } else {
-            fd= (int index) -> false;
+            fd= (int index) -> false; // JAVA 8
         }
         Units u= Units.lookupUnits(m.getXUnits().getName());
         if ( oup.isPresent() ) {
             UncertaintyProvider up= oup.get();
             for ( int i=0; i<xyds.size(); i++ ) {
-                System.err.printf("%s %s (%f-%f)\n", u.createDatum( xyds.getX(i) ), fd.isFill(i) ? "***" : xyds.getY(i), up.getUncertMinus(i), up.getUncertPlus(i) );
+                if ( fd.isFill(i) ) {
+                    System.err.printf("%s *** (***-***)\n", u.createDatum( xyds.getX(i) ),xyds.getY(i), up.getUncertMinus(i), up.getUncertPlus(i) );
+                } else {
+                    System.err.printf("%s %s (%f-%f)\n", u.createDatum( xyds.getX(i) ), xyds.getY(i), up.getUncertMinus(i), up.getUncertPlus(i) );                    
+                }
             }            
         } else {
             for ( int i=0; i<xyds.size(); i++ ) {

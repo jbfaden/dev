@@ -22,7 +22,7 @@ public class Adapter {
     /**
      * returns null or the implementation of the class.
      * @param <T>
-     * @param ds
+     * @param ds the QDataSet
      * @param clazz e.g. XYData.class
      * @return the implementation, e.g. XYDataImpl.
      */
