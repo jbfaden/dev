@@ -1,18 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package org.das2.sdi;
 
 import org.virbo.dataset.QDataSet;
 import org.virbo.dataset.SemanticOps;
+import org.virbo.dataset.examples.Schemes;
 import sdi.data.Bin;
 import sdi.data.SimpleBinnedData2D;
 
 /**
  *
- * @author jbf
+ * @author faden@cottagesystems.com
  */
 public class SimpleBinnedData2DImpl implements SimpleBinnedData2D {
 
@@ -21,6 +18,7 @@ public class SimpleBinnedData2DImpl implements SimpleBinnedData2D {
     QDataSet z;
     
     public SimpleBinnedData2DImpl( QDataSet ds ) {
+        if ( !Schemes.isSimpleSpectrogram(ds) ) throw new IllegalArgumentException("scheme");
         this.x= SemanticOps.xtagsDataSet(ds);
         this.y= SemanticOps.ytagsDataSet(ds);
         this.z= ds;        
@@ -28,27 +26,27 @@ public class SimpleBinnedData2DImpl implements SimpleBinnedData2D {
     
     @Override
     public int sizeX() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return x.length();
     }
 
     @Override
     public Bin getXBin(int i) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new BinImpl( x, i );
     }
 
     @Override
     public int sizeY() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return y.length();
     }
 
     @Override
-    public Bin getYBin(int i) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Bin getYBin(int j) {
+        return new BinImpl( y, j );
     }
 
     @Override
-    public double getZ(int i, int i1) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public double getZ(int i, int j ) {
+        return z.value( i, j );
     }
     
 }
