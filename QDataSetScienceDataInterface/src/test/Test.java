@@ -1,7 +1,8 @@
 
-package org.das2.sdi;
+package test;
 
 import org.das2.datum.Units;
+import org.das2.sdi.Adapter;
 import org.virbo.dataset.QDataSet;
 import org.virbo.dataset.examples.Schemes;
 import sdi.data.SimpleXYData;
@@ -34,7 +35,16 @@ public class Test {
         }   
     }
     
-    
+    private static void test3() {
+        System.err.println("==test2==");
+        QDataSet ds= Schemes.scalarTimeSeries().trim(0,10);
+        XYData xyds= Adapter.adapt( ds, XYData.class );
+        XYMetadata m= xyds.getMetadata();
+        Units u= Units.lookupUnits(m.getXUnits().getName());
+        for ( int i=0; i<xyds.size(); i++ ) {
+            System.err.printf("%s %f\n", u.createDatum( xyds.getX(i) ), xyds.getY(i) );
+        }   
+    }
     public static void main( String[] args ) {
         test1();
         test2();
