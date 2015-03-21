@@ -5,6 +5,7 @@ package sdi.data;
  * within the interval. When a bin cannot be used, for example if data located
  * by the Bin is to be interpolated, then the reference value should be used.
  *
+ * @see Validator#checkValid(sdi.data.Bin) 
  * @author faden@cottagesystems.com
  */
 public interface Bin {
