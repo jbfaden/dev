@@ -58,10 +58,5 @@ public class XYMetadataImpl implements XYMetadata {
     public String getName() {
         return (String) y.property(QDataSet.NAME); //TODO: verify this, QDataSet doesn't have a separate name.
     }
-
-    @Override
-    public Object getMetadata() {
-        return this;
-    }
     
 }

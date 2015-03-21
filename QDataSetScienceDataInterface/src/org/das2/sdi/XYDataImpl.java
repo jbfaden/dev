@@ -60,10 +60,5 @@ public class XYDataImpl implements XYData {
     public double getY(int i) {
         return y.value(i);
     }
-
-    @Override
-    public Object getData() {
-        return this;
-    }
     
 }
