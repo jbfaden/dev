@@ -1,7 +1,7 @@
 package sdi.data;
 
 /**
- * representation of data units, which should follow the conventions:<ul>
+ * representation of data units.  These should follow the conventions:<ul>
  * <li>SI conventions should be used: m kg s A K mol cd
  * <li>asterisk should be used to indicate multiplication, carot for exponents.
  * <li>Exponents should be negative, rather than using solidus.  cm^-2

@@ -1,0 +1,26 @@
+# trim the whitespace from images.
+dr= '/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/renderings/'
+
+ff= listDirectory(dr + '*.png' )
+
+for f in ff:
+  p= getParam( 'p', 3, 'extra padding in pixels' )
+  
+  from org.virbo.autoplot.ScreenshotsTool import getTrim
+  from javax.imageio import ImageIO
+  
+  img= ImageIO.read(URL('file:%s%s' % ( dr,f ) ))
+  rect= getTrim(img)
+  
+  x= rect.x - p
+  y= rect.y - p
+  width= rect.width + p*2
+  height= rect.height + p*2
+  
+  img= img.getSubimage( x, y, width, height )
+  
+  from java.io import File
+  
+  mkdir('%s/trim/' % (dr ) )
+  ImageIO.write( img,"png", File('%s/trim/%s' % (dr, f ) ) )
+  

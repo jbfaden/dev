@@ -1,7 +1,9 @@
 package sdi.data;
 
 /**
- * two-index table of numbers, each tagged with an X and a Y bin.
+ * two-index table of numbers, each tagged with an X and a Y bin.  
+ * <br>
+ * X(i),Y(j) &rarr; Z(i,j)
  *
  * @author faden@cottagesystems.com
  */

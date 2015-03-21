@@ -63,6 +63,16 @@ public class Validator {
     }
     
     /**
+     * Check for valid bin, where the reference value must be within the
+     * min, max boundaries.
+     * @param d the Bin.
+     */
+    public static void checkValid(Bin d) {
+        if ( d.getMin() > d.getReference() ) throw new IllegalArgumentException( "reference must be greater than or equal to min");
+        if ( d.getMax() < d.getReference() ) throw new IllegalArgumentException( "reference must be less than or equal to max");
+    }
+    
+    /**
      * return true if the data is valid.  
      * @param d the ContiguousBinnedData1D.
      * @return true if the data is valid.

@@ -4,6 +4,8 @@ package sdi.data;
 /**
  * XY data where the X dimension has bins associated with it and Y
  * is a dependent variable.
+ * <br>
+ * X(i) &rarr; Y(i)
  *
  * @author vandejd1
  *
