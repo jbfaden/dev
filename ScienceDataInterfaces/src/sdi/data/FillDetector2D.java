@@ -8,7 +8,7 @@ package sdi.data;
 public interface FillDetector2D {
 
     /**
-     * returns true if the data is fill and should not be used.
+     * returns true if the data at the indeces is fill and should not be used.
      *
      * @param i the first index
      * @param j the second index

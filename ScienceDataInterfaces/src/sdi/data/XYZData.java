@@ -9,6 +9,8 @@ import com.google.common.base.Optional;
 
 /**
  * Z as a function of X and Y, possibly containing fill values and uncertainties.
+ * <img src="http://jfaden.net/~jbf/autoplot/renderings/XYZData.png" alt="XYZData.png">
+ *
  * @author faden@cottagesystems.com
  */
 public interface XYZData extends SimpleXYZData, MetadataSrc<XYZMetadata> {

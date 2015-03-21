@@ -5,6 +5,7 @@ import com.google.common.base.Optional;
 
 /**
  * Y as a function of X, possibly containing fill values and uncertainties.
+ * <img src="http://jfaden.net/~jbf/autoplot/renderings/XYData.png" alt="XYData.png">
  * @author faden@cottagesystems.com
  */
 public interface XYData extends SimpleXYData, MetadataSrc<XYMetadata> {
