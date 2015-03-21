@@ -6,7 +6,7 @@ import org.das2.datum.Units;
 import org.virbo.dataset.AbstractRank1DataSet;
 import org.virbo.dataset.MutablePropertyDataSet;
 import org.virbo.dataset.QDataSet;
-import org.virbo.dsops.Ops;
+import org.virbo.dataset.SemanticOps;
 import sdi.data.FillDetector;
 import sdi.data.SimpleXYData;
 import sdi.data.UncertaintyProvider;
@@ -36,13 +36,58 @@ public class Adapter {
         }
     }
     
+    
     private static MutablePropertyDataSet getX( XYData xydata ) {
         MutablePropertyDataSet result= getX( (SimpleXYData)xydata );
         XYMetadata meta= xydata.getMetadata();
         result.putProperty( QDataSet.UNITS, Units.lookupUnits( meta.getXUnits().getName() ) );
         result.putProperty( QDataSet.LABEL, meta.getXLabel() );
         result.putProperty( QDataSet.NAME, meta.getXName() );
+        result.putProperty( QDataSet.DELTA_MINUS, getUPAdapter( result, xydata.getXUncertProvider(), true ) );
+        result.putProperty( QDataSet.DELTA_MINUS, getUPAdapter( result, xydata.getXUncertProvider(), false ) );        
         return result;
+    }
+    
+    /**
+     * returns the QDataSet implementing the UncertaintyProvider or null.
+     * @param ds the dataset
+     * @param up the UncertainProvider Optional, which can be absent.
+     * @param minus if true, then implement DELTA_MINUS, or if false then implement DELTA_PLUS.
+     * @return the QDataSet implementing the UncertaintyProvider or null.
+     */
+    private static QDataSet getUPAdapter( QDataSet ds, Optional<UncertaintyProvider> oup, boolean minus ) {
+        if ( oup.isPresent() ) {
+            UncertaintyProvider up= oup.get();
+            MutablePropertyDataSet result= new AbstractRank1DataSet(ds.length()) {
+                @Override
+                public double value(int i) {
+                    return minus ? ( ds.value(i) - up.getUncertMinus(i) ) : ( up.getUncertPlus(i) - ds.value(i) );
+                }
+            };
+            result.putProperty(QDataSet.UNITS,SemanticOps.getUnits(ds).getOffsetUnits());
+            return result;
+        } else {
+            return null;
+        }
+    }
+    
+    /**
+     * return the weights dataset, or null.
+     * @param ofd the FillDetector Optional.
+     * @return the weights dataset, or null.
+     */
+    private static QDataSet getWeights( QDataSet ds, Optional<FillDetector> ofd ) {
+        if ( ofd.isPresent() ) {
+            FillDetector fd= ofd.get();
+            return new AbstractRank1DataSet( ds.length()) {
+                @Override
+                public double value(int i) {
+                    return fd.isFill(i) ? 0.0 : 1.0;
+                }
+            };
+        } else {
+            return null;
+        }
     }
     
     private static MutablePropertyDataSet getY( XYData xydata ) {
@@ -51,13 +96,16 @@ public class Adapter {
         result.putProperty( QDataSet.UNITS, Units.lookupUnits( meta.getYUnits().getName() ) );
         result.putProperty( QDataSet.LABEL, meta.getYLabel() );
         result.putProperty( QDataSet.NAME, meta.getYName() );
+        result.putProperty( QDataSet.DELTA_MINUS, getUPAdapter( result, xydata.getYUncertProvider(), true ) );
+        result.putProperty( QDataSet.DELTA_PLUS, getUPAdapter( result, xydata.getYUncertProvider(), false ) );
+        result.putProperty( QDataSet.WEIGHTS, getWeights( result, xydata.getFillDetector() ) );
         return result;
     }
      
     /**
      * return a QDataSet for the xydata
-     * @param xydata
-     * @return 
+     * @param xydata the xydata
+     * @return a QDataSet
      */
     public static QDataSet adapt( XYData xydata ) {
         MutablePropertyDataSet dep0= getX(xydata);
@@ -86,6 +134,11 @@ public class Adapter {
         return result;
     }
          
+    /**
+     * adapt the simple XY data.
+     * @param simpleXYData the data
+     * @return a QDataSet
+     */
     public static QDataSet adapt( SimpleXYData simpleXYData ) {
         MutablePropertyDataSet dep0= getX(simpleXYData);
         MutablePropertyDataSet ds= getY(simpleXYData);
