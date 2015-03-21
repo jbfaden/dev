@@ -14,8 +14,20 @@ import com.google.common.base.Optional;
  */
 public interface BinnedData2D extends SimpleBinnedData2D, MetadataSrc<XYZMetadata> {
 
+    /**
+     * return the fill detector indicating if a value is valid or fill
+     * (non-valid measurement). This is Optional, in case all the data is valid.
+     *
+     * @return the fill detector
+     */    
     Optional<FillDetector2D> getFillDetector();
 
+    /**
+     * return the uncertainty provider for the Z values, indicating the 1-sigma confidence
+     * interval for the data.
+     *
+     * @return the uncertainty provider
+     */    
     Optional<UncertaintyProvider> getZUncertProvider();
 
     /**

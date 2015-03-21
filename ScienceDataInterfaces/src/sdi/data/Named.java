@@ -9,7 +9,8 @@ public interface Named {
 
     /**
      * return the name, which is a valid Java identifier identifying the
-     * Named object.
+     * Named object.  Valid names start with a letter or underscore, and contain
+     * letters, underscores, and numbers.  
      *
      * @return the name
      */

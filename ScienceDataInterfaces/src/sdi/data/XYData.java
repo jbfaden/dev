@@ -10,8 +10,10 @@ import com.google.common.base.Optional;
 public interface XYData extends SimpleXYData, MetadataSrc<XYMetadata> {
 
     /**
-     * get the fill detector for the values. 
-     * @return the fill detector.
+     * return the fill detector indicating if a value is valid or fill
+     * (non-valid measurement). This is Optional, in case all the data is valid.
+     *
+     * @return the fill detector
      */
     Optional<FillDetector> getFillDetector();
 
