@@ -8,14 +8,16 @@ package org.das2.sdi;
 import com.google.common.base.Optional;
 import org.virbo.dataset.QDataSet;
 import sdi.data.FillDetector;
+import sdi.data.SimpleXYData;
 import sdi.data.UncertaintyProvider;
 import sdi.data.XYData;
 
 /**
- *
+ * Utility adapters to ScienceDataInterface.
  * @author jbf
  */
 public class Adapter {
+    
     /**
      * returns null or the implementation of the class.
      * @param <T>
@@ -24,8 +26,10 @@ public class Adapter {
      * @return the implementation, e.g. XYDataImpl.
      */
     public static <T> T adapt( QDataSet ds, Class<T> clazz  ) {
-        if ( clazz.isAssignableFrom(XYData.class) ) {
+        if ( XYData.class.isAssignableFrom(clazz) ) {
             return (T)new XYDataImpl( ds );
+        } else if ( SimpleXYData.class.isAssignableFrom(clazz) ) {
+            return (T)new SimpleXYDataImpl( ds );
         } else {
             throw new IllegalArgumentException("Unsupported interface: "+clazz);
         }

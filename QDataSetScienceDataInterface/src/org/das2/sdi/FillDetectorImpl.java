@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package org.das2.sdi;
 
 import org.virbo.dataset.QDataSet;
@@ -10,7 +6,7 @@ import org.virbo.dataset.SemanticOps;
 import sdi.data.FillDetector;
 
 /**
- *
+ * Fill detector uses SemanticOps.weightsDataSet
  * @author jbf
  */
 public class FillDetectorImpl implements FillDetector {

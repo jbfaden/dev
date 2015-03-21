@@ -17,7 +17,7 @@ import sdi.data.XYMetadata;
  * @author jbf
  */
 public class XYDataImpl implements XYData {
-
+    
     QDataSet y;
     QDataSet x;
     
@@ -45,7 +45,7 @@ public class XYDataImpl implements XYData {
     public XYMetadata getMetadata() {
         return new XYMetadataImpl( x, y );
     }
-
+    
     @Override
     public int size() {
         return x.length();
