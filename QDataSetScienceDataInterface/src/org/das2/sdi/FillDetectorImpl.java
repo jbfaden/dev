@@ -7,7 +7,7 @@ import sdi.data.FillDetector;
 
 /**
  * Fill detector uses SemanticOps.weightsDataSet
- * @author jbf
+ * @author faden@cottagesystems.com
  */
 public class FillDetectorImpl implements FillDetector {
     

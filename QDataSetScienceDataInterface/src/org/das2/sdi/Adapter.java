@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package org.das2.sdi;
 
 import com.google.common.base.Optional;
@@ -14,7 +10,7 @@ import sdi.data.XYData;
 
 /**
  * Utility adapters to ScienceDataInterface.
- * @author jbf
+ * @author faden@cottagesystems.com
  */
 public class Adapter {
     

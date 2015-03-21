@@ -14,7 +14,7 @@ import sdi.data.XYMetadata;
 
 /**
  *
- * @author jbf
+ * @author faden@cottagesystems.com
  */
 public class XYDataImpl implements XYData {
     
