@@ -2,6 +2,7 @@ package sdi.data;
 
 /**
  * Data where the X bins are enforced to be contiguous and increasing.
+ * <img src="http://jfaden.net/~jbf/autoplot/renderings/SimpleContiguousBinnedData1D.png" alt="SimpleContiguousBinnedData1D.png">
  */
 public interface SimpleContiguousBinnedData1D {
 

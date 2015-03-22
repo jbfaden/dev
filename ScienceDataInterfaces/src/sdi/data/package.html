@@ -1,8 +1,8 @@
 <body>
     <p>Science Data Interfaces provide Java interfaces for commonly encountered
-        datasets.  These interfaces include examples such as Y(X) (often rendered 
-        as a line plot) and Z(X,Y) (often rendered as a spectrogram or color plot).  
-        These are immediately divided into two catagories: those with metadata and those
+        datasets.  These interfaces include examples such as X&rarr;Y (often rendered 
+        as a line plot) and X(i),Y(j)&rarr;Z(i,j) (often rendered as a spectrogram or color plot).  
+        These are immediately divided into two categories: those with metadata and those
         without.  The "Simple" versions are ones without metadata.  The others implement
         the Described interface and provide additional metadata, such as labels and units.
     </p>
@@ -18,31 +18,56 @@
         </tr>
         <tr>
             <td>SimpleXYData</td>
-            <td><ul><li>Units are unknown.
-                    <li>Fill is not detected.
-                    <li>Data is not labeled.</ul></td>
+            <td><ul><li>X(i) &rarr; Y(i)
+                    <li>0 &le; i &lt; size()
+                    </ul></td>
             <td><img src="http://jfaden.net/~jbf/autoplot/renderings/SimpleXYData.png" alt="SimpleXYData.png"></td>
         </tr>
         <tr>
             <td>XYData</td>
-            <td><ul><li>Units are known.
+            <td><ul><li>X(i) &rarr; Y(i)
+                    <li>Units are known.
                     <li>Fill is detected.
                     <li>Data is labeled.</ul></td>
             <td><img src="http://jfaden.net/~jbf/autoplot/renderings/XYData.png" alt="XYData.png"></td>
         </tr>
         <tr>
             <td>XYZData</td>
-            <td><ul><li>X,Y->Z
+            <td><ul><li>X(i),Y(i) &rarr; Z(i)
                 </ul></td>
             <td><img src="http://jfaden.net/~jbf/autoplot/renderings/XYZData.png" alt="XYZData.png"></td>
         </tr>
         <tr>
-            <td>ContiguousBinnedData1D</td>
+            <td>SimpleBinnedData2D</td>
+            <td><ul><li>X(i),Y(j) &rarr; Z(i,j)
+                        <li>0 &le; i &lt; xsize()
+                        <li>0 &le; j &lt; ysize()
+                        <li>Data is not labeled</li>
+                </ul></td>
+            <td><img src="http://jfaden.net/~jbf/autoplot/renderings/SimpleBinnedData2D.png" alt="SimpleBinnedData2D.png"></td>
+        </tr>
+        <tr>
+            <td>BinnedData2D</td>
             <td><ul><li>Bins must be adjacent.
                     <li>Fill is detected.
                 </ul></td>
+            <td><img src="http://jfaden.net/~jbf/autoplot/renderings/BinnedData2D.png" alt="BinnedData2D.png"></td>
+        </tr>
+        <tr>
+            <td>SimpleContiguousBinnedData1D</td>
+            <td><ul><li>Bins must be adjacent.
+                </ul></td>
+            <td><img src="http://jfaden.net/~jbf/autoplot/renderings/SimpleContiguousBinnedData1D.png" alt="SimpleContiguousBinnedData1D.png"></td>
+        </tr>
+        <tr>
+            <td>ContiguousBinnedData1D</td>
+            <td><ul><li>X(i),Y(j) &rarr; Z(i,j)
+                    <li>Bins must be adjacent.
+                    <li>Fill is detected.
+                </ul></td>
             <td><img src="http://jfaden.net/~jbf/autoplot/renderings/ContiguousBinnedData1D.png" alt="ContiguousBinnedData1D.png"></td>
-        </tr>    </table>
+        </tr>        
+    </table>
 
     <p>Note often clients will need lists of these simpler types.  For example, where the
         RPW Group uses <code>BinnedData2D</code>s (tables) with changing geometry, 

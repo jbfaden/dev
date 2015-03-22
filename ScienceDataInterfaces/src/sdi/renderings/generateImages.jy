@@ -15,7 +15,6 @@ writeToPng( out + 'SimpleXYData.png' )
 ds= putProperty(dataset([1.5,3,4.5,3.6,99,3,4,3.5,3.7]), QDataSet.FILL_VALUE, 99 )
 ds= putProperty( ds, QDataSet.LABEL, 'Density' )
 tt= dataset([ 1,2,3,4,5,6,7,8,9])*datum('1s')+datum('2015-03-17T10:47')
-tt= putProperty( tt, QDataSet.LABEL, 'UTC' )
 plot( tt, ds )
 writeToPng( out + 'XYData.png' )
 
@@ -23,16 +22,41 @@ writeToPng( out + 'XYData.png' )
 ds= putProperty(dataset([1.5,3,4.5,3.6,99,3,4,3.5,3.7]), QDataSet.FILL_VALUE, 99 )
 ds= putProperty( ds, QDataSet.LABEL, 'Density' )
 tt= dataset([ 1,2,3,4,5,6,7,8,9])*datum('1hr')+datum('2015-03-17T12:00')
-tt= putProperty( tt, QDataSet.LABEL, 'UTC' )
 zz= putProperty( copy(ds)+randu(9), QDataSet.LABEL, 'Radius (Rs)' )
 plot( tt, ds, zz )
 writeToPng( out + 'XYZData.png' )
 
+# SimpleContiguousBinnedData1D
+xx= [ 1,2,3,4,5,6,7,8,9 ]
+yy= [ 1.5,3,4.5,3.6,4.2,3,2,2.1,1]
+plotx( xx, yy, renderType='stairSteps', yrange=[0,5] )
+from org.das2.graph.DefaultPlotSymbol import NONE
+dom.plotElements[0].style.plotSymbol= NONE
+writeToPng( out + 'SimpleContiguousBinnedData1D.png' )
+
 # ContiguousBinnedData1D
 xx= [ 1,2,3,4,5,6,7,8,9 ]
 yy= [ 1.5,3,4.5,3.6,99,3,2,2.1,1]
-yy= putProperty(dataset(yy   ), QDataSet.FILL_VALUE, 99 )
+yy= putProperty(dataset(yy), QDataSet.FILL_VALUE, 99 )
 plotx( xx, yy, renderType='stairSteps' , yrange=[0,5], xtitle='Density', ytitle='Normalized' )
 from org.das2.graph.DefaultPlotSymbol import NONE
 dom.plotElements[0].style.plotSymbol= NONE
 writeToPng( out + 'ContiguousBinnedData1D.png' )
+
+# SimpleData2D
+zz= ripples(10,10)
+xx= [ 1,2,3,4,5,6,7,8,9,10, ]
+yy= [ 10,20,30,40,50,60,70,80,90,100 ]
+plotx( xx, yy, zz, renderType='nnSpectrogram' )
+writeToPng( out + 'SimpleBinnedData2D.png' )
+
+# Data2D
+zz= ripples(20,20)
+zz= zz[10:20,10:20]
+zz[7,9]= -1e31
+zz[8,9]= -1e31
+xx= [ 1,2,3,4,5,6,7,8,9,10, ]
+xx= putProperty( dataset(xx), QDataSet.UNITS, Units.lookupUnits('hours since 2015-3-23') )
+yy= 10** ( dataset( [ 10,20,30,40,50,60,70,80,90,100 ] ) /30 )
+plotx( xx, yy, zz, renderType='nnSpectrogram', ztitle='Density', ytitle='Energy' )
+writeToPng( out + 'BinnedData2D.png' )

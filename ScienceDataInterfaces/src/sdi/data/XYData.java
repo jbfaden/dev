@@ -6,10 +6,10 @@ import com.google.common.base.Optional;
 /**
  * <p>
  * Y as a function of X, possibly containing fill values and uncertainties.
- * X(i) &rarr; Y(i) where 0 &le; i &lt; <code>size()</code>
+ * <br>X(i) &rarr; Y(i) where 0 &le; i &lt; <code>size()</code>
  * </p>
  * <p>The figure below represents an XYData with getMetadata().getXUnits() is 
- * new Units("seconds since 2015-03-17T00:00Z") and getMetadata().getYLabel() is "Density"</p>
+ * Units("seconds since 2015-03-17T00:00Z") and getMetadata().getYLabel() is "Density"</p>
  * <br>
  * <img src="http://jfaden.net/~jbf/autoplot/renderings/XYData.png" alt="XYData.png">
  * @author faden@cottagesystems.com
