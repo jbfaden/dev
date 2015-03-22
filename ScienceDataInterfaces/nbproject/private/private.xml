@@ -15,8 +15,6 @@
             <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/FillDetector2D.java</file>
             <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/Validator.java</file>
             <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/MetadataSrc.java</file>
-            <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/EnhancedXYProviderWithUncertainty.java</file>
-            <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/XMultiYData.java</file>
             <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/XYData.java</file>
             <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/Bin.java</file>
             <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/XYZData.java</file>
@@ -26,6 +24,8 @@
             <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/Named.java</file>
             <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/UncertaintyProvider.java</file>
             <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/package.html</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/data/Units.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/ScienceDataInterfaces/src/sdi/renderings/generateImages.jy</file>
         </group>
     </open-files>
 </project-private>

@@ -6,6 +6,7 @@ import com.google.common.base.Optional;
  * <p>
  * The data values lay in contiguous bins.</p>
  * <img src="http://jfaden.net/~jbf/autoplot/renderings/ContiguousBinnedData1D.png" alt="ContiguousBinnedData1D.png">
+ * <p>These bins may contain fill data.</p>
  *
  * @author jbf
  */

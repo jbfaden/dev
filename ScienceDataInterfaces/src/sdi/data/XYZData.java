@@ -8,7 +8,7 @@ package sdi.data;
 import com.google.common.base.Optional;
 
 /**
- * Z as a function of X and Y, possibly containing fill values and uncertainties.
+ * <p>Z as a function of X and Y, possibly containing fill values and uncertainties.</p>
  * <img src="http://jfaden.net/~jbf/autoplot/renderings/XYZData.png" alt="XYZData.png">
  *
  * @author faden@cottagesystems.com

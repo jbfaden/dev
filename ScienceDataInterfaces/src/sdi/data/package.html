@@ -17,14 +17,14 @@
             <td>Example Rendering</td>
         </tr>
         <tr>
-            <td>SimpleXYData</td>
+            <td><a href="{@docRoot}/sdi/data/SimpleXYData.html">SimpleXYData</a></td>
             <td><ul><li>X(i) &rarr; Y(i)
                     <li>0 &le; i &lt; size()
                     </ul></td>
             <td><img src="http://jfaden.net/~jbf/autoplot/renderings/SimpleXYData.png" alt="SimpleXYData.png"></td>
         </tr>
         <tr>
-            <td>XYData</td>
+            <td><a href="{@docRoot}/sdi/data/XYData.html">XYData</a></td>
             <td><ul><li>X(i) &rarr; Y(i)
                     <li>Units are known.
                     <li>Fill is detected.
@@ -32,13 +32,13 @@
             <td><img src="http://jfaden.net/~jbf/autoplot/renderings/XYData.png" alt="XYData.png"></td>
         </tr>
         <tr>
-            <td>XYZData</td>
+            <td><a href="{@docRoot}/sdi/data/XYZData.html">XYZData</a></td>
             <td><ul><li>X(i),Y(i) &rarr; Z(i)
                 </ul></td>
             <td><img src="http://jfaden.net/~jbf/autoplot/renderings/XYZData.png" alt="XYZData.png"></td>
         </tr>
         <tr>
-            <td>SimpleBinnedData2D</td>
+            <td><a href="{@docRoot}/sdi/data/SimpleBinnedData.html">SimpleBinnedData2D</a></td>
             <td><ul><li>X(i),Y(j) &rarr; Z(i,j)
                         <li>0 &le; i &lt; xsize()
                         <li>0 &le; j &lt; ysize()
@@ -47,20 +47,20 @@
             <td><img src="http://jfaden.net/~jbf/autoplot/renderings/SimpleBinnedData2D.png" alt="SimpleBinnedData2D.png"></td>
         </tr>
         <tr>
-            <td>BinnedData2D</td>
+            <td><a href="{@docRoot}/sdi/data/BinnedData2D.html">BinnedData2D</a></td>
             <td><ul><li>Bins must be adjacent.
                     <li>Fill is detected.
                 </ul></td>
             <td><img src="http://jfaden.net/~jbf/autoplot/renderings/BinnedData2D.png" alt="BinnedData2D.png"></td>
         </tr>
         <tr>
-            <td>SimpleContiguousBinnedData1D</td>
+            <td><a href="{@docRoot}/sdi/data/SimpleContiguousBinnedData1D.html">SimpleContiguousBinnedData1D</a></td>
             <td><ul><li>Bins must be adjacent.
                 </ul></td>
             <td><img src="http://jfaden.net/~jbf/autoplot/renderings/SimpleContiguousBinnedData1D.png" alt="SimpleContiguousBinnedData1D.png"></td>
         </tr>
         <tr>
-            <td>ContiguousBinnedData1D</td>
+            <td><a href="{@docRoot}/sdi/data/ContiguousBinnedData1D.html">ContiguousBinnedData1D</a></td>
             <td><ul><li>X(i),Y(j) &rarr; Z(i,j)
                     <li>Bins must be adjacent.
                     <li>Fill is detected.
@@ -70,7 +70,8 @@
     </table>
 
     <p>Note often clients will need lists of these simpler types.  For example, where the
-        RPW Group uses <code>BinnedData2D</code>s (tables) with changing geometry, 
+        Radio and Plasma Wave Group at U. Iowa uses <code>BinnedData2D</code>s 
+        (tables) with changing geometry, 
         a <code>List&lt;BinnedData2D&gt;</code> should be used.</p>
 
 </body>
