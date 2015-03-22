@@ -12,6 +12,9 @@ import org.virbo.dataset.SemanticOps;
 import org.virbo.dataset.WeightsDataSet;
 import org.virbo.dsops.Ops;
 import sdi.data.FillDetector;
+import sdi.data.FillDetector2D;
+import sdi.data.SimpleBinnedData1D;
+import sdi.data.SimpleBinnedData2D;
 import sdi.data.SimpleXYData;
 import sdi.data.UncertaintyProvider;
 import sdi.data.XYData;
@@ -35,6 +38,10 @@ public class Adapter {
             return (T)new XYDataImpl( ds );
         } else if ( SimpleXYData.class.isAssignableFrom(clazz) ) {
             return (T)new SimpleXYDataImpl( ds );
+        } else if ( SimpleBinnedData1D.class.isAssignableFrom(clazz) ) {
+            return (T)new SimpleBinnedData1DImpl( ds );
+        } else if ( SimpleBinnedData2D.class.isAssignableFrom(clazz) ) {
+            return (T)new SimpleBinnedData2DImpl( ds );
         } else {
             throw new IllegalArgumentException("Unsupported interface: "+clazz);
         }
@@ -162,6 +169,21 @@ public class Adapter {
             return  Optional.absent();
         } else {
             return  Optional.fromNullable( new FillDetectorImpl(ds) );
+        }
+    }
+
+    
+    /**
+     * provide the fill detector, if one is needed.
+     * @param ds the dataset.
+     * @return the FillDetector Optional.
+     */
+    public static Optional<FillDetector2D> getFillDetector2D(QDataSet ds) {
+        QDataSet wds= (QDataSet) SemanticOps.weightsDataSet(ds);
+        if ( wds instanceof WeightsDataSet.Finite || wds instanceof WeightsDataSet.AllValid ) {
+            return  Optional.absent();
+        } else {
+            return  Optional.fromNullable( new FillDetector2DImpl(ds) );
         }
     }
     
