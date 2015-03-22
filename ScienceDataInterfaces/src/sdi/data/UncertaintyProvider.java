@@ -4,7 +4,7 @@ package sdi.data;
  * Provides the uncertainty of a measurement, providing the boundaries of the
  * one-sigma error bar in the data units.  Note that the index will correspond 
  * to an index of the dataset, so that if getYUncertaintyProvider is used to get
- * the uncertainties, <b>then the Y index should be used.</b>
+ * the uncertainties, then the Y index (j) should be used.
  *
  * @author faden@cottagesystems.com
  */

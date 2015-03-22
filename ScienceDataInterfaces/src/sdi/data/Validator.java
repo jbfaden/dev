@@ -19,7 +19,7 @@ public class Validator {
      * </ol>
      *
      * @param d the SimpleContiguousBinnedData1D
-     * @throws IllegalArgumentException when the are semantic errors with the DataSet. 
+     * @throws IllegalArgumentException when the are semantic errors with the data. 
      */
     public static void checkValid(SimpleContiguousBinnedData1D d) {
         // First check for monotonicity of bin boundaries:
@@ -56,6 +56,7 @@ public class Validator {
      * This checks for valid 
      * SimpleContiguousBinnedData1D, and also verifies that it can getFillDetector.
      * @param d the ContiguousBinnedData1D.
+     * @throws IllegalArgumentException when the are semantic errors with the data. 
      */
     public static void checkValid(ContiguousBinnedData1D d) {
         checkValid((SimpleContiguousBinnedData1D) d);
@@ -66,6 +67,7 @@ public class Validator {
      * Check for valid bin, where the reference value must be within the
      * min, max boundaries.
      * @param d the Bin.
+     * @throws IllegalArgumentException when the are semantic errors with the Bin.
      */
     public static void checkValid(Bin d) {
         if ( d.getMin() > d.getReference() ) throw new IllegalArgumentException( "reference must be greater than or equal to min");

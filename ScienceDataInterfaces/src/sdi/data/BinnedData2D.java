@@ -8,8 +8,9 @@ package sdi.data;
 import com.google.common.base.Optional;
 
 /**
- * two-index table of numbers, each tagged with an X and a Y bin, and the
- * Z value may be fill or have uncertainties.
+ * <p>two-index table of numbers, each tagged with an X and a Y bin, and the
+ * Z value may be fill or have uncertainties.</p>
+ * <img src="http://jfaden.net/~jbf/autoplot/renderings/BinnedData2D.png" alt="BinnedData2D.png">
  * @author jbf
  */
 public interface BinnedData2D extends SimpleBinnedData2D, MetadataSrc<XYZMetadata> {

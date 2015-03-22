@@ -4,7 +4,9 @@ import com.google.common.base.Optional;
 
 /**
  * <p>
- * The data values lay in contiguous bins.</p>
+ * The data values lay in contiguous bins, but may contain fill data, and 
+ * may also have uncertainties.</p>
+ * <br>
  * <img src="http://jfaden.net/~jbf/autoplot/renderings/ContiguousBinnedData1D.png" alt="ContiguousBinnedData1D.png">
  * <p>These bins may contain fill data.</p>
  *

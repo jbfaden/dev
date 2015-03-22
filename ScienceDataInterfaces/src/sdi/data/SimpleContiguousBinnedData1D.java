@@ -2,6 +2,10 @@ package sdi.data;
 
 /**
  * Data where the X bins are enforced to be contiguous and increasing.
+ * Bin continuity is enforced 
+ * by allowing access to the minimum bounds of each bin, and the maximum
+ * bound of the highest bin.
+ * <br>
  * <img src="http://jfaden.net/~jbf/autoplot/renderings/SimpleContiguousBinnedData1D.png" alt="SimpleContiguousBinnedData1D.png">
  */
 public interface SimpleContiguousBinnedData1D {
