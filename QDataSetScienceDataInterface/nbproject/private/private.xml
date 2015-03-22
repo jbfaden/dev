@@ -5,5 +5,19 @@
         <group name="autoplot">
             <file>file:/mynet/spot6/home/jbf/ct/apljon/20150311_scienceDataInterfaces/QDataSetScienceDataInterface/src/org/das2/sdi/XYDataImpl.java</file>
         </group>
+        <group name="ScienceDataInterfaces">
+            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/FillDetectorImpl.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/XYZMetadataImpl.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/XYZDataImpl.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/BinImpl.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/XYDataImpl.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/XYMetadataImpl.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/UncertaintyProviderImpl.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/Adapter.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/test/Test.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/SimpleBinnedData2DImpl.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/SimpleXYDataImpl.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/SimpleBinnedData1DImpl.java</file>
+        </group>
     </open-files>
 </project-private>
