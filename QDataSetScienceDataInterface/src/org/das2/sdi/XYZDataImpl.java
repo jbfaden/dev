@@ -59,22 +59,22 @@ public class XYZDataImpl implements XYZData {
 
     @Override
     public int size() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return x.length();
     }
 
     @Override
     public double getX(int i) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return x.value(i);
     }
 
     @Override
     public double getY(int i) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return y.value(i);
     }
 
     @Override
     public double getZ(int i) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return z.value(i);
     }
 
     

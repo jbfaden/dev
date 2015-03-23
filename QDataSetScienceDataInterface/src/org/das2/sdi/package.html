@@ -2,5 +2,37 @@
     org.das2.sdi provides adapters to convert SDI datasets into QDataSets and from
 QDataSets to their SDI implementation.  Classes ending in "Adapter" provide a 
 QDataSet for the SDI implementation, and should be called directly.
+    <table>
+        <tr>
+            <td>Class Name</td>
+            <td>QDataSet Constraints</td>
+            <td>Example Rendering</td>
+        </tr>
+        <tr>
+            <td><a href="http://jfaden.net/~jbf/autoplot/scienceDataInterfaces/javadoc//sdi/data/XYData.html">XYData</a></td>
+            <td><ul><li>Rank 1</ul></td>
+            <td><img src="http://jfaden.net/~jbf/autoplot/renderings/XYData.png" alt="XYData.png"></td>
+        </tr>
+        <tr>
+            <td><a href="http://jfaden.net/~jbf/autoplot/scienceDataInterfaces/javadoc/sdi/data/XYZData.html">XYZData</a></td>
+            <td><ul><li>Rank 2: i,j&lt;3 &rarr; XYZ(i,j)
+                    <li>Rank 1: X(i) &rarr; Y(i;PLANE_0=Z)
+                </ul></td>
+            <td><img src="http://jfaden.net/~jbf/autoplot/renderings/XYZData.png" alt="XYZData.png"></td>
+        </tr>
+        <tr>
+            <td><a href="http://jfaden.net/~jbf/autoplot/scienceDataInterfaces/javadoc/sdi/data/SimpleBinnedData2D.html">SimpleBinnedData2D</a></td>
+            <td><ul><li>Rank 2: X(i),Y(j) &rarr; Z(i,j)
+                    <li>TODO: why would we ever implement this?
+                </ul></td>
+            <td><img src="http://jfaden.net/~jbf/autoplot/renderings/SimpleBinnedData2D.png" alt="SimpleBinnedData2D.png"></td>
+        </tr>
+        <tr>
+            <td><a href="http://jfaden.net/~jbf/autoplot/scienceDataInterfaces/javadoc/sdi/data/BinnedData2D.html">BinnedData2D</a></td>
+            <td><ul><li>Rank 2: X(i),Y(j) &rarr; Z(i,j)
+                </ul></td>
+            <td><img src="http://jfaden.net/~jbf/autoplot/renderings/BinnedData2D.png" alt="BinnedData2D.png"></td>
+        </tr>
+    </table>
 
 </body>
