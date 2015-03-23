@@ -12,7 +12,7 @@ import sdi.data.SimpleBinnedData1D;
  */
 public class SimpleBinnedData1DAdapter {
     
-    private static MutablePropertyDataSet getX( SimpleBinnedData1D data ) {
+    protected static MutablePropertyDataSet getX( SimpleBinnedData1D data ) {
         AbstractRank1DataSet result= new AbstractRank1DataSet( data.size() ) {
             @Override
             public double value(int i) {
@@ -36,7 +36,7 @@ public class SimpleBinnedData1DAdapter {
         return result;
     }
     
-    private static MutablePropertyDataSet getY( SimpleBinnedData1D data ) {
+    protected static MutablePropertyDataSet getY( SimpleBinnedData1D data ) {
         AbstractRank1DataSet result= new AbstractRank1DataSet( data.size() ) {
             @Override
             public double value(int i) {

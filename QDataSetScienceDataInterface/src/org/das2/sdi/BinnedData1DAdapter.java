@@ -4,30 +4,27 @@ package org.das2.sdi;
 import org.das2.datum.Units;
 import org.virbo.dataset.MutablePropertyDataSet;
 import org.virbo.dataset.QDataSet;
-import sdi.data.SimpleXYData;
-import sdi.data.XYData;
+import sdi.data.BinnedData1D;
+import sdi.data.SimpleBinnedData1D;
 import sdi.data.XYMetadata;
 
 /**
- * Given an XYData, provide a QDataSet that preserves as much information
- * as possible.
+ * Adapts BinnedData1D to QDataSet
  * @author faden@cottagesystems.com
  */
-public class XYDataAdapter {
-    private static MutablePropertyDataSet getX( XYData xydata ) {
-        MutablePropertyDataSet result= SimpleXYDataAdapter.getX( (SimpleXYData)xydata );
+public class BinnedData1DAdapter {
+    private static MutablePropertyDataSet getX( BinnedData1D xydata ) {
+        MutablePropertyDataSet result= SimpleBinnedData1DAdapter.getX( (SimpleBinnedData1D)xydata );
         XYMetadata meta= xydata.getMetadata();
         result.putProperty( QDataSet.UNITS, Units.lookupUnits( meta.getXUnits().getName() ) );
         result.putProperty( QDataSet.LABEL, meta.getXLabel() );
         result.putProperty( QDataSet.NAME, meta.getXName() );
-        result.putProperty( QDataSet.DELTA_MINUS, Adapter.getUPAdapter( result, xydata.getXUncertProvider(), false ) );
-        result.putProperty( QDataSet.DELTA_PLUS, Adapter.getUPAdapter( result, xydata.getXUncertProvider(), true ) );        
         return result;
     }
     
     
-    private static MutablePropertyDataSet getY( XYData xydata ) {
-        MutablePropertyDataSet result= SimpleXYDataAdapter.getY( (SimpleXYData)xydata );
+    private static MutablePropertyDataSet getY( BinnedData1D xydata ) {
+        MutablePropertyDataSet result= SimpleBinnedData1DAdapter.getY( (SimpleBinnedData1D)xydata );
         XYMetadata meta= xydata.getMetadata();
         result.putProperty( QDataSet.UNITS, Units.lookupUnits( meta.getYUnits().getName() ) );
         result.putProperty( QDataSet.LABEL, meta.getYLabel() );
@@ -39,15 +36,14 @@ public class XYDataAdapter {
     }
      
     /**
-     * return a QDataSet for the xydata
-     * @param xydata the xydata
+     * return a QDataSet for BinnedData1D
+     * @param data the BinnedData1D
      * @return a QDataSet
      */
-    public static QDataSet adapt( XYData xydata ) {
-        MutablePropertyDataSet dep0= getX(xydata);
-        MutablePropertyDataSet ds= getY(xydata);
+    public static QDataSet adapt( BinnedData1D data ) {
+        MutablePropertyDataSet dep0= getX(data);
+        MutablePropertyDataSet ds= getY(data);
         ds.putProperty( QDataSet.DEPEND_0, dep0 );
         return ds;
     }
-
 }

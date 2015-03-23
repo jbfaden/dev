@@ -51,16 +51,16 @@ public class Adapter {
      * returns the QDataSet implementing the UncertaintyProvider or null.
      * @param ds the dataset
      * @param oup the UncertainProvider Optional, which can be absent.
-     * @param minus if true, then implement DELTA_MINUS, or if false then implement DELTA_PLUS.
+     * @param plus if true, then implement DELTA_PLUS, or if false then implement DELTA_MINUS.
      * @return the QDataSet implementing the UncertaintyProvider or null.
      */
-    protected static QDataSet getUPAdapter( QDataSet ds, Optional<UncertaintyProvider> oup, boolean minus ) {
+    protected static QDataSet getUPAdapter( QDataSet ds, Optional<UncertaintyProvider> oup, boolean plus ) {
         if ( oup.isPresent() ) {
             UncertaintyProvider up= oup.get();
             MutablePropertyDataSet result= new AbstractRank1DataSet(ds.length()) {
                 @Override
                 public double value(int i) {
-                    return minus ? ( ds.value(i) - up.getUncertMinus(i) ) : ( up.getUncertPlus(i) - ds.value(i) );
+                    return plus ? ( up.getUncertPlus(i) - ds.value(i) ): ( ds.value(i) - up.getUncertMinus(i) );
                 }
             };
             result.putProperty(QDataSet.UNITS,SemanticOps.getUnits(ds).getOffsetUnits());
@@ -72,6 +72,7 @@ public class Adapter {
     
     /**
      * return the weights dataset, or null.
+     * @param ds the dataset described by this result 
      * @param ofd the FillDetector Optional.
      * @return the weights dataset, or null.
      */
@@ -98,9 +99,9 @@ public class Adapter {
     public static Optional<FillDetector> getFillDetector(QDataSet ds) {
         QDataSet wds= (QDataSet) SemanticOps.weightsDataSet(ds);
         if ( wds instanceof WeightsDataSet.Finite || wds instanceof WeightsDataSet.AllValid ) {
-            return  Optional.absent();
+            return Optional.absent();
         } else {
-            return  Optional.fromNullable( new FillDetectorImpl(ds) );
+            return Optional.fromNullable( new FillDetectorImpl(ds) );
         }
     }
 
@@ -113,9 +114,9 @@ public class Adapter {
     public static Optional<FillDetector2D> getFillDetector2D(QDataSet ds) {
         QDataSet wds= (QDataSet) SemanticOps.weightsDataSet(ds);
         if ( wds instanceof WeightsDataSet.Finite || wds instanceof WeightsDataSet.AllValid ) {
-            return  Optional.absent();
+            return Optional.absent();
         } else {
-            return  Optional.fromNullable( new FillDetector2DImpl(ds) );
+            return Optional.fromNullable( new FillDetector2DImpl(ds) );
         }
     }
     
