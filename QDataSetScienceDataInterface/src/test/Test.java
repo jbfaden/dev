@@ -4,6 +4,7 @@ package test;
 import com.google.common.base.Optional;
 import org.das2.datum.Units;
 import org.das2.sdi.Adapter;
+import org.das2.sdi.XYDataAdapter;
 import org.virbo.dataset.QDataSet;
 import org.virbo.dataset.SemanticOps;
 import org.virbo.dataset.examples.Schemes;
@@ -177,7 +178,7 @@ public class Test {
         System.err.println("== test4 ==");
         XYData data= demoXY();
         printXYData( data );
-        QDataSet ds= Adapter.adapt(data);
+        QDataSet ds= XYDataAdapter.adapt(data);
         System.err.println("== xydata -> qdataset ==");
         printQDataSet( ds );
         System.err.println("== qdataset -> xydata ==");

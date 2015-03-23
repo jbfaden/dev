@@ -18,7 +18,6 @@ import sdi.data.SimpleBinnedData2D;
 import sdi.data.SimpleXYData;
 import sdi.data.UncertaintyProvider;
 import sdi.data.XYData;
-import sdi.data.XYMetadata;
 
 /**
  * Utility adapters to ScienceDataInterface.
@@ -48,25 +47,14 @@ public class Adapter {
     }
     
     
-    private static MutablePropertyDataSet getX( XYData xydata ) {
-        MutablePropertyDataSet result= getX( (SimpleXYData)xydata );
-        XYMetadata meta= xydata.getMetadata();
-        result.putProperty( QDataSet.UNITS, Units.lookupUnits( meta.getXUnits().getName() ) );
-        result.putProperty( QDataSet.LABEL, meta.getXLabel() );
-        result.putProperty( QDataSet.NAME, meta.getXName() );
-        result.putProperty( QDataSet.DELTA_MINUS, getUPAdapter( result, xydata.getXUncertProvider(), true ) );
-        result.putProperty( QDataSet.DELTA_MINUS, getUPAdapter( result, xydata.getXUncertProvider(), false ) );        
-        return result;
-    }
-    
     /**
      * returns the QDataSet implementing the UncertaintyProvider or null.
      * @param ds the dataset
-     * @param up the UncertainProvider Optional, which can be absent.
+     * @param oup the UncertainProvider Optional, which can be absent.
      * @param minus if true, then implement DELTA_MINUS, or if false then implement DELTA_PLUS.
      * @return the QDataSet implementing the UncertaintyProvider or null.
      */
-    private static QDataSet getUPAdapter( QDataSet ds, Optional<UncertaintyProvider> oup, boolean minus ) {
+    protected static QDataSet getUPAdapter( QDataSet ds, Optional<UncertaintyProvider> oup, boolean minus ) {
         if ( oup.isPresent() ) {
             UncertaintyProvider up= oup.get();
             MutablePropertyDataSet result= new AbstractRank1DataSet(ds.length()) {
@@ -87,7 +75,7 @@ public class Adapter {
      * @param ofd the FillDetector Optional.
      * @return the weights dataset, or null.
      */
-    private static QDataSet getWeights( QDataSet ds, Optional<FillDetector> ofd ) {
+    protected static QDataSet getWeights( QDataSet ds, Optional<FillDetector> ofd ) {
         if ( ofd.isPresent() ) {
             FillDetector fd= ofd.get();
             return new AbstractRank1DataSet( ds.length()) {
@@ -100,63 +88,7 @@ public class Adapter {
             return null;
         }
     }
-    
-    private static MutablePropertyDataSet getY( XYData xydata ) {
-        MutablePropertyDataSet result= getY( (SimpleXYData)xydata );
-        XYMetadata meta= xydata.getMetadata();
-        result.putProperty( QDataSet.UNITS, Units.lookupUnits( meta.getYUnits().getName() ) );
-        result.putProperty( QDataSet.LABEL, meta.getYLabel() );
-        result.putProperty( QDataSet.NAME, meta.getYName() );
-        result.putProperty( QDataSet.DELTA_MINUS, getUPAdapter( result, xydata.getYUncertProvider(), true ) );
-        result.putProperty( QDataSet.DELTA_PLUS, getUPAdapter( result, xydata.getYUncertProvider(), false ) );
-        result.putProperty( QDataSet.WEIGHTS, getWeights( result, xydata.getFillDetector() ) );
-        return result;
-    }
-     
-    /**
-     * return a QDataSet for the xydata
-     * @param xydata the xydata
-     * @return a QDataSet
-     */
-    public static QDataSet adapt( XYData xydata ) {
-        MutablePropertyDataSet dep0= getX(xydata);
-        MutablePropertyDataSet ds= getY(xydata);
-        ds.putProperty( QDataSet.DEPEND_0, dep0 );
-        return ds;
-    }
-
-    private static MutablePropertyDataSet getX( SimpleXYData xydata ) {
-        AbstractRank1DataSet result= new AbstractRank1DataSet( xydata.size() ) {
-            @Override
-            public double value(int i) {
-                return xydata.getX(i);
-            }
-        };
-        return result;
-    }
-    
-    private static MutablePropertyDataSet getY( SimpleXYData xydata ) {
-        AbstractRank1DataSet result= new AbstractRank1DataSet( xydata.size() ) {
-            @Override
-            public double value(int i) {
-                return xydata.getY(i);
-            }
-        };
-        return result;
-    }
-         
-    /**
-     * adapt the simple XY data.
-     * @param simpleXYData the data
-     * @return a QDataSet
-     */
-    public static QDataSet adapt( SimpleXYData simpleXYData ) {
-        MutablePropertyDataSet dep0= getX(simpleXYData);
-        MutablePropertyDataSet ds= getY(simpleXYData);
-        ds.putProperty( QDataSet.DEPEND_0, dep0 );
-        return ds;       
-    }
-    
+   
     
     /**
      * provide the fill detector, if one is needed.
