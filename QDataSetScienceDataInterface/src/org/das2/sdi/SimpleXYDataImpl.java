@@ -17,6 +17,12 @@ public class SimpleXYDataImpl implements SimpleXYData {
     public SimpleXYDataImpl( QDataSet source ) {
         this.y= source;
         this.x= SemanticOps.xtagsDataSet(source);
+        if ( y.rank()!=1 ) {
+            throw new IllegalArgumentException("source is not rank 1: "+y );
+        }
+        if ( x.rank()!=1 ) {
+            throw new IllegalArgumentException("source x is not rank 1: "+x );
+        }        
     }
     
     @Override

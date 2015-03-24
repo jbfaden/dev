@@ -17,7 +17,17 @@ public class SimpleBinnedData1DImpl implements SimpleBinnedData1D {
     
     public SimpleBinnedData1DImpl( QDataSet source ) {
         this.y= source;
+        if ( y.rank()!=1 ) {
+            throw new IllegalArgumentException("source is not rank 1: "+y );
+        }
         this.x= SemanticOps.xtagsDataSet(source);
+        if ( x.rank()!=1 ) {
+            throw new IllegalArgumentException("source x is not rank 1: "+x );
+        }
+        if ( (QDataSet) x.property(QDataSet.BIN_MINUS)==null 
+                || (QDataSet) x.property(QDataSet.BIN_PLUS)==null ) {
+            throw new IllegalArgumentException("source x must have BIN_PLUS and BIN_MINUS");
+        }
     }
     
     @Override

@@ -10,31 +10,42 @@ import sdi.data.Bin;
  */
 public class BinImpl implements Bin {
 
-    QDataSet ref;
-    QDataSet minus;
-    QDataSet plus;
+    double min;
+    double max;
+    double ref;
+            
     int i0;
     
     public BinImpl( QDataSet ds, int i0 ) {
-        this.ref= ds;
-        this.i0= i0;
-        this.minus= (QDataSet) ds.property(QDataSet.BIN_MINUS);
-        this.plus= (QDataSet) ds.property(QDataSet.BIN_PLUS);
+        //TODO: check units!
+        this.ref= ds.value(i0);
+        QDataSet minus= (QDataSet) ds.property(QDataSet.BIN_MINUS);
+        if ( minus.rank()==0 ) {
+            min= ref - minus.value();
+        } else {
+            min= ref - minus.value(i0);
+        }
+        QDataSet plus= (QDataSet) ds.property(QDataSet.BIN_PLUS);
+        if ( plus.rank()==0 ) {
+            min= ref + plus.value();
+        } else {
+            min= ref + plus.value(i0);
+        }
     }
     
     @Override
     public double getMin() {
-        return ref.value(i0) - minus.value(i0);
+        return min;
     }
 
     @Override
     public double getMax() {
-        return ref.value(i0) + plus.value(i0);
+        return max;
     }
 
     @Override
     public double getReference() {
-        return ref.value(i0);
+        return ref;
     }
     
 }
