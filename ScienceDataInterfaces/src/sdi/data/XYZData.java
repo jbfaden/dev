@@ -40,7 +40,7 @@ public interface XYZData extends SimpleXYZData, MetadataSrc<XYZMetadata> {
      * get the uncertainty provider for Z values.
      * @return the uncertainty provider for Z values.
      */    
-    Optional<UncertaintyProvider> getZUncertProvider();
+    Optional<UncertaintyProvider2D> getZUncertProvider();
 
     /**
      * return the metadata for the object.
