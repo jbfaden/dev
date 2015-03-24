@@ -11,6 +11,8 @@ import org.virbo.dataset.QDataSet;
 import org.virbo.dataset.SemanticOps;
 import org.virbo.dataset.WeightsDataSet;
 import org.virbo.dsops.Ops;
+import sdi.data.BinnedData1D;
+import sdi.data.BinnedData2D;
 import sdi.data.FillDetector;
 import sdi.data.FillDetector2D;
 import sdi.data.SimpleBinnedData1D;
@@ -27,7 +29,7 @@ public class Adapter {
     
     /**
      * returns null or the implementation of the class.
-     * @param <T>
+     * @param <T> a data interface type
      * @param ds the QDataSet
      * @param clazz e.g. XYData.class
      * @return the implementation, e.g. XYDataImpl.
@@ -39,6 +41,10 @@ public class Adapter {
             return (T)new SimpleXYDataImpl( ds );
         } else if ( SimpleBinnedData1D.class.isAssignableFrom(clazz) ) {
             return (T)new SimpleBinnedData1DImpl( ds );
+        } else if ( BinnedData1D.class.isAssignableFrom(clazz) ) {
+            return (T)new BinnedData1DImpl( ds );
+        } else if ( BinnedData2D.class.isAssignableFrom(clazz) ) {
+            return (T)new BinnedData2DImpl( ds );
         } else if ( SimpleBinnedData2D.class.isAssignableFrom(clazz) ) {
             return (T)new SimpleBinnedData2DImpl( ds );
         } else {

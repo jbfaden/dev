@@ -16,8 +16,8 @@ public class SimpleContiguousBinnedData1DAdapter {
     /**
      * This returns the infrequently-used "Bins" dataset, which is 
      * i,j(0=low,1=high) &rarr; BinBoundary(i,j)
-     * @param data
-     * @return 
+     * @param data the data 
+     * @return the QDataSet equivalent
      */
     protected static MutablePropertyDataSet getX( SimpleContiguousBinnedData1D data ) {
         MutablePropertyDataSet result= new AbstractDataSet() {

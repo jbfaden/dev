@@ -33,5 +33,10 @@ public class XYZMetadataImpl extends XYMetadataImpl implements XYZMetadata  {
     public String getZLabel() {
         return (String) z.property(QDataSet.LABEL);
     }
+
+    @Override
+    public String getName() {
+        return getZName();
+    }
     
 }

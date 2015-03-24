@@ -4,15 +4,21 @@ package test;
 import com.google.common.base.Optional;
 import org.das2.datum.Units;
 import org.das2.sdi.Adapter;
+import org.das2.sdi.BinnedData2DAdapter;
 import org.das2.sdi.XYDataAdapter;
+import org.virbo.dataset.DataSetOps;
 import org.virbo.dataset.QDataSet;
 import org.virbo.dataset.SemanticOps;
 import org.virbo.dataset.examples.Schemes;
+import org.virbo.datasource.MetadataModel;
+import sdi.data.BinnedData2D;
 import sdi.data.FillDetector;
+import sdi.data.SimpleBinnedData2D;
 import sdi.data.SimpleXYData;
 import sdi.data.UncertaintyProvider;
 import sdi.data.XYData;
 import sdi.data.XYMetadata;
+import sdi.data.XYZMetadata;
 
 /**
  * Tests to exercise the code.
@@ -124,8 +130,18 @@ public class Test {
         return data;
     }
     
+    private static void printMetadataXY( XYMetadata xy ) {
+        System.err.println( "xname:  "+xy.getXName() );
+        System.err.println( "xlabel: "+xy.getXLabel() );
+        System.err.println( "xunits: "+xy.getXUnits() );
+        System.err.println( "yname:  "+xy.getYName() );
+        System.err.println( "ylabel: "+xy.getYLabel() );
+        System.err.println( "yunits: "+xy.getYUnits() );
+    }
+    
     private static void printXYData( XYData xyds ) {  
         XYMetadata m= xyds.getMetadata();
+        printMetadataXY( m );
         Optional<UncertaintyProvider> oup= xyds.getYUncertProvider();
         Optional<FillDetector> ofd= xyds.getFillDetector();
         FillDetector fd;
@@ -186,9 +202,69 @@ public class Test {
         printXYData( xyds );
     }
     
+    private static void printMetadataXYZ( XYZMetadata xyz ) {
+        System.err.println( "xname:  "+xyz.getXName() );
+        System.err.println( "xlabel: "+xyz.getXLabel() );
+        System.err.println( "xunits: "+xyz.getXUnits() );
+        System.err.println( "yname:  "+xyz.getYName() );
+        System.err.println( "ylabel: "+xyz.getYLabel() );
+        System.err.println( "yunits: "+xyz.getYUnits() );
+        System.err.println( "zname:  "+xyz.getZName() );
+        System.err.println( "zlabel: "+xyz.getZLabel() );
+        System.err.println( "zunits: "+xyz.getZUnits() );
+    }
+    
+    private static void printBinnedData2D( BinnedData2D d ) {
+        printMetadataXYZ( d.getMetadata() );
+        System.err.printf("%30s ","");
+        for ( int j=0; j<d.sizeY(); j++ ) {
+            System.err.printf( "%9.2f ",d.getYBin(j).getReference() );
+        }
+        Units x= Units.lookupUnits( d.getMetadata().getXUnits().getName() );
+        System.err.println("");
+        for ( int i=0; i<d.sizeX(); i++ ) {
+            System.err.printf("%30s ", x.createDatum(d.getXBin(i).getReference()) );
+            for ( int j=0; j<d.sizeY(); j++ ) {
+                System.err.printf( "%9.2e ",d.getZ(i,j) );
+            }
+            System.err.println("");
+        }
+    }
+    
+    private static void printBinnedData2DQDataSet( QDataSet ds ) {
+        System.err.printf("%30s ","");
+        QDataSet y= (QDataSet) ds.property(QDataSet.DEPEND_1);
+        QDataSet x= (QDataSet) ds.property(QDataSet.DEPEND_0);
+        for ( int j=0; j<y.length(); j++ ) {
+            System.err.printf( "%9.2f ",y.value(j) );
+        }
+        System.err.println("");
+        for ( int i=0; i<x.length(); i++ ) {
+            System.err.printf("%30s ",x.slice(i) );
+            for ( int j=0; j<y.length(); j++ ) {
+                System.err.printf( "%9.2e ",ds.slice(i).slice(j).value() );
+            }
+            System.err.println("");
+        }
+    }
+    
+    private static void test5() {
+        System.err.println("== test5 ==");
+        QDataSet rank2ds= Schemes.simpleSpectrogramTimeSeries();
+        rank2ds= DataSetOps.leafTrim( rank2ds, 0, 8 );
+        rank2ds= rank2ds.trim(0,12);
+        BinnedData2D bd2d= Adapter.adapt( rank2ds, BinnedData2D.class );
+        System.err.println("== qdataset -> BinnedData2D ==");
+        printBinnedData2D( bd2d );
+        QDataSet ds= BinnedData2DAdapter.adapt( bd2d );
+        System.err.println("== BinnedData2D -> QDataSet ==");
+        printBinnedData2DQDataSet( ds );
+    }
+    
     public static void main( String[] args ) {
         test1();
         test2();
         test4();
+        test5();
     }
 }

@@ -3,7 +3,6 @@ package org.das2.sdi;
 
 import com.google.common.base.Optional;
 import org.virbo.dataset.QDataSet;
-import sdi.data.Bin;
 import sdi.data.BinnedData2D;
 import sdi.data.FillDetector2D;
 import sdi.data.UncertaintyProvider;

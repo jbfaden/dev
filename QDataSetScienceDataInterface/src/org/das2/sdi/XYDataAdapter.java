@@ -4,7 +4,6 @@ package org.das2.sdi;
 import org.das2.datum.Units;
 import org.virbo.dataset.MutablePropertyDataSet;
 import org.virbo.dataset.QDataSet;
-import sdi.data.SimpleXYData;
 import sdi.data.XYData;
 import sdi.data.XYMetadata;
 
@@ -13,30 +12,7 @@ import sdi.data.XYMetadata;
  * as possible.
  * @author faden@cottagesystems.com
  */
-public class XYDataAdapter {
-    private static MutablePropertyDataSet getX( XYData xydata ) {
-        MutablePropertyDataSet result= SimpleXYDataAdapter.getX( (SimpleXYData)xydata );
-        XYMetadata meta= xydata.getMetadata();
-        result.putProperty( QDataSet.UNITS, Units.lookupUnits( meta.getXUnits().getName() ) );
-        result.putProperty( QDataSet.LABEL, meta.getXLabel() );
-        result.putProperty( QDataSet.NAME, meta.getXName() );
-        result.putProperty( QDataSet.DELTA_MINUS, Adapter.getUPAdapter( result, xydata.getXUncertProvider(), false ) );
-        result.putProperty( QDataSet.DELTA_PLUS, Adapter.getUPAdapter( result, xydata.getXUncertProvider(), true ) );        
-        return result;
-    }
-    
-    
-    private static MutablePropertyDataSet getY( XYData xydata ) {
-        MutablePropertyDataSet result= SimpleXYDataAdapter.getY( (SimpleXYData)xydata );
-        XYMetadata meta= xydata.getMetadata();
-        result.putProperty( QDataSet.UNITS, Units.lookupUnits( meta.getYUnits().getName() ) );
-        result.putProperty( QDataSet.LABEL, meta.getYLabel() );
-        result.putProperty( QDataSet.NAME, meta.getYName() );
-        result.putProperty( QDataSet.DELTA_MINUS, Adapter.getUPAdapter( result, xydata.getYUncertProvider(), false ) );
-        result.putProperty( QDataSet.DELTA_PLUS, Adapter.getUPAdapter( result, xydata.getYUncertProvider(), true ) );
-        result.putProperty( QDataSet.WEIGHTS, Adapter.getWeights( result, xydata.getFillDetector() ) );
-        return result;
-    }
+public class XYDataAdapter extends SimpleXYDataAdapter {
      
     /**
      * return a QDataSet for the xydata
@@ -44,10 +20,22 @@ public class XYDataAdapter {
      * @return a QDataSet
      */
     public static QDataSet adapt( XYData xydata ) {
-        MutablePropertyDataSet dep0= getX(xydata);
-        MutablePropertyDataSet ds= getY(xydata);
-        ds.putProperty( QDataSet.DEPEND_0, dep0 );
-        return ds;
+        MutablePropertyDataSet x= getX(xydata);
+        MutablePropertyDataSet y= getY(xydata);
+        y.putProperty( QDataSet.DEPEND_0, x );
+        XYMetadata meta= xydata.getMetadata();
+        x.putProperty( QDataSet.UNITS, Units.lookupUnits( meta.getXUnits().getName() ) );
+        x.putProperty( QDataSet.LABEL, meta.getXLabel() );
+        x.putProperty( QDataSet.NAME, meta.getXName() );
+        x.putProperty( QDataSet.DELTA_MINUS, Adapter.getUPAdapter( x, xydata.getXUncertProvider(), false ) );
+        x.putProperty( QDataSet.DELTA_PLUS, Adapter.getUPAdapter( x, xydata.getXUncertProvider(), true ) );        
+        y.putProperty( QDataSet.UNITS, Units.lookupUnits( meta.getYUnits().getName() ) );
+        y.putProperty( QDataSet.LABEL, meta.getYLabel() );
+        y.putProperty( QDataSet.NAME, meta.getYName() );
+        y.putProperty( QDataSet.DELTA_MINUS, Adapter.getUPAdapter( y, xydata.getYUncertProvider(), false ) );
+        y.putProperty( QDataSet.DELTA_PLUS, Adapter.getUPAdapter( y, xydata.getYUncertProvider(), true ) );
+        y.putProperty( QDataSet.WEIGHTS, Adapter.getWeights( y, xydata.getFillDetector() ) );
+        return y;
     }
 
 }
