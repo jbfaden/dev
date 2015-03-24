@@ -32,27 +32,35 @@ public class XYMetadataImpl implements XYMetadata {
 
     @Override
     public String getXName() {
-        return (String) x.property(QDataSet.NAME);
+        String name= (String) x.property(QDataSet.NAME);
+        if ( name==null ) name="x";
+        return name;        
     }
 
     @Override
     public String getYName() {
-        return (String) y.property(QDataSet.NAME);
+        String name= (String) y.property(QDataSet.NAME);
+        if ( name==null ) name="y";
+        return name;
     }
 
     @Override
     public String getXLabel() {
-        return (String) x.property(QDataSet.LABEL);
+        String label= (String) x.property(QDataSet.LABEL);
+        if ( label==null ) label= getXName();
+        return label;
     }
 
     @Override
     public String getYLabel() {
-        return (String) y.property(QDataSet.LABEL);
+        String label= (String) y.property(QDataSet.LABEL);
+        if ( label==null ) label= getYName();
+        return label;
     }
 
     @Override
     public String getName() {
-        return (String) y.property(QDataSet.NAME); //TODO: verify this, QDataSet doesn't have a separate name.
+        return getYName();
     }
     
 }

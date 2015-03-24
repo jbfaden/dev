@@ -26,12 +26,16 @@ public class XYZMetadataImpl extends XYMetadataImpl implements XYZMetadata  {
 
     @Override
     public String getZName() {
-        return (String) z.property(QDataSet.NAME);
+        String name= (String) z.property(QDataSet.NAME);
+        if ( name==null ) name="z";
+        return name;
     }
 
     @Override
     public String getZLabel() {
-        return (String) z.property(QDataSet.LABEL);
+        String label= (String) z.property(QDataSet.LABEL);
+        if ( label==null ) label= getZName();
+        return label;
     }
 
     @Override
