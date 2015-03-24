@@ -1,7 +1,7 @@
 
 package test;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 import org.das2.datum.Units;
 import org.das2.sdi.Adapter;
 import org.das2.sdi.BinnedData2DAdapter;
@@ -59,7 +59,7 @@ public class Test {
             
             @Override
             public Optional<UncertaintyProvider> getXUncertProvider() {
-                return Optional.absent();
+                return Optional.empty();
             }
             
             @Override
