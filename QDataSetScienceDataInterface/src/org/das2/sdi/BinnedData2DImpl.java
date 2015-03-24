@@ -1,7 +1,7 @@
 
 package org.das2.sdi;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 import org.virbo.dataset.QDataSet;
 import sdi.data.BinnedData2D;
 import sdi.data.FillDetector2D;
@@ -25,7 +25,7 @@ public class BinnedData2DImpl extends SimpleBinnedData2DImpl implements BinnedDa
 
     @Override
     public Optional<UncertaintyProvider> getZUncertProvider() {
-        return Optional.absent(); //TODO: UncertaintyProvider2D
+        return Optional.empty(); //TODO: UncertaintyProvider2D
     }
 
     @Override

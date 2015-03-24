@@ -5,6 +5,7 @@
  */
 package org.das2.sdi;
 
+import java.util.Optional;
 import org.virbo.dataset.QDataSet;
 import org.virbo.dataset.SemanticOps;
 import sdi.data.FillDetector;
@@ -27,17 +28,17 @@ public class XYDataImpl implements XYData {
     }
     
     @Override
-    public com.google.common.base.Optional<FillDetector> getFillDetector() {
+    public Optional<FillDetector> getFillDetector() {
         return Adapter.getFillDetector(y);
     }
 
     @Override
-    public com.google.common.base.Optional<UncertaintyProvider> getXUncertProvider() {
+    public Optional<UncertaintyProvider> getXUncertProvider() {
         return Adapter.getUncertaintyProvider(x);
     }
 
     @Override
-    public com.google.common.base.Optional<UncertaintyProvider> getYUncertProvider() {
+    public Optional<UncertaintyProvider> getYUncertProvider() {
         return Adapter.getUncertaintyProvider(y);
     }
 

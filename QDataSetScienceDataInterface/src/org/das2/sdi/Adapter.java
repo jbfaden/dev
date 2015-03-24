@@ -1,13 +1,8 @@
 
 package org.das2.sdi;
 
-import com.google.common.base.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.das2.datum.Units;
+import java.util.Optional;
 import org.virbo.dataset.AbstractRank1DataSet;
-import org.virbo.dataset.ArrayDataSet;
-import org.virbo.dataset.DDataSet;
 import org.virbo.dataset.MutablePropertyDataSet;
 import org.virbo.dataset.QDataSet;
 import org.virbo.dataset.SemanticOps;
@@ -107,9 +102,9 @@ public class Adapter {
     public static Optional<FillDetector> getFillDetector(QDataSet ds) {
         QDataSet wds= (QDataSet) SemanticOps.weightsDataSet(ds);
         if ( wds instanceof WeightsDataSet.Finite || wds instanceof WeightsDataSet.AllValid ) {
-            return Optional.absent();
+            return Optional.empty();
         } else {
-            return Optional.fromNullable( new FillDetectorImpl(ds) );
+            return Optional.ofNullable( new FillDetectorImpl(ds) );
         }
     }
 
@@ -122,9 +117,9 @@ public class Adapter {
     public static Optional<FillDetector2D> getFillDetector2D(QDataSet ds) {
         QDataSet wds= (QDataSet) SemanticOps.weightsDataSet(ds);
         if ( wds instanceof WeightsDataSet.Finite || wds instanceof WeightsDataSet.AllValid ) {
-            return Optional.absent();
+            return Optional.empty();
         } else {
-            return Optional.fromNullable( new FillDetector2DImpl(ds) );
+            return Optional.ofNullable( new FillDetector2DImpl(ds) );
         }
     }
     
@@ -137,9 +132,9 @@ public class Adapter {
         QDataSet dxp= (QDataSet) ds.property(QDataSet.DELTA_PLUS);
         QDataSet dxm= (QDataSet) ds.property(QDataSet.DELTA_MINUS);
         if ( dxp!=null && dxm!=null ) {
-            return Optional.fromNullable( new UncertaintyProviderImpl( Ops.add( ds, dxp ), Ops.subtract( ds, dxm ) ) );
+            return Optional.ofNullable( new UncertaintyProviderImpl( Ops.add( ds, dxp ), Ops.subtract( ds, dxm ) ) );
         } else {
-            return Optional.absent();
+            return Optional.empty();
         }
     }
 }

@@ -1,7 +1,7 @@
 
 package org.das2.sdi;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 import org.virbo.dataset.QDataSet;
 import sdi.data.BinnedData1D;
 import sdi.data.FillDetector;
