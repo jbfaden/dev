@@ -136,8 +136,6 @@ public class Adapter {
     public static Optional<UncertaintyProvider> getUncertaintyProvider( QDataSet ds ) {
         QDataSet dxp= (QDataSet) ds.property(QDataSet.DELTA_PLUS);
         QDataSet dxm= (QDataSet) ds.property(QDataSet.DELTA_MINUS);
-        dxp= DDataSet.copy(dxp);
-        dxm= DDataSet.copy(dxm);
         if ( dxp!=null && dxm!=null ) {
             return Optional.fromNullable( new UncertaintyProviderImpl( Ops.add( ds, dxp ), Ops.subtract( ds, dxm ) ) );
         } else {
