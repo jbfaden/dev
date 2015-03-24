@@ -2,6 +2,8 @@
 package org.das2.sdi;
 
 import com.google.common.base.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.das2.datum.Units;
 import org.virbo.dataset.AbstractRank1DataSet;
 import org.virbo.dataset.ArrayDataSet;
@@ -26,7 +28,7 @@ import sdi.data.XYData;
  * @author faden@cottagesystems.com
  */
 public class Adapter {
-    
+         
     /**
      * returns null or the implementation of the class.
      * @param <T> a data interface type
@@ -39,10 +41,10 @@ public class Adapter {
             return (T)new XYDataImpl( ds );
         } else if ( SimpleXYData.class.isAssignableFrom(clazz) ) {
             return (T)new SimpleXYDataImpl( ds );
-        } else if ( SimpleBinnedData1D.class.isAssignableFrom(clazz) ) {
-            return (T)new SimpleBinnedData1DImpl( ds );
         } else if ( BinnedData1D.class.isAssignableFrom(clazz) ) {
             return (T)new BinnedData1DImpl( ds );
+        } else if ( SimpleBinnedData1D.class.isAssignableFrom(clazz) ) {
+            return (T)new SimpleBinnedData1DImpl( ds );
         } else if ( BinnedData2D.class.isAssignableFrom(clazz) ) {
             return (T)new BinnedData2DImpl( ds );
         } else if ( SimpleBinnedData2D.class.isAssignableFrom(clazz) ) {

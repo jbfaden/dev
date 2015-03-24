@@ -18,7 +18,7 @@ public class SimpleBinnedData2DImpl implements SimpleBinnedData2D {
     QDataSet z;
     
     public SimpleBinnedData2DImpl( QDataSet ds ) {
-        if ( !Schemes.isSimpleSpectrogram(ds) ) throw new IllegalArgumentException("scheme");
+        if ( !Schemes.isSimpleSpectrogram(ds) ) throw new IllegalArgumentException("data cannot be converted to SimpleBinnedData2D");
         this.x= SemanticOps.xtagsDataSet(ds);
         this.y= SemanticOps.ytagsDataSet(ds);
         this.z= ds;        
