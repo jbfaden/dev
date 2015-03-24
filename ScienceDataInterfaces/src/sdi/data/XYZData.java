@@ -5,7 +5,7 @@
  */
 package sdi.data;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 
 /**
  * <p>Z as a function of X and Y, possibly containing fill values and uncertainties.</p>

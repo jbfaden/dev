@@ -1,7 +1,7 @@
 
 package sdi.data;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 
 /**
  * <p>

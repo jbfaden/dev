@@ -5,7 +5,7 @@
  */
 package sdi.data;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 
 /**
  * <p>two-index table of numbers, each tagged with an X and a Y bin, and the
