@@ -79,7 +79,6 @@ public class Adapter {
             throw new IllegalArgumentException("Unsupported interface: "+clazz);
         }
     }
-    
         
     /**
      * returns the implementation of the class

@@ -32,11 +32,11 @@ public class SimpleXYDataImpl implements SimpleXYData {
     
     /**
      * create the SimpleXYDataImpl with the dataset, using known schemes.
-     * @param source 
+     * @param ds the dataset
      * @see SemanticOps#xtagsDataSet(org.virbo.dataset.QDataSet) 
      */
-    public SimpleXYDataImpl( QDataSet source ) {
-        this( SemanticOps.xtagsDataSet(source), source );
+    public SimpleXYDataImpl( QDataSet ds ) {
+        this( SemanticOps.xtagsDataSet(ds), ds );
     }
     
     @Override

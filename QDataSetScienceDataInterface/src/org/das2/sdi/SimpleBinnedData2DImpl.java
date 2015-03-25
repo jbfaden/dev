@@ -30,7 +30,7 @@ public class SimpleBinnedData2DImpl implements SimpleBinnedData2D {
         if ( !Schemes.isSimpleSpectrogram(z) ) throw new IllegalArgumentException("data cannot be converted to SimpleBinnedData2D");
         if ( (QDataSet) x.property(QDataSet.BIN_MINUS)==null 
                 || (QDataSet) x.property(QDataSet.BIN_PLUS)==null ) {
-            QDataSet cadence= DataSetUtil.guessCadenceNew(x,null);
+            QDataSet cadence= DataSetUtil.guessCadence(x,null);
             if ( cadence!=null ) {
                 cadence= Ops.divide(cadence,2);
                 x= Ops.putProperty( x, QDataSet.BIN_PLUS, cadence );
@@ -41,7 +41,7 @@ public class SimpleBinnedData2DImpl implements SimpleBinnedData2D {
         }
         if ( (QDataSet) y.property(QDataSet.BIN_MINUS)==null 
                 || (QDataSet) y.property(QDataSet.BIN_PLUS)==null ) {
-            QDataSet cadence= DataSetUtil.guessCadenceNew(y,null);
+            QDataSet cadence= DataSetUtil.guessCadence(y,null);
             if ( cadence!=null ) {
                 cadence= Ops.divide(cadence,2);
                 y= Ops.putProperty( y, QDataSet.BIN_PLUS, cadence );

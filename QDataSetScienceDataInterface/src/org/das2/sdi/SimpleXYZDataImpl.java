@@ -40,9 +40,10 @@ public class SimpleXYZDataImpl implements SimpleXYZData {
     
     /**
      * create the SimpleXYDataImpl with the dataset, using known schemes.
-     * @param ds 
+     * @param ds the dataset
      * @see SemanticOps#xtagsDataSet(org.virbo.dataset.QDataSet) 
-     * @see SemanticOps#ztagsDataSet(org.virbo.dataset.QDataSet) 
+     * @see SemanticOps#ytagsDataSet(org.virbo.dataset.QDataSet)
+     * @see SemanticOps#getDependentDataSet(org.virbo.dataset.QDataSet) 
      * @see #SimpleXYZDataImpl(org.virbo.dataset.QDataSet) which must contain repeat code.
      */
     public SimpleXYZDataImpl( QDataSet ds ) {
