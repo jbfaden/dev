@@ -14,15 +14,29 @@ public class SimpleXYDataImpl implements SimpleXYData {
     QDataSet y;
     QDataSet x;
     
-    public SimpleXYDataImpl( QDataSet source ) {
-        this.y= source;
-        this.x= SemanticOps.xtagsDataSet(source);
+    /**
+     * create the SimpleXYDataImpl with x and y rank 1 datasets.
+     * @param x rank 1 dataset
+     * @param y rank 1 dataset
+     */
+    public SimpleXYDataImpl( QDataSet x, QDataSet y ) {
+        this.y= y;
+        this.x= x;
         if ( y.rank()!=1 ) {
             throw new IllegalArgumentException("source is not rank 1: "+y );
         }
         if ( x.rank()!=1 ) {
             throw new IllegalArgumentException("source x is not rank 1: "+x );
         }        
+    }
+    
+    /**
+     * create the SimpleXYDataImpl with the dataset, using known schemes.
+     * @param source 
+     * @see SemanticOps#xtagsDataSet(org.virbo.dataset.QDataSet) 
+     */
+    public SimpleXYDataImpl( QDataSet source ) {
+        this( SemanticOps.xtagsDataSet(source), source );
     }
     
     @Override

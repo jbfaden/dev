@@ -7,7 +7,6 @@ package org.das2.sdi;
 
 import java.util.Optional;
 import org.virbo.dataset.QDataSet;
-import org.virbo.dataset.SemanticOps;
 import sdi.data.FillDetector;
 import sdi.data.UncertaintyProvider;
 import sdi.data.XYData;
@@ -17,14 +16,14 @@ import sdi.data.XYMetadata;
  *
  * @author faden@cottagesystems.com
  */
-public class XYDataImpl implements XYData {
-    
-    QDataSet y;
-    QDataSet x;
+public class XYDataImpl extends SimpleXYDataImpl implements XYData {
+
+    public XYDataImpl( QDataSet x, QDataSet y ) {
+        super( x, y );
+    }
     
     public XYDataImpl( QDataSet source ) {
-        this.y= source;
-        this.x= SemanticOps.xtagsDataSet(source);
+        super( source );
     }
     
     @Override
@@ -45,21 +44,6 @@ public class XYDataImpl implements XYData {
     @Override
     public XYMetadata getMetadata() {
         return new XYMetadataImpl( x, y );
-    }
-    
-    @Override
-    public int size() {
-        return x.length();
-    }
-
-    @Override
-    public double getX(int i) {
-        return x.value(i);
-    }
-
-    @Override
-    public double getY(int i) {
-        return y.value(i);
     }
     
 }

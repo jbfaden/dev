@@ -3,17 +3,23 @@ package org.das2.sdi;
 
 import java.util.Optional;
 import org.virbo.dataset.QDataSet;
+import org.virbo.dataset.examples.Schemes;
 import sdi.data.BinnedData2D;
 import sdi.data.FillDetector2D;
-import sdi.data.UncertaintyProvider;
+import sdi.data.UncertaintyProvider2D;
 import sdi.data.XYZMetadata;
 
 /**
- *
+ * Implements a BinnedData2D with a rank 2 dataset.
+ * @see Schemes#simpleSpectrogram() 
  * @author faden@cottagesystems.com
  */
 public class BinnedData2DImpl extends SimpleBinnedData2DImpl implements BinnedData2D {
 
+    public BinnedData2DImpl( QDataSet x, QDataSet y, QDataSet z ) {
+        super( x,y,z );
+    }
+    
     public BinnedData2DImpl(QDataSet ds) {
         super(ds);
     }
@@ -24,8 +30,8 @@ public class BinnedData2DImpl extends SimpleBinnedData2DImpl implements BinnedDa
     }
 
     @Override
-    public Optional<UncertaintyProvider> getZUncertProvider() {
-        return Optional.empty(); //TODO: UncertaintyProvider2D
+    public Optional<UncertaintyProvider2D> getZUncertProvider() {
+        return Adapter.getUncertaintyProvider2D(z);
     }
 
     @Override

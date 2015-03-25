@@ -2,9 +2,7 @@
 package org.das2.sdi;
 
 import java.util.Optional;
-import org.virbo.dataset.DataSetOps;
 import org.virbo.dataset.QDataSet;
-import org.virbo.dataset.SemanticOps;
 import sdi.data.FillDetector;
 import sdi.data.UncertaintyProvider;
 import sdi.data.XYZData;
@@ -14,22 +12,14 @@ import sdi.data.XYZMetadata;
  *
  * @author faden@cottagesystems.com
  */
-public class XYZDataImpl implements XYZData {
-
-    QDataSet x;
-    QDataSet y;
-    QDataSet z;
+public class XYZDataImpl extends SimpleXYZDataImpl implements XYZData {
             
+    public XYZDataImpl( QDataSet x, QDataSet y, QDataSet z ) {
+        super( x,y,z );
+    }
+    
     public XYZDataImpl( QDataSet ds ) {
-        if ( ds.rank()==2 ) {
-            x= SemanticOps.xtagsDataSet(ds);
-            y= SemanticOps.ytagsDataSet(ds);
-            z= DataSetOps.unbundleDefaultDataSet(ds);
-        } else if ( ds.rank()==1 ) {
-            x= SemanticOps.xtagsDataSet(ds);
-            y= SemanticOps.ytagsDataSet(ds);
-            z= (QDataSet) ds.property(QDataSet.PLANE_0);
-        }
+        super( ds );
     }
     
     @Override
@@ -56,26 +46,5 @@ public class XYZDataImpl implements XYZData {
     public XYZMetadata getMetadata() {
         return new XYZMetadataImpl(x, y, z);
     }
-
-    @Override
-    public int size() {
-        return x.length();
-    }
-
-    @Override
-    public double getX(int i) {
-        return x.value(i);
-    }
-
-    @Override
-    public double getY(int i) {
-        return y.value(i);
-    }
-
-    @Override
-    public double getZ(int i) {
-        return z.value(i);
-    }
-
     
 }

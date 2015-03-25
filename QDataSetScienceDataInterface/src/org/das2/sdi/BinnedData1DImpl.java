@@ -14,8 +14,12 @@ import sdi.data.XYMetadata;
  */
 public class BinnedData1DImpl extends SimpleBinnedData1DImpl implements BinnedData1D {
 
+    public BinnedData1DImpl( QDataSet x, QDataSet y ) {
+        super( x, y );
+    }
+    
     public BinnedData1DImpl(QDataSet ds) {
-        super(ds);
+        super( ds );
     }
     
     @Override

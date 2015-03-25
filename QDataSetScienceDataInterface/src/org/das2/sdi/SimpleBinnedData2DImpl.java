@@ -19,11 +19,15 @@ public class SimpleBinnedData2DImpl implements SimpleBinnedData2D {
     QDataSet y;
     QDataSet z;
     
-    public SimpleBinnedData2DImpl( QDataSet ds ) {
-        if ( !Schemes.isSimpleSpectrogram(ds) ) throw new IllegalArgumentException("data cannot be converted to SimpleBinnedData2D");
-        this.x= SemanticOps.xtagsDataSet(ds);
-        this.y= SemanticOps.ytagsDataSet(ds);
-        this.z= ds;  
+    /**
+     * create the SimpleBinnedData2DImpl with x (rank 1), y (rank 1) and 
+     * z (rank 2) datasets.
+     * @param x rank 1 dataset independent parameter
+     * @param y rank 1 dataset independent parameter
+     * @param z rank 2 dataset dependent parameter
+     */
+    public SimpleBinnedData2DImpl( QDataSet x, QDataSet y, QDataSet z ) {
+        if ( !Schemes.isSimpleSpectrogram(z) ) throw new IllegalArgumentException("data cannot be converted to SimpleBinnedData2D");
         if ( (QDataSet) x.property(QDataSet.BIN_MINUS)==null 
                 || (QDataSet) x.property(QDataSet.BIN_PLUS)==null ) {
             QDataSet cadence= DataSetUtil.guessCadenceNew(x,null);
@@ -45,7 +49,14 @@ public class SimpleBinnedData2DImpl implements SimpleBinnedData2D {
             } else {
                 throw new IllegalArgumentException("source y must have BIN_PLUS and BIN_MINUS");
             }
-        }        
+        }
+        this.x= x;
+        this.y= y;
+        this.z= z;
+    }
+    
+    public SimpleBinnedData2DImpl( QDataSet ds ) {
+        this( SemanticOps.xtagsDataSet(ds), SemanticOps.ytagsDataSet(ds), ds );  
     }
     
     @Override

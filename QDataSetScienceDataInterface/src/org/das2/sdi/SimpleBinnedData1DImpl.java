@@ -15,12 +15,17 @@ public class SimpleBinnedData1DImpl implements SimpleBinnedData1D {
     QDataSet y;
     QDataSet x;
     
-    public SimpleBinnedData1DImpl( QDataSet source ) {
-        this.y= source;
+    /**
+     * create the SimpleBinnedData1DImpl with x and y rank 1 datasets.
+     * @param x
+     * @param y 
+     */
+    public SimpleBinnedData1DImpl( QDataSet x, QDataSet y ) {
+        this.y= y;
         if ( y.rank()!=1 ) {
-            throw new IllegalArgumentException("source is not rank 1: "+y );
+            throw new IllegalArgumentException("source y is not rank 1: "+y );
         }
-        this.x= SemanticOps.xtagsDataSet(source);
+        this.x= x;
         if ( x.rank()!=1 ) {
             throw new IllegalArgumentException("source x is not rank 1: "+x );
         }
@@ -28,6 +33,15 @@ public class SimpleBinnedData1DImpl implements SimpleBinnedData1D {
                 || (QDataSet) x.property(QDataSet.BIN_PLUS)==null ) {
             throw new IllegalArgumentException("source x must have BIN_PLUS and BIN_MINUS");
         }
+    }
+    
+    /**
+     * create the SimpleBinnedData1DImpl, using known schemes.
+     * @param source the dataset
+     * @see SemanticOps#xtagsDataSet(org.virbo.dataset.QDataSet) 
+     */
+    public SimpleBinnedData1DImpl( QDataSet source ) {
+        this( SemanticOps.xtagsDataSet(source), source );
     }
     
     @Override
