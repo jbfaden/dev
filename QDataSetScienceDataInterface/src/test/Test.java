@@ -1,10 +1,7 @@
 
 package test;
 
-import java.text.ParseException;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.das2.datum.Units;
 import org.das2.sdi.Adapter;
 import org.das2.sdi.BinnedData2DAdapter;
@@ -307,7 +304,7 @@ public class Test {
     }
     
     /**
-     * test UncertaintyProvider2D
+     * test UncertaintyProvider2D 
      */
     public static void test7() throws Exception {
         QDataSet z= Ops.findgen(4,5);
