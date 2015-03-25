@@ -5,6 +5,8 @@ import java.util.Optional;
 import org.das2.datum.Units;
 import org.das2.sdi.Adapter;
 import org.das2.sdi.BinnedData2DAdapter;
+import org.das2.sdi.BinnedData2DImpl;
+import org.das2.sdi.Operations;
 import org.das2.sdi.XYDataAdapter;
 import org.das2.sdi.XYZDataAdapter;
 import org.virbo.dataset.DataSetOps;
@@ -12,6 +14,7 @@ import org.virbo.dataset.QDataSet;
 import org.virbo.dataset.SemanticOps;
 import org.virbo.dataset.examples.Schemes;
 import org.virbo.dsops.Ops;
+import sdi.data.BinnedData1D;
 import sdi.data.BinnedData2D;
 import sdi.data.FillDetector;
 import sdi.data.SimpleXYData;
@@ -303,17 +306,25 @@ public class Test {
         printXYZDataQDataSet( ds );
     }
     
+    private static BinnedData2D exampleBinned2D() {
+        try {
+            QDataSet z= Ops.findgen(4,5);
+            z= Ops.putProperty( z, QDataSet.DELTA_MINUS, Ops.dataset(0.3) );
+            z= Ops.putProperty( z, QDataSet.DELTA_PLUS, Ops.dataset(0.4) );
+            QDataSet x= Ops.timegen("2014-03-25T06:48", "1s", 4 );
+            QDataSet y= Ops.findgen(5);
+            BinnedData2D bd2d= Adapter.adapt( x, y, z, BinnedData2D.class );
+            return bd2d;
+        } catch ( Exception ex ) {
+            throw new RuntimeException(ex);
+        }
+    }
+    
     /**
      * test UncertaintyProvider2D 
-     * @throws Exception because we're parsing.
      */
-    public static void test7() throws Exception {
-        QDataSet z= Ops.findgen(4,5);
-        z= Ops.putProperty( z, QDataSet.DELTA_MINUS, Ops.dataset(0.3) );
-        z= Ops.putProperty( z, QDataSet.DELTA_PLUS, Ops.dataset(0.4) );
-        QDataSet x= Ops.timegen("2014-03-25T06:48", "1s", 4 );
-        QDataSet y= Ops.findgen(5);
-        BinnedData2D bd2d= Adapter.adapt( x, y, z, BinnedData2D.class );
+    public static void test7() {
+        BinnedData2D bd2d= exampleBinned2D();
         
         UncertaintyProvider2D dbd2d= bd2d.getZUncertProvider().get();
         
@@ -328,6 +339,22 @@ public class Test {
 
     }
     
+    public static void printBinnedData1D( BinnedData1D data ) {
+        Units xu= Units.lookupUnits( data.getMetadata().getXUnits().getName() );
+        Units yu= Units.lookupUnits( data.getMetadata().getYUnits().getName() );
+        for ( int i=0; i<data.size(); i++ ) {
+            System.err.println( xu.createDatum( data.getXBin(i).getReference() ) + " " + yu.createDatum( data.getY(i) ) );
+        }
+    }
+    
+    public static void test8() {
+        BinnedData2D data = exampleBinned2D();
+        printBinnedData2D(data);
+        
+        BinnedData1D data1d= Operations.sliceAtX( data, 1 );
+        printBinnedData1D( data1d );
+     
+    }
     
     public static void main( String[] args ) throws Exception {
         test1();
@@ -336,5 +363,6 @@ public class Test {
         test5();
         test6();
         test7();
+        test8();
     }
 }
