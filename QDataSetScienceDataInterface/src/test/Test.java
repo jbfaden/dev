@@ -305,6 +305,7 @@ public class Test {
     
     /**
      * test UncertaintyProvider2D 
+     * @throws Exception because we're parsing.
      */
     public static void test7() throws Exception {
         QDataSet z= Ops.findgen(4,5);

@@ -12,6 +12,12 @@ import sdi.data.XYMetadata;
  * @author faden@cottagesystems.com
  */
 public class ContiguousBinnedData1DAdapter extends SimpleContiguousBinnedData1DAdapter {
+    
+    /**
+     * Adapt the 
+     * @param data
+     * @return 
+     */
     public static QDataSet adapt( ContiguousBinnedData1D data ) {
         MutablePropertyDataSet result= SimpleContiguousBinnedData1DAdapter.adapt( data );
         result.putProperty( QDataSet.DELTA_MINUS, Adapter.getUPAdapter( result, data.getUncertProvider(), false ) );

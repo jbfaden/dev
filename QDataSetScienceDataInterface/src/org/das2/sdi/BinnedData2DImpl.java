@@ -21,7 +21,7 @@ public class BinnedData2DImpl extends SimpleBinnedData2DImpl implements BinnedDa
     }
     
     public BinnedData2DImpl(QDataSet ds) {
-        super(ds);
+        super( ds );
     }
     
     @Override

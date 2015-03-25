@@ -35,7 +35,7 @@ public class SimpleBinnedData1DImpl implements SimpleBinnedData1D {
         }
         if ( (QDataSet) x.property(QDataSet.BIN_MINUS)==null 
                 || (QDataSet) x.property(QDataSet.BIN_PLUS)==null ) {
-            QDataSet cadence= DataSetUtil.guessCadence(y,null);
+            QDataSet cadence= DataSetUtil.guessCadence(x,null);
             if ( cadence!=null ) {
                 cadence= Ops.divide(cadence,2);
                 x= Ops.putProperty( x, QDataSet.BIN_PLUS, cadence );
