@@ -1,21 +1,28 @@
 
 package test;
 
+import java.text.ParseException;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.das2.datum.Units;
 import org.das2.sdi.Adapter;
 import org.das2.sdi.BinnedData2DAdapter;
 import org.das2.sdi.XYDataAdapter;
+import org.das2.sdi.XYZDataAdapter;
 import org.virbo.dataset.DataSetOps;
 import org.virbo.dataset.QDataSet;
 import org.virbo.dataset.SemanticOps;
 import org.virbo.dataset.examples.Schemes;
+import org.virbo.dsops.Ops;
 import sdi.data.BinnedData2D;
 import sdi.data.FillDetector;
 import sdi.data.SimpleXYData;
 import sdi.data.UncertaintyProvider;
+import sdi.data.UncertaintyProvider2D;
 import sdi.data.XYData;
 import sdi.data.XYMetadata;
+import sdi.data.XYZData;
 import sdi.data.XYZMetadata;
 
 /**
@@ -259,10 +266,77 @@ public class Test {
         printBinnedData2DQDataSet( ds );
     }
     
-    public static void main( String[] args ) {
+
+    private static void printXYZData(XYZData xyzdata) {
+        Units xu= Units.lookupUnits( xyzdata.getMetadata().getXUnits().getName() );
+        Units yu= Units.lookupUnits( xyzdata.getMetadata().getYUnits().getName() );
+        Units zu= Units.lookupUnits( xyzdata.getMetadata().getZUnits().getName() );
+        printMetadataXYZ(xyzdata.getMetadata());
+        for ( int i=0; i<xyzdata.size(); i++ ) {
+            System.err.println( String.format( "%s %s %s", 
+                    xu.createDatum( xyzdata.getX(i) ),
+                    yu.createDatum( xyzdata.getY(i) ), 
+                    zu.createDatum( xyzdata.getZ(i) ) ) );
+        }
+    }
+
+    private static void printXYZDataQDataSet(QDataSet ds) {
+        QDataSet x= SemanticOps.xtagsDataSet(ds);
+        QDataSet y= SemanticOps.ytagsDataSet(ds);
+        QDataSet z= SemanticOps.getDependentDataSet(ds);
+        Units xu= SemanticOps.getUnits(x);
+        Units yu= SemanticOps.getUnits(y);
+        Units zu= SemanticOps.getUnits(z);
+        for ( int i=0; i<x.length(); i++ ) {
+            System.err.println( String.format( "%s %s %s", 
+                    xu.createDatum( x.value(i) ),
+                    yu.createDatum( y.value(i) ), 
+                    zu.createDatum( z.value(i) ) ) );
+        }
+    }
+
+    private static void test6() {
+        System.err.println("== test6 ==");
+        QDataSet rank2ds= Ops.ripplesVectorTimeSeries(10);
+        XYZData bd2d= Adapter.adapt( rank2ds, XYZData.class );
+        System.err.println("== QDataSet -> XYZData ==");
+        printXYZData( bd2d );
+        QDataSet ds= XYZDataAdapter.adapt( bd2d );
+        System.err.println("== XYZData -> QDataSet ==");
+        printXYZDataQDataSet( ds );
+    }
+    
+    /**
+     * test UncertaintyProvider2D
+     */
+    public static void test7() throws Exception {
+        QDataSet z= Ops.findgen(4,5);
+        z= Ops.putProperty( z, QDataSet.DELTA_MINUS, Ops.dataset(0.3) );
+        z= Ops.putProperty( z, QDataSet.DELTA_PLUS, Ops.dataset(0.4) );
+        QDataSet x= Ops.timegen("2014-03-25T06:48", "1s", 4 );
+        QDataSet y= Ops.findgen(5);
+        BinnedData2D bd2d= Adapter.adapt( x, y, z, BinnedData2D.class );
+        
+        UncertaintyProvider2D dbd2d= bd2d.getZUncertProvider().get();
+        
+        for ( int i=0; i<bd2d.sizeX(); i++ ) {
+            for ( int j=0; j<bd2d.sizeY(); j++ ) {
+                System.err.println( String.format( "%d %d: ", i, j ) 
+                        + bd2d.getZ(i,j) 
+                        + " ("+dbd2d.getUncertMinus(i, j)
+                        + " - "+dbd2d.getUncertPlus(i, j) + ")");
+            }
+        }
+
+    }
+    
+    
+    public static void main( String[] args ) throws Exception {
         test1();
         test2();
         test4();
         test5();
+        test6();
+        test7();
     }
 }
