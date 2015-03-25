@@ -29,7 +29,7 @@ public interface BinnedData2D extends SimpleBinnedData2D, MetadataSrc<XYZMetadat
      *
      * @return the uncertainty provider
      */    
-    Optional<UncertaintyProvider> getZUncertProvider();
+    Optional<UncertaintyProvider2D> getZUncertProvider();
 
     /**
      * return the metadata for the object.
