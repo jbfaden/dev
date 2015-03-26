@@ -9,8 +9,7 @@ import sdi.data.XYZData;
 import sdi.data.XYZMetadata;
 
 /**
- * Given an XYZData, provide a QDataSet that preserves as much information
- * as possible.
+ * Adapts XYZData to QDataSet
  * @author faden@cottagesystems.com
  */
 public class XYZDataAdapter extends SimpleXYZDataAdapter {

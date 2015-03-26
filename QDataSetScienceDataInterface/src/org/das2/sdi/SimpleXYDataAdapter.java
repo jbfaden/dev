@@ -7,7 +7,7 @@ import org.virbo.dataset.QDataSet;
 import sdi.data.SimpleXYData;
 
 /**
- *
+ * Adapts SimpleXYData to QDataSet
  * @author faden@cottagesystems.com
  */
 public class SimpleXYDataAdapter {

@@ -8,8 +8,7 @@ import sdi.data.XYData;
 import sdi.data.XYMetadata;
 
 /**
- * Given an XYData, provide a QDataSet that preserves as much information
- * as possible.
+ * Adapts XYData to QDataSet
  * @author faden@cottagesystems.com
  */
 public class XYDataAdapter extends SimpleXYDataAdapter {

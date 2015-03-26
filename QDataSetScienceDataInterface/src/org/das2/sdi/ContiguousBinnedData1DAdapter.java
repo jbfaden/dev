@@ -8,7 +8,7 @@ import sdi.data.ContiguousBinnedData1D;
 import sdi.data.XYMetadata;
 
 /**
- *
+ * Adapts ContiguousBinnedData1D to QDataSet.
  * @author faden@cottagesystems.com
  */
 public class ContiguousBinnedData1DAdapter extends SimpleContiguousBinnedData1DAdapter {

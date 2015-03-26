@@ -8,7 +8,7 @@ import org.virbo.dataset.QDataSet;
 import sdi.data.SimpleBinnedData2D;
 
 /**
- * Adapt to Rank 2 Spectrogram.
+ * Adapts BinnedData2D to QDataSet
  * @author faden@cottagesystems.com
  * @see org.virbo.dataset.examples.Schemes#simpleSpectrogram() 
  */

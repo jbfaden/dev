@@ -8,7 +8,7 @@ import sdi.data.BinnedData2D;
 import sdi.data.XYZMetadata;
 
 /**
- *
+ * Adapts BinnedData2D to QDataSet
  * @author faden@cottagesystems.com
  */
 public class BinnedData2DAdapter extends SimpleBinnedData2DAdapter {

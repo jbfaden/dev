@@ -8,7 +8,7 @@ import org.virbo.dsops.Ops;
 import sdi.data.SimpleXYZData;
 
 /**
- *
+ * Adapts SimpleXYZData to QDataSet
  * @author faden@cottagesystems.com
  */
 public class SimpleXYZDataAdapter {

@@ -8,7 +8,7 @@ import sdi.data.SimpleContiguousBinnedData1D;
 
 
 /**
- *
+ * Adapts SimpleContiguousBinnedData1D to QDataSet
  * @author faden@cottagesystems.com
  */
 public class SimpleContiguousBinnedData1DAdapter {

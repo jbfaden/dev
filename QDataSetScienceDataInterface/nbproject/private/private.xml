@@ -6,18 +6,30 @@
             <file>file:/mynet/spot6/home/jbf/ct/apljon/20150311_scienceDataInterfaces/QDataSetScienceDataInterface/src/org/das2/sdi/XYDataImpl.java</file>
         </group>
         <group name="ScienceDataInterfaces">
-            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/FillDetectorImpl.java</file>
-            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/XYZMetadataImpl.java</file>
-            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/XYZDataImpl.java</file>
-            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/BinImpl.java</file>
             <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/XYDataImpl.java</file>
-            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/XYMetadataImpl.java</file>
-            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/UncertaintyProviderImpl.java</file>
             <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/Adapter.java</file>
             <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/test/Test.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/BinnedData2DImpl.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/SimpleContiguousBinnedData1DAdapter.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/ContiguousBinnedData1DAdapter.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/XYZDataImpl.java</file>
             <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/SimpleBinnedData2DImpl.java</file>
             <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/SimpleXYDataImpl.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/BinnedData1DImpl.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/BinnedData2DAdapter.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/UncertaintyProviderImpl.java</file>
             <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/SimpleBinnedData1DImpl.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/UncertaintyProvider2DImpl.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/SimpleXYZDataImpl.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/XYZDataAdapter.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/SimpleXYZDataAdapter.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/BinImpl.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/SimpleBinnedData1DAdapter.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/ContiguousBinnedData1DImpl.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/SimpleContiguousBinnedData1DImpl.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/FillDetector2DImpl.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/BinnedData1DAdapter.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/Operations.java</file>
         </group>
     </open-files>
 </project-private>

@@ -7,7 +7,7 @@ import org.virbo.dataset.QDataSet;
 import sdi.data.SimpleBinnedData1D;
 
 /**
- *
+ * Adapts SimpleBinnedData1D to QDataSet
  * @author faden@cottagesystems.com
  */
 public class SimpleBinnedData1DAdapter {
