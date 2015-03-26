@@ -14,12 +14,14 @@ import sdi.data.XYMetadata;
 public class ContiguousBinnedData1DAdapter extends SimpleContiguousBinnedData1DAdapter {
     
     /**
-     * Adapt the 
-     * @param data
-     * @return 
+     * Adapt the ContiguousBinnedData1D to QDataSet.  QDataSet doesn't have
+     * an explicit constraint on the bins like ContiguousBinnedData1D, so we just
+     * have to line things up.
+     * @param data the data
+     * @return a QDataSet
      */
     public static QDataSet adapt( ContiguousBinnedData1D data ) {
-        MutablePropertyDataSet result= SimpleContiguousBinnedData1DAdapter.adapt( data );
+        MutablePropertyDataSet result = SimpleContiguousBinnedData1DAdapter.adapt( data );
         result.putProperty( QDataSet.DELTA_MINUS, Adapter.getUPAdapter( result, data.getUncertProvider(), false ) );
         result.putProperty( QDataSet.DELTA_PLUS, Adapter.getUPAdapter( result, data.getUncertProvider(), true ) );
         result.putProperty( QDataSet.WEIGHTS, Adapter.getFillDetector( result ) );

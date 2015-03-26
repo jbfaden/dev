@@ -13,7 +13,8 @@ import sdi.data.XYData;
 import sdi.data.XYMetadata;
 
 /**
- *
+ * Adapt QDataSets to an XYData.  This will take a rank 1 QDataSet with 
+ * DEPEND_0 tags, or two rank 1 QDataSets.
  * @author faden@cottagesystems.com
  */
 public class XYDataImpl extends SimpleXYDataImpl implements XYData {

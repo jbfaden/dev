@@ -60,6 +60,13 @@ public class SimpleContiguousBinnedData1DAdapter {
         return result;
     }
          
+    /**
+     * Adapt the SimpleContiguousBinnedData1D to QDataSet.  QDataSet doesn't have
+     * an explicit constraint on the bins like SimpleContiguousBinnedData1D, so we just
+     * have to line things up.
+     * @param data the data
+     * @return a QDataSet
+     */
     public static MutablePropertyDataSet adapt( SimpleContiguousBinnedData1D data ) {
         MutablePropertyDataSet dep0= getX(data);
         MutablePropertyDataSet ds= getY(data);

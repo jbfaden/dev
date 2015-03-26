@@ -2,13 +2,16 @@
 package test;
 
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.das2.datum.Units;
 import org.das2.sdi.Adapter;
 import org.das2.sdi.BinnedData2DAdapter;
-import org.das2.sdi.BinnedData2DImpl;
+import org.das2.sdi.ContiguousBinnedData1DImpl;
 import org.das2.sdi.Operations;
 import org.das2.sdi.XYDataAdapter;
 import org.das2.sdi.XYZDataAdapter;
+import org.virbo.autoplot.ScriptContext;
 import org.virbo.dataset.DataSetOps;
 import org.virbo.dataset.QDataSet;
 import org.virbo.dataset.SemanticOps;
@@ -16,6 +19,7 @@ import org.virbo.dataset.examples.Schemes;
 import org.virbo.dsops.Ops;
 import sdi.data.BinnedData1D;
 import sdi.data.BinnedData2D;
+import sdi.data.ContiguousBinnedData1D;
 import sdi.data.FillDetector;
 import sdi.data.SimpleXYData;
 import sdi.data.UncertaintyProvider;
@@ -34,7 +38,7 @@ public class Test {
     private static void test1() {
         System.err.println("==test1==");
         QDataSet ds= Schemes.simpleSpectrogram().slice(0).trim(0,10);
-        SimpleXYData xyds= Adapter.adapt( ds, SimpleXYData.class );
+        SimpleXYData xyds= Adapter.adaptSimpleXYData( ds );
         for ( int i=0; i<xyds.size(); i++ ) {
             System.err.printf("%f %f\n", xyds.getX(i), xyds.getY(i) );
         }   
@@ -43,7 +47,7 @@ public class Test {
     private static void test2() {
         System.err.println("==test2==");
         QDataSet ds= Schemes.scalarTimeSeries().trim(0,10);
-        XYData xyds= Adapter.adapt( ds, XYData.class );
+        XYData xyds= Adapter.adaptXYData(ds);
         XYMetadata m= xyds.getMetadata();
         Units u= Units.lookupUnits(m.getXUnits().getName());
         for ( int i=0; i<xyds.size(); i++ ) {
@@ -203,7 +207,7 @@ public class Test {
         System.err.println("== xydata -> qdataset ==");
         printQDataSet( ds );
         System.err.println("== qdataset -> xydata ==");
-        XYData xyds= Adapter.adapt(ds, XYData.class );
+        XYData xyds= Adapter.adaptXYData(ds);
         printXYData( xyds );
     }
     
@@ -258,7 +262,7 @@ public class Test {
         QDataSet rank2ds= Schemes.simpleSpectrogramTimeSeries();
         rank2ds= DataSetOps.leafTrim( rank2ds, 0, 8 );
         rank2ds= rank2ds.trim(0,12);
-        BinnedData2D bd2d= Adapter.adapt( rank2ds, BinnedData2D.class );
+        BinnedData2D bd2d= Adapter.adaptBinnedData2D(rank2ds);
         System.err.println("== qdataset -> BinnedData2D ==");
         printBinnedData2D( bd2d );
         QDataSet ds= BinnedData2DAdapter.adapt( bd2d );
@@ -298,7 +302,7 @@ public class Test {
     private static void test6() {
         System.err.println("== test6 ==");
         QDataSet rank2ds= Ops.ripplesVectorTimeSeries(10);
-        XYZData bd2d= Adapter.adapt( rank2ds, XYZData.class );
+        XYZData bd2d= Adapter.adaptXYZData(rank2ds);
         System.err.println("== QDataSet -> XYZData ==");
         printXYZData( bd2d );
         QDataSet ds= XYZDataAdapter.adapt( bd2d );
@@ -308,12 +312,12 @@ public class Test {
     
     private static BinnedData2D exampleBinned2D() {
         try {
-            QDataSet z= Ops.findgen(4,5);
+            QDataSet z= Ops.multiply( Ops.findgen(4,5), 0.5 );
             z= Ops.putProperty( z, QDataSet.DELTA_MINUS, Ops.dataset(0.3) );
             z= Ops.putProperty( z, QDataSet.DELTA_PLUS, Ops.dataset(0.4) );
             QDataSet x= Ops.timegen("2014-03-25T06:48", "1s", 4 );
             QDataSet y= Ops.findgen(5);
-            BinnedData2D bd2d= Adapter.adapt( x, y, z, BinnedData2D.class );
+            BinnedData2D bd2d= Adapter.adaptBinnedData2D( x, y, z );
             return bd2d;
         } catch ( Exception ex ) {
             throw new RuntimeException(ex);
@@ -356,6 +360,22 @@ public class Test {
      
     }
     
+    public static void test9() {
+        try {
+            QDataSet sample= Ops.randn(300);
+            QDataSet hist= Ops.autoHistogram(sample);
+            ScriptContext.createGui();
+            ScriptContext.plot(hist);
+            ContiguousBinnedData1D ds= new ContiguousBinnedData1DImpl( hist );
+            for ( int i=0; i<ds.size(); i++ ) {
+                System.err.printf(" %3d: %f - %f %d\n", i, ds.getXBinLo(i), i==ds.size()-1 ? ds.getLastXBinHi() : ds.getXBinLo(i+1), (int)ds.getY(i) );
+            }
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
     public static void main( String[] args ) throws Exception {
         test1();
         test2();
@@ -364,5 +384,6 @@ public class Test {
         test6();
         test7();
         test8();
+        test9();
     }
 }
