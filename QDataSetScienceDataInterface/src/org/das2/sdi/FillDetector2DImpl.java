@@ -9,7 +9,7 @@ import sdi.data.FillDetector2D;
  *
  * @author faden@cottagesystems.com
  */
-public class FillDetector2DImpl implements FillDetector2D {
+class FillDetector2DImpl implements FillDetector2D {
 
     QDataSet wds;
     

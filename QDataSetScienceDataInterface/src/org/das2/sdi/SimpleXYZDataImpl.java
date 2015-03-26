@@ -1,7 +1,6 @@
 
 package org.das2.sdi;
 
-import org.virbo.dataset.DataSetOps;
 import org.virbo.dataset.QDataSet;
 import org.virbo.dataset.SemanticOps;
 import sdi.data.SimpleXYZData;
@@ -10,7 +9,7 @@ import sdi.data.SimpleXYZData;
  *
  * @author faden@cottagesystems.com
  */
-public class SimpleXYZDataImpl implements SimpleXYZData {
+class SimpleXYZDataImpl implements SimpleXYZData {
 
     QDataSet y;
     QDataSet x;

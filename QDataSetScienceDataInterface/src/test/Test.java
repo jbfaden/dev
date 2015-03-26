@@ -7,7 +7,6 @@ import java.util.logging.Logger;
 import org.das2.datum.Units;
 import org.das2.sdi.Adapter;
 import org.das2.sdi.BinnedData2DAdapter;
-import org.das2.sdi.ContiguousBinnedData1DImpl;
 import org.das2.sdi.Operations;
 import org.das2.sdi.XYDataAdapter;
 import org.das2.sdi.XYZDataAdapter;
@@ -33,7 +32,7 @@ import sdi.data.XYZMetadata;
  * Tests to exercise the code.
  * @author faden@cottagesystems.com
  */
-public class Test {
+class Test {
     
     private static void test1() {
         System.err.println("==test1==");
@@ -366,7 +365,7 @@ public class Test {
             QDataSet hist= Ops.autoHistogram(sample);
             ScriptContext.createGui();
             ScriptContext.plot(hist);
-            ContiguousBinnedData1D ds= new ContiguousBinnedData1DImpl( hist );
+            ContiguousBinnedData1D ds= Adapter.adaptContiguousBinnedData1D( hist );
             for ( int i=0; i<ds.size(); i++ ) {
                 System.err.printf(" %3d: %f - %f %d\n", i, ds.getXBinLo(i), i==ds.size()-1 ? ds.getLastXBinHi() : ds.getXBinLo(i+1), (int)ds.getY(i) );
             }

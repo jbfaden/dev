@@ -17,7 +17,7 @@ import sdi.data.XYMetadata;
  * DEPEND_0 tags, or two rank 1 QDataSets.
  * @author faden@cottagesystems.com
  */
-public class XYDataImpl extends SimpleXYDataImpl implements XYData {
+class XYDataImpl extends SimpleXYDataImpl implements XYData {
 
     public XYDataImpl( QDataSet x, QDataSet y ) {
         super( x, y );

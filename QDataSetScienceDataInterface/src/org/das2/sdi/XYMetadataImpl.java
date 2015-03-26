@@ -10,7 +10,7 @@ import sdi.data.XYMetadata;
  *
  * @author faden@cottagesystems.com
  */
-public class XYMetadataImpl implements XYMetadata {
+class XYMetadataImpl implements XYMetadata {
 
     QDataSet x;
     QDataSet y;

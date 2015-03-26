@@ -14,7 +14,7 @@ import sdi.data.XYZMetadata;
  * @see Schemes#simpleSpectrogram() 
  * @author faden@cottagesystems.com
  */
-public class BinnedData2DImpl extends SimpleBinnedData2DImpl implements BinnedData2D {
+class BinnedData2DImpl extends SimpleBinnedData2DImpl implements BinnedData2D {
 
     public BinnedData2DImpl( QDataSet x, QDataSet y, QDataSet z ) {
         super( x,y,z );

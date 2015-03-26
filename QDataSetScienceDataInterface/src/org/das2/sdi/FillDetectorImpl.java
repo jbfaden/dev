@@ -9,7 +9,7 @@ import sdi.data.FillDetector;
  * Fill detector uses SemanticOps.weightsDataSet
  * @author faden@cottagesystems.com
  */
-public class FillDetectorImpl implements FillDetector {
+class FillDetectorImpl implements FillDetector {
     
     QDataSet wds;
     

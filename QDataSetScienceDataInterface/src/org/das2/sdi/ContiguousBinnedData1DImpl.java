@@ -12,7 +12,7 @@ import sdi.data.XYMetadata;
  *
  * @author faden@cottagesystems.com
  */
-public class ContiguousBinnedData1DImpl extends SimpleContiguousBinnedData1DImpl implements ContiguousBinnedData1D {
+class ContiguousBinnedData1DImpl extends SimpleContiguousBinnedData1DImpl implements ContiguousBinnedData1D {
 
     public ContiguousBinnedData1DImpl(QDataSet ds) {
         super(ds);

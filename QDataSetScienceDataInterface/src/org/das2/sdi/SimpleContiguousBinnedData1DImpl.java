@@ -11,7 +11,7 @@ import sdi.data.SimpleContiguousBinnedData1D;
  *
  * @author faden@cottagesystems.com
  */
-public class SimpleContiguousBinnedData1DImpl implements SimpleContiguousBinnedData1D {
+class SimpleContiguousBinnedData1DImpl implements SimpleContiguousBinnedData1D {
 
     QDataSet xlow;
     QDataSet xhigh;

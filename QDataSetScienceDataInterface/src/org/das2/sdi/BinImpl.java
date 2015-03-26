@@ -8,7 +8,7 @@ import sdi.data.Bin;
  * Implementation looks at BIN_PLUS and BIN_MINUS properties.
  * @author faden@cottagesystems.com
  */
-public class BinImpl implements Bin {
+class BinImpl implements Bin {
 
     double min;
     double max;

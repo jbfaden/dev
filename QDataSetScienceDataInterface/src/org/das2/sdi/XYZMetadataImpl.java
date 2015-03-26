@@ -10,7 +10,7 @@ import sdi.data.XYZMetadata;
  *
  * @author faden@cottagesystems.com
  */
-public class XYZMetadataImpl extends XYMetadataImpl implements XYZMetadata  {
+class XYZMetadataImpl extends XYMetadataImpl implements XYZMetadata  {
 
     QDataSet z;
     

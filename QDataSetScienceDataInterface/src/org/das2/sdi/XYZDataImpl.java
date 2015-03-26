@@ -12,7 +12,7 @@ import sdi.data.XYZMetadata;
  *
  * @author faden@cottagesystems.com
  */
-public class XYZDataImpl extends SimpleXYZDataImpl implements XYZData {
+class XYZDataImpl extends SimpleXYZDataImpl implements XYZData {
             
     public XYZDataImpl( QDataSet x, QDataSet y, QDataSet z ) {
         super( x,y,z );

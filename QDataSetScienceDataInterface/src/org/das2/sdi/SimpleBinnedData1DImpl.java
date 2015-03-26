@@ -12,7 +12,7 @@ import sdi.data.SimpleBinnedData1D;
  *
  * @author faden@cottagesystems.com
  */
-public class SimpleBinnedData1DImpl implements SimpleBinnedData1D {
+class SimpleBinnedData1DImpl implements SimpleBinnedData1D {
 
     QDataSet y;
     QDataSet x;

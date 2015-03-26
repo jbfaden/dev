@@ -8,7 +8,7 @@ import sdi.data.UncertaintyProvider;
  *
  * @author faden@cottagesystems.com
  */
-public class UncertaintyProviderImpl implements UncertaintyProvider {
+class UncertaintyProviderImpl implements UncertaintyProvider {
 
     QDataSet uncertPlus;
     QDataSet uncertMinus;

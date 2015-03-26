@@ -9,7 +9,7 @@ import sdi.data.SimpleXYData;
  *
  * @author faden@cottagesystems.com
  */
-public class SimpleXYDataImpl implements SimpleXYData {
+class SimpleXYDataImpl implements SimpleXYData {
 
     QDataSet y;
     QDataSet x;
