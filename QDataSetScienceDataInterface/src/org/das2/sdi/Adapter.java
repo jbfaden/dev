@@ -24,7 +24,7 @@ import sdi.data.XYData;
 import sdi.data.XYZData;
 
 /**
- * Adapters to and from QDataSet and ScienceDataInterface 
+ * Adapters from QDataSet to ScienceDataInterface 
  * @author faden@cottagesystems.com
  */
 public class Adapter {
