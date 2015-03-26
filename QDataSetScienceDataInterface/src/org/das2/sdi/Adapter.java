@@ -24,41 +24,15 @@ import sdi.data.XYData;
 import sdi.data.XYZData;
 
 /**
- * Utility adapters to ScienceDataInterface.
+ * Adapters from QDataSet to and from ScienceDataInterface 
  * @author faden@cottagesystems.com
  */
 public class Adapter {
          
-    /**
-     * returns the implementation of the class.
-     * @param <T> a data interface type
-     * @param ds the QDataSet
-     * @param clazz e.g. XYData.class
-     * @return the implementation, e.g. XYDataImpl.
-     * @throws IllegalArgumentException if the interface is not supported.
-     */
-    private static <T> T adapt( QDataSet ds, Class<T> clazz  ) {
-        if ( XYData.class.isAssignableFrom(clazz) ) {
-            return (T)new XYDataImpl( ds );
-        } else if ( SimpleXYData.class.isAssignableFrom(clazz) ) {
-            return (T)new SimpleXYDataImpl( ds );
-        } else if ( XYZData.class.isAssignableFrom(clazz) ) {
-            return (T)new XYZDataImpl( ds );
-        } else if ( SimpleXYZData.class.isAssignableFrom(clazz) ) {
-            return (T)new SimpleXYZDataImpl( ds );
-        } else if ( BinnedData1D.class.isAssignableFrom(clazz) ) {
-            return (T)new BinnedData1DImpl( ds );
-        } else if ( SimpleBinnedData1D.class.isAssignableFrom(clazz) ) {
-            return (T)new SimpleBinnedData1DImpl( ds );
-        } else if ( BinnedData2D.class.isAssignableFrom(clazz) ) {
-            return (T)new BinnedData2DImpl( ds );
-        } else if ( SimpleBinnedData2D.class.isAssignableFrom(clazz) ) {
-            return (T)new SimpleBinnedData2DImpl( ds );
-        } else {
-            throw new IllegalArgumentException("Unsupported interface: "+clazz);
-        }
+    private Adapter() {
+        // this class is not to be instantiated.
     }
-
+    
     /**
      * Adapt the QDataSets for X and Y to SimpleXYData.  
      * @param x a rank 1 QDataSet
@@ -257,52 +231,6 @@ public class Adapter {
         return new ContiguousBinnedData1DImpl( ds );
     }
         
-    /**
-     * returns the implementation of the class.
-     * @param <T> a data interface type
-     * @param x the dataset for the independent parameter
-     * @param y the dataset for the dependent parameter
-     * @param clazz e.g. XYData.class
-     * @return the implementation, e.g. XYDataImpl.
-     * @throws IllegalArgumentException if the interface is not supported.
-     */
-    private static <T> T adapt( QDataSet x, QDataSet y, Class<T> clazz  ) {
-        if ( XYData.class.isAssignableFrom(clazz) ) {
-            return (T)new XYDataImpl( x,y );
-        } else if ( SimpleXYData.class.isAssignableFrom(clazz) ) {
-            return (T)new SimpleXYDataImpl( x,y );
-        } else if ( BinnedData1D.class.isAssignableFrom(clazz) ) {
-            return (T)new BinnedData1DImpl( x,y );
-        } else if ( SimpleBinnedData1D.class.isAssignableFrom(clazz) ) {
-            return (T)new SimpleBinnedData1DImpl( x,y );
-        } else {
-            throw new IllegalArgumentException("Unsupported interface: "+clazz);
-        }
-    }
-        
-    /**
-     * returns the implementation of the class
-     * @param <T> a data interface type
-     * @param x the dataset for the independent parameter
-     * @param y the dataset for the independent parameter
-     * @param z the dataset for the dependent parameter
-     * @param clazz e.g. XYZData.class
-     * @return the implementation, e.g. XYZDataImpl.
-     * @throws IllegalArgumentException if the interface is not supported.
-     */
-    private static <T> T adapt( QDataSet x, QDataSet y, QDataSet z, Class<T> clazz ) {
-        if ( BinnedData2D.class.isAssignableFrom(clazz) ) {
-            return (T)new BinnedData2DImpl( x,y,z );
-        } else if ( SimpleBinnedData2D.class.isAssignableFrom(clazz) ) {
-            return (T)new SimpleBinnedData2DImpl( x,y,z );
-        } else if ( SimpleXYZData.class.isAssignableFrom(clazz) ) {
-            return (T)new SimpleXYZDataImpl( x,y,z );
-        } else if ( XYZData.class.isAssignableFrom(clazz) ) {
-            return (T)new XYZDataImpl( x,y,z );
-        } else {
-            throw new IllegalArgumentException("Unsupported interface: "+clazz);
-        }
-    }
         
     /**
      * returns the QDataSet implementing the UncertaintyProvider or null.
