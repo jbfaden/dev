@@ -143,7 +143,7 @@ public class Operations {
      * Slice the 2-D data at the index.
      * @param ds the dataset.
      * @param iSlice the index.
-     * @return 
+     * @return the slice in a BinnedData1D
      */
     public static BinnedData1D sliceAtX( BinnedData2D ds, final int iSlice ) {
         
