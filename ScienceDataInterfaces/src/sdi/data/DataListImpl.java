@@ -28,12 +28,12 @@ public class DataListImpl<T> implements DataList {
     }
 
     @Override
-    public Object get(int i) {
+    public T get(int i) {
         return back.get(i);
     }
 
     @Override
-    public Iterator iterator() {
+    public Iterator<T> iterator() {
         return back.iterator();
     }
 
