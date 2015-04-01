@@ -1,9 +1,9 @@
 
 package org.das2.sdi;
 
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Example implementation of DataList wraps an unmodifiableList.
@@ -19,7 +19,7 @@ public class DataListImpl<T> implements DataList {
      * @param back the list.
      */
     public DataListImpl( List<T> back ) {
-        this.back= Collections.unmodifiableList(back);
+        this.back= new ArrayList( back );
     }
     
     @Override

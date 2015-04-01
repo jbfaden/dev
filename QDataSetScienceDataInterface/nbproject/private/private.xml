@@ -30,6 +30,15 @@
             <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/FillDetector2DImpl.java</file>
             <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/BinnedData1DAdapter.java</file>
             <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/Operations.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/FillDetectorImpl.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/XYMetadataImpl.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/XYZMetadataImpl.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/SimpleBinnedData2DAdapter.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/SimpleXYDataAdapter.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/XYDataAdapter.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/package.html</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/DataList.java</file>
+            <file>file:/home/jbf/ct/autoplot/git/dev/QDataSetScienceDataInterface/src/org/das2/sdi/DataListImpl.java</file>
         </group>
     </open-files>
 </project-private>
