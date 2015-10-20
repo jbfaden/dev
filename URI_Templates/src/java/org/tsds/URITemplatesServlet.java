@@ -6,9 +6,14 @@
 package org.tsds;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.net.URL;
 import java.text.ParseException;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,38 +25,63 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class URITemplatesServlet extends HttpServlet {
 
+    private static final Logger logger= Logger.getLogger("org.tsds.serv");
+    
     private boolean supportsGenerate( String s ) {
         return !(s.contains("$v") || s.contains("$(v") ||
                 s.contains("$x") || s.contains("$(x") ||
                 s.contains(";sparse") || s.contains(",sparse"));  // TODO: make canonical!!!
     } 
 
-    
-//    private int doParse( DatumRange trdr, String root, String template, PrintWriter out ) throws IOException {
-//        
-//        int count= 0;
-//        
-//        FileSystem fs= FileSystem.create( root );
-//        FileStorageModel fsm= FileStorageModel.create( fs, template );
-//        fsm.setContext( trdr );
-//
-//        String[] names= fsm.getNamesFor( trdr );
-//
-//        for ( String n : names ) {
-//            out.printf(  "<tr>" );
-//            DatumRange tr= fsm.getRangeFor( n );
-//            String v;
-//            try {
-//                v= fsm.getField("v",n);
-//            } catch ( Exception ex ) {
-//                v= "N/A";
-//            }
-//            out.printf(  "<td>"+root + "/" + n + "</td><td>"+tr.toString() + "</td><td>" + v +"</td>\n" );
-//            out.printf(  "</tr>" );
-//            count= count+1;
-//        }
-//        return count;
-//    }
+
+    private int doParse( TimeStruct[] trdr, String root, String template, PrintWriter out ) throws IOException {
+        
+        int count= 0;
+
+        if ( !root.endsWith("/") ) root= root+"/";
+        
+        URL rootUrl= new URL(root);
+        InputStream in = rootUrl.openStream();
+                
+        URL[] result=null;
+        try {
+            result= HtmlUtil.getDirectoryListing( rootUrl, in, true );
+        } finally {
+            in.close();
+        }
+        
+        String[] names= new String[result.length];
+        int len= root.length();
+        for ( int i=0; i< result.length; i++ ) names[i]= result[i].toString().substring(len);
+
+        TimeParserGenerator tpg= TimeParserGenerator.create( template );
+        
+        for ( String n : names ) {
+            out.printf(  "<tr>" );
+            
+            Map<String,String> ffs= new HashMap();
+            
+            try {
+                TimeStruct[] ts= tpg.parse(n,ffs).getTimeRange();
+                String v;
+                v= ffs.get( tpg.getFieldHandlerByCode("v").getId() );
+            
+                if ( v==null ) v= "N/A";
+            
+                out.printf(  "<td>"+root + "/" + n + "</td><td>"+ TimeUtil.formatISO8601Range(ts) + "</td><td>" + v +"</td>\n" );
+                out.printf(  "</tr>" );
+                count= count+1;
+                
+            } catch (ParseException ex) {
+                logger.finest("not part of templated collection: "+n);
+                
+            }
+            
+        }
+        
+        return count;
+        
+    }
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -162,8 +192,7 @@ public class URITemplatesServlet extends HttpServlet {
                         out.printf(  "<tr><td>"+st + "</td><td>"+ TimeUtil.formatISO8601Range(dr) + "</td><td>N/A</td><tr>\n" );
                         count++;
                     } else {
-                        throw new IllegalArgumentException("parse is not supportet, yet.");
-                        //count+= doParse( drtr, st, parseUri, out );
+                        count+= doParse( drtr, st, parseUri, out );
                     }
 
                     if ( count>10000 ) {
