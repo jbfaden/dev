@@ -38,7 +38,7 @@ public class TimeStruct {
     /**
      * seconds since the last minute boundary of the time datum
      */
-    public double seconds; // remaining number of seconds past minute boundary
+    public int second; // remaining number of seconds past minute boundary
 
     /**
      * additional milliseconds since minute boundary
@@ -46,9 +46,9 @@ public class TimeStruct {
     public int millis;
 
     /**
-     * additional microseconds since minute boundary
+     * additional nanoseconds since minute boundary
      */
-    public int micros;
+    public int nanos;
 
     /**
      * flag indicating if this is a time duration or a particular instance in
@@ -59,13 +59,12 @@ public class TimeStruct {
     @Override
     public String toString() {
         if (isLocation) {
-            return String.format("%4d/%02d/%02d %02d:%02d:%06.3f", year, month, day, hour, minute, seconds + millis / 1000. + micros / 1000000.);
+            return String.format("%4d/%02d/%02d %02d:%02d:%06.3f", year, month, day, hour, minute, second + millis / 1000. + nanos / 1000000000.);
         } else {
-            int intSeconds = (int) seconds;
-            int nanos = (int) (1000000000 * (seconds - intSeconds));
-            nanos += micros * 1000;
-            nanos += millis * 1000000;
-            return TimeUtil.formatISO8601Duration(new int[]{year, month, day, hour, minute, intSeconds, nanos}); //TODO: test this.
+            int nanosl;
+            nanosl = this.nanos;
+            nanosl += millis * 1000000;
+            return TimeUtil.formatISO8601Duration(new int[]{year, month, day, hour, minute, second, nanosl }); //TODO: test this.
         }
     }
 
@@ -80,9 +79,9 @@ public class TimeStruct {
         result.day = this.day;
         result.hour = this.hour;
         result.minute = this.minute;
-        result.seconds = this.seconds;
+        result.second = this.second;
         result.millis = this.millis;
-        result.micros = this.micros;
+        result.nanos = this.nanos;
         result.isLocation = this.isLocation;
         return result;
     }
@@ -104,9 +103,9 @@ public class TimeStruct {
         result.day = this.day + offset.day;
         result.hour = this.hour + offset.hour;
         result.minute = this.minute + offset.minute;
-        result.seconds = this.seconds + offset.seconds;
+        result.second = this.second + offset.second;
         result.millis = this.millis + offset.millis;
-        result.micros = this.micros + offset.micros;
+        result.nanos = this.nanos + offset.nanos;
 
         result.isLocation = this.isLocation || offset.isLocation;
 
@@ -129,9 +128,9 @@ public class TimeStruct {
         result.day = this.day - offset.day;
         result.hour = this.hour - offset.hour;
         result.minute = this.minute - offset.minute;
-        result.seconds = this.seconds - offset.seconds;
+        result.second = this.second - offset.second;
         result.millis = this.millis - offset.millis;
-        result.micros = this.micros - offset.micros;
+        result.nanos = this.nanos - offset.nanos;
 
         result.isLocation = false;
 
@@ -152,11 +151,11 @@ public class TimeStruct {
         result.day = time[2];
         result.hour = time[3];
         result.minute = time[4];
-        result.seconds = time[5];
+        result.second = time[5];
         int nanos= time[6];
         result.millis = nanos/1000000;
         nanos-= result.millis*1000;
-        result.micros = nanos/1000;
+        result.nanos = nanos;
         result.isLocation= time[0]>=1000;
         return result;
     }
@@ -167,10 +166,11 @@ public class TimeStruct {
      * @return the array
      */
     public int[] components() {
+        normalize();
         return new int[] { 
             this.year, this.month, this.day, this.hour, this.minute, 
-            (int)this.seconds, 
-            this.millis*1000000 + this.micros* 1000 
+            this.second,
+            this.millis*1000000 + this.nanos
         };
     }
     
@@ -181,17 +181,17 @@ public class TimeStruct {
      * @return the normalized TimeStruct.
      */
     public TimeStruct normalize() {
-        while ( this.micros>=1000 ) {
+        while ( this.nanos>=1000000 ) {
             this.millis+= 1;
-            this.micros-= 1000;
+            this.nanos-= 1000000;
         }
         while ( this.millis>=1000 ) {
-            this.seconds+= 1;
+            this.second+= 1;
             this.millis-= 1000;
         }
-        while ( this.seconds>=60 ) { // TODO: leap seconds
+        while ( this.second>=60 ) { // TODO: leap seconds
             this.minute+= 1;
-            this.seconds-= 60;
+            this.second-= 60;
         }
         while ( this.minute>=60 ) {
             this.hour+= 1;
@@ -234,6 +234,38 @@ public class TimeStruct {
         return false;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 97 * hash + this.year;
+        hash = 97 * hash + this.month;
+        hash = 97 * hash + this.day;
+        hash = 97 * hash + this.doy;
+        hash = 97 * hash + this.hour;
+        hash = 97 * hash + this.minute;
+        hash = 97 * hash + this.second;
+        hash = 97 * hash + this.millis;
+        hash = 97 * hash + this.nanos;
+        hash = 97 * hash + (this.isLocation ? 1 : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals( Object o ) {
+        if ( !( o instanceof TimeStruct ) ) {  
+            return false;
+        }
+        TimeStruct stop= (TimeStruct)o;
+        int[] cthis= components();
+        int[] cstop= stop.components();
+        for ( int i=0; i<cthis.length; i++ ) {
+            if ( cthis[i]!=cstop[i] ) return false;
+            if ( cthis[i]!=cstop[i] ) return false;
+        }
+        return true;
+    }
+    
+    
     /**
      * return the next interval following the interval dr.
      * @param dr two-element array of TimeStruct.
@@ -242,6 +274,14 @@ public class TimeStruct {
     public static TimeStruct[] next(TimeStruct[] dr) {
         TimeStruct delta= dr[1].subtract(dr[0]);
         return new TimeStruct[] { dr[0].add(delta).normalize(), dr[1].add(delta).normalize() };
+    }
+    
+    
+    public static void main( String[] args ) {
+        TimeStruct ts1, ts2;
+        ts1= TimeStruct.create(new int[] { 2000,4,5, 0,0, 0, 0 } );
+        ts2= TimeStruct.create(new int[] { 2000,4,4, 24,0, 0, 0 } );
+        System.err.println( ts1.equals(ts2) );
     }
 
     
