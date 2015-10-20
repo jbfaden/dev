@@ -19,14 +19,13 @@ public class TimeStruct {
      * month containing the time datum
      */
     public int month;
+    
     /**
-     * day of month containing the time datum
+     * day of month containing the time datum.  Note to support 
+     * day of year (doy), month can be set to 1 and this to the day of year.
      */
     public int day;
-    /**
-     * day of year containing the time datum
-     */
-    public int doy;
+
     /**
      * hour containing the time datum
      */
