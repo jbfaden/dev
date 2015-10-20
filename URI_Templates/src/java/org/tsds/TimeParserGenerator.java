@@ -730,7 +730,6 @@ public class TimeParserGenerator {
         startTime.year= MIN_VALID_YEAR;
         startTime.month= 1;
         startTime.day= 1;
-        startTime.doy= 1;
         startTime.isLocation= true;
         
         stopTime = new TimeStruct();
@@ -738,7 +737,6 @@ public class TimeParserGenerator {
         stopTime.year= MAX_VALID_YEAR;
         stopTime.month= 1;
         stopTime.day= 1;
-        stopTime.doy= 1;
         stopTime.isLocation= true;
 
         this.fieldHandlers = fieldHandlers;
@@ -905,7 +903,10 @@ public class TimeParserGenerator {
                         if ( name.equals("Y") ) context.year= Integer.parseInt(val);
                         else if ( name.equals("m") ) context.month= Integer.parseInt(val);
                         else if ( name.equals("d") ) context.day= Integer.parseInt(val);
-                        else if ( name.equals("j") ) context.doy= Integer.parseInt(val);
+                        else if ( name.equals("j") ) {
+                            context.month= 1;
+                            context.day= Integer.parseInt(val);
+                        }
                         else if ( name.equals("H") ) context.hour= Integer.parseInt(val);
                         else if ( name.equals("M") ) context.minute= Integer.parseInt(val);
                         else if ( name.equals("S") ) context.second= Integer.parseInt(val);

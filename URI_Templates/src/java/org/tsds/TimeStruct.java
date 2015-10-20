@@ -240,7 +240,6 @@ public class TimeStruct {
         hash = 97 * hash + this.year;
         hash = 97 * hash + this.month;
         hash = 97 * hash + this.day;
-        hash = 97 * hash + this.doy;
         hash = 97 * hash + this.hour;
         hash = 97 * hash + this.minute;
         hash = 97 * hash + this.second;
