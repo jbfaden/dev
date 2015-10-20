@@ -107,21 +107,26 @@ public class TimeParserGenerator {
      * two-hex digits indicating the ten-minute interval covered by the file name.  This is also used for orbits.
      * TODO: FieldHandler needs to report its affect on the LSD.  (Autoplot gets versioning).
      */
-    public interface FieldHandler {
+    public abstract static class FieldHandler {
 
+        String id;
+        
         /**
          * arguments for the parser are passed in.
          * @param args map of arguments.  $(t,a1=v1,a2=v2,a3=v3)
          * @return null if the string is parseable, an error message otherwise.
          */
-        public String configure( Map<String,String> args );
+        public String configure( Map<String,String> args ) {
+            this.id= args.get("id");
+            return null;
+        }
 
         /**
          * return a regular expression that matches valid field entries.  ".*" can be used to match anything, but this limits use.
          * TODO: where is this used?  I added it because it's easy and I saw a TODO to add it.
          * @return null to match anything, or a regular expression matching valid entries.
          */
-        public String getRegex();
+        public abstract String getRegex();
 
         /**
          * parse the field to interpret as a time range.
@@ -131,7 +136,7 @@ public class TimeParserGenerator {
          * @param extra extra data, such as version numbers, are passed out here.
          * @throws ParseException when the field is not consistent with the spec.
          */
-        public void parse( String fieldContent, TimeStruct startTime, TimeStruct timeWidth, Map<String,String> extra ) throws ParseException;
+        public abstract void parse( String fieldContent, TimeStruct startTime, TimeStruct timeWidth, Map<String,String> extra ) throws ParseException;
         
         /**
          * create a string given the times, when this is possible.  An IllegalArgumentException should be thrown when this is 
@@ -149,6 +154,9 @@ public class TimeParserGenerator {
          */
         public abstract String format( TimeStruct startTime, TimeStruct timeWidth, int length, Map<String,String> extra ) throws IllegalArgumentException;
 
+        public String getId() {
+            return this.id;
+        }
     }
     
     /**
@@ -306,7 +314,7 @@ public class TimeParserGenerator {
     /**
      * $(subsec;places=6)  "36" -> "36 microseconds"
      */
-    public static class SubsecFieldHandler implements TimeParserGenerator.FieldHandler {
+    public static class SubsecFieldHandler extends TimeParserGenerator.FieldHandler {
 
         int places;
         double factor;
@@ -349,7 +357,7 @@ public class TimeParserGenerator {
     /**
      * $(hrinterval;names=a,b,c,d)  "b" -> "06:00/12:00"
      */
-    public static class HrintervalFieldHandler implements TimeParserGenerator.FieldHandler {
+    public static class HrintervalFieldHandler extends TimeParserGenerator.FieldHandler {
 
         Map<String,Integer> values;
         Map<Integer,String> revvalues;
@@ -357,6 +365,8 @@ public class TimeParserGenerator {
         
         @Override
         public String configure(Map<String, String> args) {
+            super.configure(args);
+            
             String vs= args.get("values");
             if ( vs==null ) vs= args.get("names"); // some legacy thing
             if ( vs==null ) return "values must be specified for hrinterval";
@@ -409,7 +419,7 @@ public class TimeParserGenerator {
      * regular intervals are numbered.
      * $(periodic;offset=0;start=2000-001;period=P1D)", "0",  "2000-001"
      */
-    public static class PeriodicFieldHandler implements TimeParserGenerator.FieldHandler {
+    public static class PeriodicFieldHandler extends TimeParserGenerator.FieldHandler {
 
         int offset;
         int[] start;
@@ -418,6 +428,8 @@ public class TimeParserGenerator {
         
         @Override
         public String configure( Map<String, String> args ) {
+            super.configure(args);
+            
             String s= args.get("start");
             if ( s==null ) return "periodic field needs start";
             start= TimeUtil.parseISO8601(s);
@@ -505,13 +517,13 @@ public class TimeParserGenerator {
     /**
      * "$Y$m$d-$(enum;values=a,b,c,d)", "20130202-a", "2013-02-02/2013-02-03" 
      */
-    public static class EnumFieldHandler implements TimeParserGenerator.FieldHandler {
+    public static class EnumFieldHandler extends TimeParserGenerator.FieldHandler {
 
         LinkedHashSet<String> values;
-        String id;
         
         @Override
         public String configure( Map<String, String> args ) {
+            super.configure(args);
             values= new LinkedHashSet();
             String svalues= args.get("values");
             String[] ss= svalues.split(",",-2);
@@ -570,21 +582,21 @@ public class TimeParserGenerator {
             return this.values.toArray( new String[this.values.size()] );
         }
         
-        public String getId() {
-            return this.id;
-        }
     }
     
     /**
      * Just skip the field.  This is the default for $v.
      */
-    public static class IgnoreFieldHandler implements FieldHandler {
+    public static class IgnoreFieldHandler extends FieldHandler {
 
         String regex;
         
         @Override
         public String configure(Map<String, String> args) {
+            super.configure(args);
             regex= args.get("regex");
+            String s= args.get("id");
+            if ( s!=null ) id= s; else id="unindentifiedEnum";
             return null;
         }
 
@@ -595,11 +607,16 @@ public class TimeParserGenerator {
 
         @Override
         public void parse(String fieldContent, TimeStruct startTime, TimeStruct timeWidth, Map<String, String> extra) throws ParseException {
+            extra.put( id, fieldContent );
         }
 
         @Override
         public String format(TimeStruct startTime, TimeStruct timeWidth, int length, Map<String, String> extra) throws IllegalArgumentException {
-            return "";
+            String v= extra.get(id);
+            if ( v==null ) {
+                throw new IllegalArgumentException( "\"" + id + " is undefined in extras." );
+            }
+            return v;
         }
         
     }
