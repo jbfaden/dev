@@ -323,8 +323,8 @@ public class TimeParserGenerator {
         @Override
         public String configure(Map<String, String> args) {
             places= Integer.parseInt( args.get("places") );
-            if ( places>6 ) throw new IllegalArgumentException("only six places allowed.");
-            factor= Math.pow( 10, (6-places) );          // magic number 6 comes from timeWidth.micros
+            if ( places>9 ) throw new IllegalArgumentException("only nine places allowed.");
+            factor= Math.pow( 10, (9-places) );          // magic number 9 comes from timeWidth.nanos
             format= "%0"+places+"d";
             return null;
         }
@@ -339,17 +339,16 @@ public class TimeParserGenerator {
         @Override
         public void parse(String fieldContent, TimeStruct startTime, TimeStruct timeWidth, Map<String, String> extra) throws ParseException {
             double value= Double.parseDouble(fieldContent);
-            startTime.micros= (int)( value * factor ); //TODO: support nanos!
-            timeWidth.seconds= 0; //legacy TimeStruct supported double seconds.
-            timeWidth.micros= (int)( 1*factor );
+            startTime.nanos= (int)( value * factor ); //TODO: support nanos!
+            timeWidth.second= 0; //legacy TimeStruct supported double seconds.
+            timeWidth.nanos= (int)( 1*factor );
         }
 
         @Override
         public String format(TimeStruct startTime, TimeStruct timeWidth, int length, Map<String, String> extra) throws IllegalArgumentException {
             return String.format( format, 
-                    (int) ( ( startTime.seconds-(int)startTime.seconds ) * ( 1000000/factor ) ) //legacy TimeStruct supported double seconds.
-                    + (int) ( startTime.millis * 1000 / factor ) 
-                    + (int) ( startTime.micros / factor ) );
+                    (int) ( startTime.millis * 1000000 / factor ) 
+                    + (int) ( startTime.nanos / factor ) );
         }
         
     }
@@ -483,16 +482,16 @@ public class TimeParserGenerator {
             timeWidth.month= 0;
             timeWidth.hour= period[3];
             timeWidth.minute= period[4];
-            timeWidth.seconds= period[5];
-            timeWidth.micros= period[6]/1000;
+            timeWidth.second= period[5];
+            timeWidth.nanos= period[6];
             TimeStruct ts= TimeUtil.julianToGregorian( julday + timeWidth.day * addOffset + t[2] );
             startTime.year= ts.year;
             startTime.month= ts.month;
             startTime.day= ts.day;
             startTime.hour= t[3];
             startTime.minute= t[4];
-            startTime.seconds= t[5];
-            startTime.millis= t[6];
+            startTime.second= t[5];
+            startTime.nanos= t[6];
         }
 
         @Override
@@ -909,7 +908,7 @@ public class TimeParserGenerator {
                         else if ( name.equals("j") ) context.doy= Integer.parseInt(val);
                         else if ( name.equals("H") ) context.hour= Integer.parseInt(val);
                         else if ( name.equals("M") ) context.minute= Integer.parseInt(val);
-                        else if ( name.equals("S") ) context.seconds= Integer.parseInt(val);
+                        else if ( name.equals("S") ) context.second= Integer.parseInt(val);
                         else if ( name.equals("cadence") ) span= Integer.parseInt(val);
                         else if ( name.equals("span") ) span= Integer.parseInt(val);
                         else if ( name.equals("delta") ) span= Integer.parseInt(val); // see http://tsds.org/uri_templates
@@ -1016,13 +1015,13 @@ public class TimeParserGenerator {
                 timeWidth.minute = lsdMult;
                 break;
             case 5:
-                timeWidth.seconds = lsdMult;
+                timeWidth.second = lsdMult;
                 break;
             case 6:
                 timeWidth.millis = lsdMult;
                 break;
             case 7:
-                timeWidth.micros = lsdMult;
+                timeWidth.nanos = lsdMult*1000;
                 break;
             case -1:
                 timeWidth.year= 8000;
@@ -1157,45 +1156,6 @@ public class TimeParserGenerator {
         return new TimeParserGenerator(formatString, map);
     }
 
-    private double toUs2000(TimeStruct d) {
-        int year = d.year;
-        int month = d.month;
-        int day = d.day;
-        int jd = 367 * year - 7 * (year + (month + 9) / 12) / 4 -
-                3 * ((year + (month - 9) / 7) / 100 + 1) / 4 +
-                275 * month / 9 + day + 1721029;
-        int hour = d.hour;
-        int minute = d.minute;
-        double seconds = d.seconds + hour * (float) 3600.0 + minute * (float) 60.0;
-        int mjd1958 = (jd - 2436205);
-        double us2000 = (mjd1958 - 15340) * 86400000000. + seconds * 1e6 + d.millis * 1000 + d.micros;
-        return us2000;
-    }
-
-    private double toUs1980(TimeStruct d) {
-        int year = d.year;
-        int month = d.month;
-        int day = d.day;
-        int jd = 367 * year - 7 * (year + (month + 9) / 12) / 4 -
-                3 * ((year + (month - 9) / 7) / 100 + 1) / 4 +
-                275 * month / 9 + day + 1721029;
-        int hour = d.hour;
-        int minute = d.minute;
-        double seconds = d.seconds + hour * (float) 3600.0 + minute * (float) 60.0;
-        double us1980 = (jd - 2436205 - 8035) * 86400000000. + seconds * 1e6 + d.millis * 1e3 + d.micros;
-        return us1980;
-    }
-
-    /**
-     * reset the seconds register.  setDigit( String formatCode, double val ) accumulates 
-     * fractional part in the seconds.
-     * 
-     * TODO: where is this used?  
-     */
-    public void resetSeconds() {
-        startTime.seconds = 0;
-    }
-
     /**
      * force the parser to look for delimiters.  This should be called immediately after 
      */
@@ -1231,8 +1191,8 @@ public class TimeParserGenerator {
         dst.day = src.day;
         dst.hour = src.hour;
         dst.minute = src.minute;
-        dst.seconds = src.seconds;
-        dst.micros = src.micros;
+        dst.second = src.second;
+        dst.nanos = src.nanos;
         dst.isLocation= src.isLocation;
     }
     
@@ -1331,13 +1291,13 @@ public class TimeParserGenerator {
                             time.minute = digit;
                             break;
                         case 7:
-                            time.seconds = digit;
+                            time.second = digit;
                             break;
                         case 8:
                             time.millis = digit;
                             break;
                         case 9:
-                            time.micros = digit;
+                            time.nanos = digit*1000;
                             break;
                     }
                 } else if (handlers[idigit] == 100) {
@@ -1443,111 +1403,6 @@ public class TimeParserGenerator {
     }
 
     /**
-     * set the digit with the integer part, and move the fractional part to the
-     * less significant digits.  Format should contain just one field,
-     * see setDigit( String format, int value ) to break up fields.
-     * @param format like "Y"
-     * @param value like 2014
-     */
-    public void setDigit(String format, double value) {
-
-        TimeStruct time;
-
-        time= startTime;
-        
-        format= makeCanonical(format);
-        if (format.equals("$(ignore)") || format.equals("$X") || format.equals("$x")) return;
-        
-        if (value < 0) {
-            throw new IllegalArgumentException("value must not be negative on field:"+format+" value:"+value );
-        }
-        String[] ss = format.split("\\$", -2);
-        if (ss.length > 2) {
-            throw new IllegalArgumentException("multiple fields not supported");
-        }
-        for (int i = ss.length - 1; i > 0; i--) {
-            int digit = (int) value;
-            double fp = value - digit;
-
-            switch (ss[i].charAt(0)) {
-                case 'Y':
-                    time.year = digit;
-                    if (TimeUtil.isLeapYear(time.year)) {
-                        time.seconds += 366 * 24 * 3600 * fp;
-                    } else {
-                        time.seconds += 365 * 24 * 3600 * fp;
-                    }
-                    break;
-                case 'y':
-                    time.year = digit < 58 ? 2000 + digit : 1900 + digit;
-                    if (TimeUtil.isLeapYear(time.year)) {
-                        time.seconds += 366 * 24 * 3600 * fp;
-                    } else {
-                        time.seconds += 365 * 24 * 3600 * fp;
-                    }
-                    break;
-                case 'j':
-                    time.month = 1;
-                    time.day = digit;
-                    time.seconds += 24 * 3600 * fp;
-                    break;
-                case 'm':
-                    time.month = digit;
-                    time.seconds += TimeUtil.daysInMonth(time.month, time.year) * 24 * 3600 * fp;
-                    break;
-                case 'b':  // someone else must parse the month name into 1..12.
-                    time.month = digit;
-                    break;
-                case 'd':
-                    time.day = digit;
-                    time.seconds += 24 * 3600 * fp;
-                    break;
-                case 'H':
-                    time.hour = digit;
-                    time.seconds += 3600 * fp;
-                    break;
-                case 'M':
-                    time.minute = digit;
-                    time.seconds += 60 * fp;
-                    break;
-                case 'S':
-                    time.seconds = digit + fp;
-                    break;
-                case '{':
-                    FieldSpec fs= parseSpec(ss[i]);
-                    
-                    if (fs.fieldType.equals("milli")) {
-                        time.millis = digit;
-                        time.micros += 1000 * fp;
-                        time.seconds += ((1000 * fp) - time.micros) * 1e-6;
-                    } else if (fs.fieldType.equals("micro")) {
-                        time.micros = digit;
-                        time.seconds += fp * 1e-6;
-                    } else if (fs.fieldType.equals("ignore")) {
-                        // do nothing
-                    }
-                    break;
-                case '(':
-                    fs= parseSpec(ss[i]);
-                    
-                    if (fs.fieldType.equals("milli")) {
-                        time.millis = digit;
-                        time.micros += 1000 * fp;
-                        time.seconds += ((1000 * fp) - time.micros) * 1e-6;
-                    } else if (fs.fieldType.equals("micro")) {
-                        time.micros = digit;
-                        time.seconds += fp * 1e-6;
-                    } else if (fs.fieldType.equals("ignore")) {
-                        // do nothing
-                    }
-                    break;
-                default:
-                    throw new IllegalArgumentException("format code not supported");
-            }
-        }
-    }
-
-    /**
      * Set the digit using the format code.  If multiple digits are found, then
      * the integer provided should be the misinterpreted integer.  For example,
      * if the format is "%Y%m%d", the integer 20080830 is split apart into 
@@ -1609,7 +1464,7 @@ public class TimeParserGenerator {
                 case 'S':
                     mod = 100;
                     digit = value % mod;
-                    time.seconds = digit;
+                    time.second = digit;
                     break;
                 case 'X':
                     break;
@@ -1626,7 +1481,7 @@ public class TimeParserGenerator {
                     if ( fs.fieldType.equals("milli")) {
                         time.millis = digit;
                     } else if ( fs.fieldType.equals("micros")) {
-                        time.micros = digit;
+                        time.nanos = digit*1000;
                     } else if ( fs.fieldType.equals("ignore")) {
                         // do nothing
                     }
@@ -1644,7 +1499,7 @@ public class TimeParserGenerator {
                     if ( fs.fieldType.equals("milli")) {
                         time.millis = digit;
                     } else if ( fs.fieldType.equals("micros")) {
-                        time.micros = digit;
+                        time.nanos = digit*1000;
                     } else if ( fs.fieldType.equals("ignore")) {
                         // do nothing
                     }
@@ -1656,68 +1511,6 @@ public class TimeParserGenerator {
         }
         return this;
 
-    }
-
-    /**
-     * This allows for string split into elements to be interpreted here.  This
-     * is to add flexibility to external parsers that have partially parsed the
-     * number already.
-     * examples:<code>
-     *   TimeParser p= TimeParser.create("%Y %m %d");
-     *   p.setDigit(0,2007).setDigit(1,12).setDigit(2,5).getTime( Units.us2000 );
-     *   p.format();  // maybe in the future
-     * </code>
-     * @param digitNumber, the digit to set (starting with 0).
-     * @param digit, value to set the digit.
-     * @return the time parser with the digit set.
-     * @throws IllegalArgumentException if the digit has a custom field handler
-     * @throws IllegalArgumentException if the digit does not exist.
-     */
-    public TimeParserGenerator setDigit(int digitNumber, int digit) {
-        TimeStruct time;
-        
-        time= startTime;
-        switch (handlers[digitNumber + 1]) {
-            case 0:
-                time.year = digit;
-                break;
-            case 1:
-                time.year = digit < 58 ? 2000 + digit : 1900 + digit;
-                break;
-            case 2:
-                time.month = 1;
-                time.day = digit;
-                break;
-            case 3:
-                time.month = digit;
-                break;
-            case 4:
-                time.day = digit;
-                break;
-            case 5:
-                time.hour = digit;
-                break;
-            case 6:
-                time.minute = digit;
-                break;
-            case 7:
-                time.seconds = digit;
-                break;
-            case 8:
-                time.millis = digit;
-                break;
-            case 9:
-                time.micros = digit;
-                break;
-            case 12:
-                break;  // ignore
-            case 13:
-                time.month = digit;
-                break;
-            case 14:
-                break;  // ignore
-        }
-        return this;
     }
 
     /**
@@ -1765,11 +1558,11 @@ public class TimeParserGenerator {
      */
     public TimeStruct[] getTimeRange() {
         if ( !lock.equals("") ) throw new IllegalArgumentException("someone is messing with the parser on a different thread "+lock+ " this thread is "+Thread.currentThread().getName() );
-        if ( stopTimeDigit==AFTERSTOP_INIT && startTime.day==1 && startTime.hour==0 && startTime.minute==0 && startTime.seconds==0 && startTime.millis==0 && startTime.micros==0 &&
-            timeWidth.day==0 && timeWidth.hour==0 && timeWidth.minute==0 && timeWidth.seconds==0 && timeWidth.millis==0 && timeWidth.micros==0 ) { // special code for years.
+        if ( stopTimeDigit==AFTERSTOP_INIT && startTime.day==1 && startTime.hour==0 && startTime.minute==0 && startTime.second==0 && startTime.millis==0 && startTime.nanos==0 &&
+            timeWidth.day==0 && timeWidth.hour==0 && timeWidth.minute==0 && timeWidth.second==0 && timeWidth.millis==0 && timeWidth.nanos==0 ) { // special code for years.
             TimeStruct lstopTime = startTime.add(timeWidth);
-            int[] t1= new int[] { startTime.year, startTime.month, startTime.day, startTime.hour, startTime.minute, (int)startTime.seconds, startTime.millis*1000000 + startTime.micros*1000 };
-            int[] t2= new int[] { lstopTime.year, lstopTime.month, lstopTime.day, lstopTime.hour, lstopTime.minute, (int)lstopTime.seconds, lstopTime.millis*1000000 + lstopTime.micros*1000 };
+            int[] t1= new int[] { startTime.year, startTime.month, startTime.day, startTime.hour, startTime.minute, (int)startTime.second, startTime.millis*1000000 + startTime.nanos };
+            int[] t2= new int[] { lstopTime.year, lstopTime.month, lstopTime.day, lstopTime.hour, lstopTime.minute, (int)lstopTime.second, lstopTime.millis*1000000 + lstopTime.nanos };
             return new TimeStruct[] { TimeStruct.create(t1), TimeStruct.create(t2) };            
         } else {
             if ( stopTimeDigit<AFTERSTOP_INIT ) {
@@ -1811,21 +1604,6 @@ public class TimeParserGenerator {
     }
     
     /**
-     * move fractional part of timel.seconds into timel.millis and timel.micros
-     * components.
-     * @param timel the decomposed time. 
-     */
-    private void normalizeSeconds( TimeStruct timel ) {
-        double dextraMillis= ( 1000 * ( timel.seconds - (int) timel.seconds ) ) + 0.1e-6; // add fraction of millisecond to avoid roundoff error.
-        int extraMillis= (int)Math.floor( dextraMillis );
-        timel.seconds= (int)timel.seconds;
-
-        int extraMicros= (int)( 1000 * ( dextraMillis - extraMillis ) );
-        timel.millis+= extraMillis;
-        timel.micros+= extraMicros;
-    }
-    
-    /**
      * The TimeParser can be used to format times as well.  
      * @param start beginning of the interval
      * @param stop null if not needed or implicit.
@@ -1854,9 +1632,7 @@ public class TimeParserGenerator {
         } else {
             stopTimel= stop.copy();
         }
-        normalizeSeconds(stopTimel);
-        normalizeSeconds(timel);
-
+        
         NumberFormat[] nf = new NumberFormat[5];
         nf[2] = new DecimalFormat("00");
         nf[3] = new DecimalFormat("000");
@@ -1914,13 +1690,13 @@ public class TimeParserGenerator {
                         digit = timel.minute;
                         break;
                     case 7:
-                        digit = (int) timel.seconds;
+                        digit = timel.second;
                         break;
                     case 8:
                         digit = timel.millis;
                         break;
                     case 9:
-                        digit = timel.micros;
+                        digit = timel.nanos/1000;
                         break;
                     default:
                         throw new RuntimeException("shouldn't get here");
@@ -2030,7 +1806,7 @@ public class TimeParserGenerator {
         TimeStruct[] dr= tp.parse(test).getTimeRange();
         TimeStruct[] drnorm= TimeUtil.parseISO8601Range(norm);
         
-        if ( !dr.equals(drnorm) ) {
+        if ( ! ( dr[0].equals(drnorm[0]) && dr[1].equals(drnorm[1]) ) ) {
             tp= TimeParserGenerator.create(spec);
             String sdr= TimeUtil.formatISO8601Range( tp.parse(test).getTimeRange() );
             throw new IllegalStateException("ranges do not match: "+spec + " " +test + "--> " + sdr + ", should be "+norm );
