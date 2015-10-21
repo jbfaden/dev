@@ -200,12 +200,19 @@ public class TimeStruct {
             this.day+= 1;
             this.hour-= 24;
         }
-        int daysInMonth= TimeUtil.daysInMonth( this.month, this.year);
-        while ( this.day >= daysInMonth ) {
-            this.day-= daysInMonth;
-            this.month+= 1;
-            daysInMonth= TimeUtil.daysInMonth( this.month, this.year);
+        // Irregular month lengths make it impossible to do this nicely.  Either 
+        // months should be incremented or days should be incremented, but not
+        // both.  Note Day-of-Year will be normalized to Year,Month,Day here
+        // as well.  e.g. 2000/13/01 because we incremented the month.
+        if ( this.day>28 ) {  
+            int daysInMonth= TimeUtil.daysInMonth( this.month, this.year);
+            while ( this.day >= daysInMonth ) {
+                this.day-= daysInMonth;
+                this.month+= 1;
+                daysInMonth= TimeUtil.daysInMonth( this.month, this.year);
+            }
         }
+        
         while ( this.month>= 12 ) {
             this.year+= 1;
             this.month-= 12;

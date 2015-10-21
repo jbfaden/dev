@@ -13,6 +13,7 @@ import java.text.ParseException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -33,8 +34,17 @@ public class URITemplatesServlet extends HttpServlet {
                 s.contains(";sparse") || s.contains(",sparse"));  // TODO: make canonical!!!
     } 
 
-
-    private int doParse( TimeStruct[] trdr, String root, String template, PrintWriter out ) throws IOException {
+    /**
+     * The root is listed and files matching the template are returned.
+     * @param root the root URI, for example http://cdaweb.gsfc.nasa.gov/sp_phys/data/omni/hourly/2000/
+     * @param template the template for files, for example omni2_h0_mrg1hr_$Y$(m;delta=6)01_v$v.cdf
+     * @param out the stream to which HTML output is added.
+     * @return the number of items added to the list.
+     * @throws IOException 
+     */
+    private int doParse( String root, String template, PrintWriter out) throws IOException {
+        
+        logger.entering( "org.tsds.URITemplatesServlet", "doParse {0} {1}", new Object[] { root, template } );
         
         int count= 0;
 
@@ -43,7 +53,7 @@ public class URITemplatesServlet extends HttpServlet {
         URL rootUrl= new URL(root);
         InputStream in = rootUrl.openStream();
                 
-        URL[] result=null;
+        URL[] result;
         try {
             result= HtmlUtil.getDirectoryListing( rootUrl, in, true );
         } finally {
@@ -68,16 +78,18 @@ public class URITemplatesServlet extends HttpServlet {
             
                 if ( v==null ) v= "N/A";
             
-                out.printf(  "<td>"+root + "/" + n + "</td><td>"+ TimeUtil.formatISO8601Range(ts) + "</td><td>" + v +"</td>\n" );
+                out.printf("<td>"+root + "/" + n + "</td><td>"+ TimeUtil.formatISO8601Range(ts) + "</td><td>" + v +"</td>\n" );
                 out.printf(  "</tr>" );
                 count= count+1;
                 
             } catch (ParseException ex) {
-                logger.finest("not part of templated collection: "+n);
+                logger.log(Level.FINEST, "not part of templated collection: {0}", n);
                 
             }
             
         }
+
+        logger.exiting( "org.tsds.URITemplatesServlet", "doParse {0} {1}", new Object[] { root, template } );
         
         return count;
         
@@ -96,14 +108,7 @@ public class URITemplatesServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>URI Templates</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            
+
             String uri= request.getParameter("resourceURI");
             String timerange= request.getParameter("timerange");
             
@@ -118,9 +123,17 @@ public class URITemplatesServlet extends HttpServlet {
             try {
                 drtr= TimeUtil.parseISO8601Range(timerange);
             } catch ( ParseException ex ) {
-                throw new RuntimeException( "unable to parse timerange",ex );
+                throw new RuntimeException( "unable to parse ISO8601 timerange",ex );
             }
-        
+            if ( drtr==null ) throw new IllegalArgumentException("unable to interpret ISO8601 timerange: "+timerange);
+
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>URI Templates</title>");            
+            out.println("</head>");
+            out.println("<body>");
+                        
             String[] ss= uri.split("/");
             
             StringBuilder generateUriBuilder= new StringBuilder(ss[0]);
@@ -138,6 +151,10 @@ public class URITemplatesServlet extends HttpServlet {
                 parseUri= "";
             } else {
                 parseUri= uri.substring(generateUri.length()+1);
+            }
+            
+            if ( parseUri.contains("/") ) {
+                throw new IllegalArgumentException("parse portion of URI cannot contain /");
             }
             
             TimeParserGenerator tp= TimeParserGenerator.create(generateUri);
@@ -192,7 +209,11 @@ public class URITemplatesServlet extends HttpServlet {
                         out.printf(  "<tr><td>"+st + "</td><td>"+ TimeUtil.formatISO8601Range(dr) + "</td><td>N/A</td><tr>\n" );
                         count++;
                     } else {
-                        count+= doParse( drtr, st, parseUri, out );
+                        try {
+                            count+= doParse(st, parseUri, out );
+                        } catch ( IOException ex ) {
+                            logger.fine("exception thrown, presumably because the folder does not exist.");
+                        }
                     }
 
                     if ( count>10000 ) {

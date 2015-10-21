@@ -428,10 +428,17 @@ public class TimeUtil {
     }    
     
     private final static int[][] daysInMonth = {
-        {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31, 0},
-        {0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31, 0}
+        {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31},
+        {0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
     };
         
+    /**
+     * return the number of days in the month of the year.  Note the 
+     * result is not valid for years less than 1600 or so.
+     * @param month the month (1..12)
+     * @param year the year (1000..8999)
+     * @return the number of days in the month.
+     */
     public static int daysInMonth(int month, int year) {
         return daysInMonth[isLeapYear(year)?1:0][month];
     }
