@@ -50,6 +50,14 @@ public class URITemplatesServlet extends HttpServlet {
 
         if ( !root.endsWith("/") ) root= root+"/";
         
+        String childTemplate= "";
+        
+        int iparent= template.indexOf("/");
+        if ( iparent>-1 ) {
+            childTemplate= template.substring(iparent+1);
+            template= template.substring(0,iparent);
+        }
+        
         URL rootUrl= new URL(root);
         InputStream in = rootUrl.openStream();
                 
@@ -68,20 +76,26 @@ public class URITemplatesServlet extends HttpServlet {
         tpg.setContext( context[0] );
         
         for ( String n : names ) {
-            out.printf(  "<tr>" );
             
             Map<String,String> ffs= new HashMap();
             
             try {
                 TimeStruct[] ts= tpg.parse(n,ffs).getTimeRange();
+                
                 String v;
                 v= ffs.get( tpg.getFieldHandlerByCode("v").getId() );
             
-                if ( v==null ) v= "N/A";
-            
-                out.printf("<td>"+root + n + "</td><td>"+ TimeUtil.formatISO8601Range(ts) + "</td><td>" + v +"</td>\n" );
-                out.printf(  "</tr>" );
-                count= count+1;
+                if ( childTemplate.length()>0 ) {
+                    count= count+ doParse( ts, root + "/" + n, childTemplate, out );
+                    
+                } else {
+                    if ( v==null ) v= "N/A";
+                    
+                    out.printf(  "<tr>" );    
+                    out.printf("<td>"+root + n + "</td><td>"+ TimeUtil.formatISO8601Range(ts) + "</td><td>" + v +"</td>\n" );
+                    out.printf(  "</tr>" );
+                    count= count+1;
+                }
                 
             } catch (ParseException ex) {
                 logger.log(Level.FINEST, "not part of templated collection: {0}", n);
@@ -153,11 +167,7 @@ public class URITemplatesServlet extends HttpServlet {
             } else {
                 parseUri= uri.substring(generateUri.length()+1);
             }
-            
-            if ( parseUri.contains("/") ) {
-                throw new IllegalArgumentException("parse portion of URI cannot contain /");
-            }
-            
+                        
             TimeParserGenerator tp= TimeParserGenerator.create(generateUri);
             
             int i1= generateUri.indexOf("$(enum;");
