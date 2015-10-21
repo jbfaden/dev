@@ -177,6 +177,8 @@ public class TimeStruct {
      * return this time struct, after normalizing
      * all the components, so no component is 
      * greater than its expected range.
+     * Note that this doesn't support borrowing, where fields are equal to
+     * negative numbers.
      * @return the normalized TimeStruct.
      */
     public TimeStruct normalize() {
@@ -205,15 +207,16 @@ public class TimeStruct {
         // both.  Note Day-of-Year will be normalized to Year,Month,Day here
         // as well.  e.g. 2000/13/01 because we incremented the month.
         if ( this.day>28 ) {  
-            int daysInMonth= TimeUtil.daysInMonth( this.month, this.year);
-            while ( this.day >= daysInMonth ) {
+            int daysInMonth= TimeUtil.daysInMonth( this.month, this.year );
+            while ( this.day > daysInMonth ) {
                 this.day-= daysInMonth;
                 this.month+= 1;
-                daysInMonth= TimeUtil.daysInMonth( this.month, this.year);
+                if ( this.month>12 ) break;
+                daysInMonth= TimeUtil.daysInMonth( this.month, this.year );
             }
         }
         
-        while ( this.month>= 12 ) {
+        while ( this.month>12 ) {
             this.year+= 1;
             this.month-= 12;
         }
