@@ -42,7 +42,7 @@ public class URITemplatesServlet extends HttpServlet {
      * @return the number of items added to the list.
      * @throws IOException 
      */
-    private int doParse( String root, String template, PrintWriter out) throws IOException {
+    private int doParse( TimeStruct[] context, String root, String template, PrintWriter out) throws IOException {
         
         logger.entering( "org.tsds.URITemplatesServlet", "doParse {0} {1}", new Object[] { root, template } );
         
@@ -65,6 +65,7 @@ public class URITemplatesServlet extends HttpServlet {
         for ( int i=0; i< result.length; i++ ) names[i]= result[i].toString().substring(len);
 
         TimeParserGenerator tpg= TimeParserGenerator.create( template );
+        tpg.setContext( context[0] );
         
         for ( String n : names ) {
             out.printf(  "<tr>" );
@@ -210,7 +211,7 @@ public class URITemplatesServlet extends HttpServlet {
                         count++;
                     } else {
                         try {
-                            count+= doParse(st, parseUri, out );
+                            count+= doParse(dr, st, parseUri, out );
                         } catch ( IOException ex ) {
                             logger.fine("exception thrown, presumably because the folder does not exist.");
                         }
