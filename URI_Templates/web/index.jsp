@@ -12,7 +12,10 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <h1>URI Templates</h1>
         <a href="URI_Templates.jsp">This way...</a>
+        
+        <br><br>
+        <small>version 20151021.0717</small>
     </body>
 </html>
