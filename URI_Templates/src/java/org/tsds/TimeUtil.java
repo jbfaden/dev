@@ -220,8 +220,8 @@ public class TimeUtil {
                         t2[0], t2[1], t2[2],
                         t2[3], t2[4] ) );
         if ( 5<=lsd ) {
-            st1.append( String.format( "%02d", t1[5] ) );
-            st2.append( String.format( "%02d", t2[5] ) );
+            st1.append( String.format( ":%02d", t1[5] ) );
+            st2.append( String.format( ":%02d", t2[5] ) );
         }
         if ( 6<=lsd ) {
             if ( t1[6] % 1000000 == 0 && t2[6] % 1000000 == 0 ) {
@@ -434,7 +434,7 @@ public class TimeUtil {
         
     /**
      * return the number of days in the month of the year.  Note the 
-     * result is not valid for years less than 1600 or so.
+     * result is not valid for years less than 1600 or so.  
      * @param month the month (1..12)
      * @param year the year (1000..8999)
      * @return the number of days in the month.

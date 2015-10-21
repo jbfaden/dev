@@ -79,7 +79,7 @@ public class URITemplatesServlet extends HttpServlet {
             
                 if ( v==null ) v= "N/A";
             
-                out.printf("<td>"+root + "/" + n + "</td><td>"+ TimeUtil.formatISO8601Range(ts) + "</td><td>" + v +"</td>\n" );
+                out.printf("<td>"+root + n + "</td><td>"+ TimeUtil.formatISO8601Range(ts) + "</td><td>" + v +"</td>\n" );
                 out.printf(  "</tr>" );
                 count= count+1;
                 
