@@ -256,7 +256,15 @@ public class URITemplatesServlet extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             String uri= request.getParameter("resourceURI");
             String timerange= request.getParameter("timerange");
-            formatHtml( uri, timerange, out );
+            try {
+                formatHtml( uri, timerange, out );
+            } catch ( Exception ex ) {
+                response.setStatus(400);
+                out.printf("<html><h3>Exception encountered</h3>");
+                out.printf("<pre>");
+                ex.printStackTrace(out);
+                out.printf("</pre>");
+            }
         }
         
     }
