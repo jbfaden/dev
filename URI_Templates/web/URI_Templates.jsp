@@ -16,8 +16,8 @@
         <h1>Hybrid Generating/Parsing URIs</h1>
         <p>This will use the generation code for all parts of the URI which can be handled
             with generation, and then will switch to parsing for parts that need
-            parsing.  For example, the $Y/$m/$d/ components can be resolved, and then 
-            listings are used to resolve $H$M$(S,sparse).png.
+            parsing.  For example, the http://data.org/$Y/$m/$d/ components can be resolved, and then 
+            HTTP listings are used to resolve $H$M$(S,sparse).png.
         </p>
         
         <script lang="javascript">
@@ -43,6 +43,6 @@
         <br>
         <input type="submit" value="Try it out" />
     </form>        
-        <br><small>version 20151020T0748</small>
+        <br><small>version 20151022T0819</small>
     </body>
 </html>
