@@ -4,6 +4,7 @@ package org.das2.sdi;
 import org.das2.datum.Units;
 import org.virbo.dataset.MutablePropertyDataSet;
 import org.virbo.dataset.QDataSet;
+
 import sdi.data.BinnedData2D;
 import sdi.data.XYZMetadata;
 
@@ -23,19 +24,36 @@ public class BinnedData2DAdapter extends SimpleBinnedData2DAdapter {
         MutablePropertyDataSet dep0= getX(data);
         MutablePropertyDataSet dep1= getY(data);
         MutablePropertyDataSet ds= getZ(data);
+
+        XYZMetadata md = data.getMetadata();
+        Units xUnits = Units.lookupUnits( md.getXUnits().getName() );
+        Units yUnits = Units.lookupUnits( md.getYUnits().getName() );
+        Units zUnits = Units.lookupUnits( md.getZUnits().getName() );
+
+        addUnits(dep0.property(QDataSet.BIN_PLUS), xUnits);
+        addUnits(dep0.property(QDataSet.BIN_MINUS), xUnits);
+
+        addUnits(dep1.property(QDataSet.BIN_PLUS), yUnits);
+        addUnits(dep1.property(QDataSet.BIN_MINUS), yUnits);
+
+        
         ds.putProperty( QDataSet.DEPEND_0, dep0 );
         ds.putProperty( QDataSet.DEPEND_1, dep1 );        
-        XYZMetadata meta= data.getMetadata();
-        dep0.putProperty( QDataSet.UNITS, Units.lookupUnits( meta.getXUnits().getName() ) );
-        dep0.putProperty( QDataSet.LABEL, meta.getXLabel() );
-        dep0.putProperty( QDataSet.NAME, meta.getXName() );
-        dep1.putProperty( QDataSet.UNITS, Units.lookupUnits( meta.getYUnits().getName() ) );
-        dep1.putProperty( QDataSet.LABEL, meta.getYLabel() );
-        dep1.putProperty( QDataSet.NAME, meta.getYName() );
-        ds.putProperty( QDataSet.UNITS, Units.lookupUnits( meta.getZUnits().getName() ) );
-        ds.putProperty( QDataSet.LABEL, meta.getZLabel() );
-        ds.putProperty( QDataSet.NAME, meta.getZName() );
+        dep0.putProperty( QDataSet.UNITS, xUnits );
+        dep0.putProperty( QDataSet.LABEL, md.getXLabel() );
+        dep0.putProperty( QDataSet.NAME, md.getXName() );
+        dep1.putProperty( QDataSet.UNITS, yUnits);
+        dep1.putProperty( QDataSet.LABEL, md.getYLabel() );
+        dep1.putProperty( QDataSet.NAME, md.getYName() );
+        ds.putProperty( QDataSet.UNITS, zUnits);
+        ds.putProperty( QDataSet.LABEL, md.getZLabel() );
+        ds.putProperty( QDataSet.NAME, md.getZName() );
         
         return ds;
+    }
+
+    private static void addUnits(Object property, Units u) {
+      MutablePropertyDataSet qds = (MutablePropertyDataSet) property;
+      qds.putProperty(QDataSet.UNITS, u);
     }
 }
