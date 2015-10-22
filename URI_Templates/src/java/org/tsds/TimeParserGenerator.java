@@ -1,8 +1,7 @@
 /*
- * TimeParser.java
+ * TimeParserGenerator.java
  *
- * Created on January 27, 2006, 3:51 PM
- *
+ * Created from das2's TimeParser.java in October 2015.
  *
  */
 package org.tsds;
@@ -20,14 +19,17 @@ import java.util.logging.ConsoleHandler;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import static org.tsds.TimeUtil.formatISO8601Duration;
 
 /**
  * TimeParserGenerator was created from the TimeParser class of 
  * org.das2.datum, so that it can be used independently of Autoplot and
  * das2.
  * 
+ * This class is not thread-safe, make sure that only one thread is accessing 
+ * an instance at a time.
+ * 
  * @author faden@cottagesystems.com
+ * @see https://saturn.physics.uiowa.edu/svn/das2/dasCore/community/autoplot2011/trunk/dasCoreDatum/src/org/das2/datum/TimeParser.java
  */
 public class TimeParserGenerator {
     
@@ -56,9 +58,9 @@ public class TimeParserGenerator {
     private TimeStruct timeWidth;
     
     /**
-     * the context for parsing times.  For example 2014-09-08 can be the context, and then 
-     * "11:00" will result in 2014-09-08T11:00.  This is set in the constructor and will not be 
-     * mutated after.
+     * the context for parsing times.  For example 2014-09-08 can be the 
+     * context, and then "11:00" will result in 2014-09-08T11:00.  This is set 
+     * in the constructor and will not be mutated after.
      */
     private TimeStruct context;
 
@@ -915,7 +917,7 @@ public class TimeParserGenerator {
                         else if ( name.equals("M") ) context.minute= Integer.parseInt(val);
                         else if ( name.equals("S") ) context.second= Integer.parseInt(val);
                         else if ( name.equals("cadence") ) span= Integer.parseInt(val);
-                        else if ( name.equals("span") ) span= Integer.parseInt(val);
+                        else if ( name.equals("span") ) span= Integer.parseInt(val);  // Legacy, not in URI_Templates document
                         else if ( name.equals("delta") ) span= Integer.parseInt(val); // see http://tsds.org/uri_templates
                         else if ( name.equals("resolution") ) span= Integer.parseInt(val);
                         else if ( name.equals("period" ) ) {
