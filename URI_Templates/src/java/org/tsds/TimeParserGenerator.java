@@ -1625,7 +1625,7 @@ public class TimeParserGenerator {
         int offs = 0;
         int len;
 
-        TimeStruct timel = start.copy();
+        TimeStruct time = start.copy();
         TimeStruct timeWidthl= new TimeStruct();
         copyTime( timeWidth, timeWidthl ); // make a local copy in case future versions allow variable time widths.
         extra= new HashMap(extra);
@@ -1633,9 +1633,9 @@ public class TimeParserGenerator {
         TimeStruct stopTimel;
         if ( stop==null ) {
             if ( timeWidth.year==MAX_VALID_YEAR-MIN_VALID_YEAR ) { // orbits and other strange times
-                stopTimel= timel.copy();
+                stopTimel= time.copy();
             } else {
-                stopTimel= timel.add( timeWidth );
+                stopTimel= time.add( timeWidth );
             }
         } else {
             stopTimel= stop.copy();
@@ -1648,7 +1648,7 @@ public class TimeParserGenerator {
 
         for (int idigit = 1; idigit < ndigits; idigit++) {
             if ( idigit==stopTimeDigit ) {
-                timel= stopTimel;
+                time= stopTimel;
             }
             
             result.insert(offs, this.delims[idigit - 1]);
@@ -1677,34 +1677,34 @@ public class TimeParserGenerator {
                 }
                 switch (handlers[idigit]) {
                     case 0:
-                        digit = timel.year;
+                        digit = time.year;
                         break;
                     case 1:
-                        digit = (timel.year < 2000) ? timel.year - 1900 : timel.year - 2000;
+                        digit = (time.year < 2000) ? time.year - 1900 : time.year - 2000;
                         break;
                     case 2:
-                        digit = TimeUtil.dayOfYear(timel.month, timel.day, timel.year);
+                        digit = TimeUtil.dayOfYear(time.month, time.day, time.year);
                         break;
                     case 3:
-                        digit = timel.month;
+                        digit = time.month;
                         break;
                     case 4:
-                        digit = timel.day;
+                        digit = time.day;
                         break;
                     case 5:
-                        digit = timel.hour;
+                        digit = time.hour;
                         break;
                     case 6:
-                        digit = timel.minute;
+                        digit = time.minute;
                         break;
                     case 7:
-                        digit = timel.second;
+                        digit = time.second;
                         break;
                     case 8:
-                        digit = timel.millis;
+                        digit = time.millis;
                         break;
                     case 9:
-                        digit = timel.nanos/1000;
+                        digit = time.nanos/1000;
                         break;
                     default:
                         throw new RuntimeException("shouldn't get here");
@@ -1724,7 +1724,7 @@ public class TimeParserGenerator {
 
             } else if (handlers[idigit] == 13) { // month names
 
-                result.insert(offs, TimeUtil.monthNameAbbrev(timel.month));
+                result.insert(offs, TimeUtil.monthNameAbbrev(time.month));
                 offs += len;
 
             } else if (handlers[idigit] == 12 || handlers[idigit]==14 ) { // ignore
@@ -1742,16 +1742,16 @@ public class TimeParserGenerator {
                 } else {
                     FieldHandler fh1= fieldHandlers.get(fc[idigit]);
                     TimeStruct timeEnd = stopTimel;
-                    String ins= fh1.format( timel, timeEnd.subtract(timel), len, extra );
+                    String ins= fh1.format( time, timeEnd.subtract(time), len, extra );
                     TimeStruct startTimeTest= new TimeStruct();
-                    copyTime( timel, startTimeTest );
+                    copyTime( time, startTimeTest );
                     TimeStruct timeWidthTest= new TimeStruct();
                     copyTime( timeWidthl, timeWidthTest );
                     try {
                         fh1.parse( ins, startTimeTest, timeWidthTest, extra );
-                        copyTime( startTimeTest, timel );
+                        copyTime( startTimeTest, time );
                         copyTime( timeWidthTest, timeWidthl );
-                        copyTime( timel.add(timeWidthl), stopTimel );
+                        copyTime( time.add(timeWidthl), stopTimel );
                         
                     } catch (ParseException ex) {
                         Logger.getLogger(TimeParserGenerator.class.getName()).log(Level.SEVERE, null, ex);
