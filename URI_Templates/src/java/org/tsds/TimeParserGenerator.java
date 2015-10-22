@@ -1257,6 +1257,13 @@ public class TimeParserGenerator {
 
             if ( timeString.length()<offs+len ) {
                 throw new ParseException( "string is too short: "+timeString, timeString.length() );
+            } else {
+                int i=idigit-1;
+                int len1= i==0 ? 0 : lengths[i];
+                String constant= timeString.substring(offsets[i]+len1,offsets[idigit]);
+                if ( !this.delims[i].equals(constant) ) {
+                    throw new ParseException( "constant part mismatch: "+constant, offsets[i] );
+                }
             }
 
             String field= timeString.substring(offs, offs + len).trim();
