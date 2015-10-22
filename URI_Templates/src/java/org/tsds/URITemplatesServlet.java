@@ -90,8 +90,10 @@ public class URITemplatesServlet extends HttpServlet {
                 } else {
                     if ( v==null ) v= "N/A";
                     
-                    out.printf(  "<tr>" );    
-                    out.printf("<td>"+root + n + "</td><td>"+ TimeUtil.formatISO8601Range(ts) + "</td><td>" + v +"</td>\n" );
+                    out.printf( "<tr>" );    
+                    out.printf( "<td><a href=\""+ root + n + "\">" );
+                    out.printf( root + n );
+                    out.printf( "</a></td><td>"+ TimeUtil.formatISO8601Range(ts) + "</td><td>" + v +"</td>\n" );
                     out.printf(  "</tr>" );
                     count= count+1;
                 }
