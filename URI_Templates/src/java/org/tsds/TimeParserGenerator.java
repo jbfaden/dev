@@ -505,7 +505,11 @@ public class TimeParserGenerator {
             if ( length>16 ) {
                 throw new IllegalArgumentException("length>16 not supported");
             } else if ( length>-1 ) {
-                result= "_________________".substring(0,length-result.length()) + result;
+                char p= getPad(extra);
+                StringBuilder b= new StringBuilder();
+                int n= length-result.length();
+                for ( int i=0; i<n; i++ ) b.append(p);
+                result= b.toString() + result;
             }
             return result;
         }
@@ -1069,7 +1073,6 @@ public class TimeParserGenerator {
         spec= spec.replaceAll(",",";");
         if ( spec.contains("$Y")||spec.contains("$y")||spec.contains("$(Y;")||spec.contains("$(y;") ) return true;
         if ( spec.contains(";Y=") ) return true;
-        if ( spec.contains("$o;")|| spec.contains("$(o;") ) return true;
         if ( spec.contains("$(periodic;")) return true;
         return false;
     }
@@ -1349,7 +1352,7 @@ public class TimeParserGenerator {
      * @param args
      * @return the char, or (char)0.
      */
-    public static char getPad(Map<String, String> args) {
+    private static char getPad(Map<String, String> args) {
         String spad= args.get("pad");
         if ( spad==null || spad.equals("underscore") ) return '_';
         if ( spad.equals("space") ) {
@@ -1363,162 +1366,6 @@ public class TimeParserGenerator {
         } else {
             return spad.charAt(0);
         }
-    }
-
-    
-    private static class FieldSpec {
-        String spec=null;  // unparsed spec
-        String fieldType= null;
-        int length= -1;
-        String params= null;
-        @Override
-        public String toString() {
-            return String.valueOf(spec)+String.valueOf(params);
-        }
-    }
-
-    /**
-     * parse field specifications like:
-     *   %{milli;cadence=100}
-     *   %3{skip}
-     * @param spec
-     * @return
-     */
-    private FieldSpec parseSpec(String spec) {
-        FieldSpec result= new FieldSpec();
-        int i0= spec.charAt(0)=='%' ? 1 : 0;
-        result.spec= spec.substring(i0);
-        int i1= i0;
-        while ( Character.isDigit(spec.charAt(i1)) ) i1++;
-        if ( i1>i0 ) {
-            result.length= Integer.parseInt(spec.substring(i0,i1));
-            i0= i1;
-        }
-        int isemi = spec.indexOf(';',i0);
-        int ibrace = spec.indexOf('}',i0);
-        i1 = ibrace;
-        if (isemi > -1 && isemi < ibrace) {
-            i1 = isemi;
-            result.params= spec.substring(isemi,ibrace);
-        } else {
-            result.params= "";
-        }
-        String fieldType = spec.substring(1, i1);
-        
-        result.fieldType= fieldType;
-        return result;
-        
-    }
-
-    /**
-     * Set the digit using the format code.  If multiple digits are found, then
-     * the integer provided should be the misinterpreted integer.  For example,
-     * if the format is "%Y%m%d", the integer 20080830 is split apart into 
-     * 2008,08,30.
-     * @param format spec like "%Y%m%d"
-     * @param value integer like 20080830.
-     * @return
-     */
-    public TimeParserGenerator setDigit(String format, int value) {
-
-        TimeStruct time= startTime;
-        
-        String[] ss = format.split("%", -2);
-        for (int i = ss.length - 1; i > 0; i--) {
-            int mod = 0;
-            int digit;
-            switch (ss[i].charAt(0)) {
-                case 'Y':
-                    mod = 10000;
-                    digit = value % mod;
-                    time.year = digit;
-                    break;
-                case 'y':
-                    mod = 100;
-                    digit = value % mod;
-                    time.year = digit < 58 ? 2000 + digit : 1900 + digit;
-                    break;
-                case 'j':
-                    mod = 1000;
-                    digit = value % mod;
-                    time.month = 1;
-                    time.day = digit;
-                    break;
-                case 'm':
-                    mod = 100;
-                    digit = value % mod;
-                    time.month = digit;
-                    break;
-                case 'b':  // someone else must parse the month name into two-digit month.
-                    mod = 100;
-                    digit = value % mod;
-                    time.month= digit;
-                    break;
-                case 'd':
-                    mod = 100;
-                    digit = value % mod;
-                    time.day = digit;
-                    break;
-                case 'H':
-                    mod = 100;
-                    digit = value % mod;
-                    time.hour = digit;
-                    break;
-                case 'M':
-                    mod = 100;
-                    digit = value % mod;
-                    time.minute = digit;
-                    break;
-                case 'S':
-                    mod = 100;
-                    digit = value % mod;
-                    time.second = digit;
-                    break;
-                case 'X':
-                    break;
-                case '{':
-                    FieldSpec fs= parseSpec(ss[i]);
-                    if (fs.fieldType.equals("milli")) {
-                        mod = 1000;
-                    } else if ( fs.fieldType.equals("micros") ) {
-                        mod = 1000;
-                    } else {
-                        mod= (int)Math.pow( 10, fs.length );
-                    }
-                    digit = value % mod;
-                    if ( fs.fieldType.equals("milli")) {
-                        time.millis = digit;
-                    } else if ( fs.fieldType.equals("micros")) {
-                        time.nanos = digit*1000;
-                    } else if ( fs.fieldType.equals("ignore")) {
-                        // do nothing
-                    }
-                    break;
-                case '(':
-                    fs= parseSpec(ss[i]);
-                    if (fs.fieldType.equals("milli")) {
-                        mod = 1000;
-                    } else if ( fs.fieldType.equals("micros") ) {
-                        mod = 1000;
-                    } else {
-                        mod= (int)Math.pow( 10, fs.length );
-                    }
-                    digit = value % mod;
-                    if ( fs.fieldType.equals("milli")) {
-                        time.millis = digit;
-                    } else if ( fs.fieldType.equals("micros")) {
-                        time.nanos = digit*1000;
-                    } else if ( fs.fieldType.equals("ignore")) {
-                        // do nothing
-                    }
-                    break;
-                default:
-                    throw new IllegalArgumentException("format code not supported");
-            }
-            value = value / mod;
-        }
-        return this;
-
     }
 
     /**
