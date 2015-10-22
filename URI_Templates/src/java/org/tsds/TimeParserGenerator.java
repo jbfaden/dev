@@ -91,7 +91,7 @@ public class TimeParserGenerator {
     private int[] shift;  // any shifts to apply to each digit (used typically to make end time inclusive).
     private final String[] delims;
     private String[] fc;
-    private String[] qualifiers;
+    private String[] modifiers;
     private final String regex;
     //private String formatString;
     private int stopTimeDigit=AFTERSTOP_INIT;  // if after stop, then timeWidth is being set.
@@ -629,7 +629,7 @@ public class TimeParserGenerator {
      * convert %() and ${} to standard $(), and support legacy modes in one
      * compact place.  Asterisk (*) is replaced with $x.
      * Note, commas may still appear in qualifier lists, and 
-     * makeQualifiersCanonical will be called to remove them.
+     * makeModifiersCanonical will be called to remove them.
      * @param formatString like %{Y,m=02}*.dat or $(Y;m=02)$x.dat
      * @return formatString containing canonical spec, $() and $x instead of *, like $(Y,m=02)$x.dat
      */
@@ -660,27 +660,27 @@ public class TimeParserGenerator {
     /**
      * $(subsec,places=4) --> $(subsec;places=4)
      * $(enum,values=01,02,03,id=foo) --> $(enum;values=01,02,03;id=foo)
-     * @param qualifiers
-     * @return 
+     * @param modifiers the modifiers string.
+     * @return the canonical string.
      */
-    private static String makeQualifiersCanonical( String qualifiers ) {
+    private static String makeModifiersCanonical( String modifiers ) {
         boolean noDelimiters= true;
-        for ( int i=0; noDelimiters && i<qualifiers.length(); i++ ) {
-            if ( qualifiers.charAt(i)==',' || qualifiers.charAt(i)==';' ) {
+        for ( int i=0; noDelimiters && i<modifiers.length(); i++ ) {
+            if ( modifiers.charAt(i)==',' || modifiers.charAt(i)==';' ) {
                 noDelimiters= false;
             }
         }
-        if ( noDelimiters ) return qualifiers;
+        if ( noDelimiters ) return modifiers;
         
-        char[] result= new char[qualifiers.length()];
+        char[] result= new char[modifiers.length()];
         
         int istart;
         // We know that the first delimiter must be a semicolon.  
-        // If it is, then assume the qualifiers are properly formatted.
-        result[0]= qualifiers.charAt(0); // '('
-        for ( istart=1; istart<qualifiers.length(); istart++ ) {
-            char ch= qualifiers.charAt(istart);
-            if ( ch==';' ) return qualifiers; // assume the qualifiers are properly formatted
+        // If it is, then assume the modifiers are properly formatted.
+        result[0]= modifiers.charAt(0); // '('
+        for ( istart=1; istart<modifiers.length(); istart++ ) {
+            char ch= modifiers.charAt(istart);
+            if ( ch==';' ) return modifiers; // assume the modifiers are properly formatted
             if ( ch==',' ) {
                 result[istart]=';';
                 break;
@@ -691,9 +691,9 @@ public class TimeParserGenerator {
         }
 
         boolean expectSemi=false;
-        for ( int i= qualifiers.length()-1; i>istart; i-- ) {
-            result[i]= qualifiers.charAt(i);
-            char ch= qualifiers.charAt(i);
+        for ( int i= modifiers.length()-1; i>istart; i-- ) {
+            result[i]= modifiers.charAt(i);
+            char ch= modifiers.charAt(i);
             if ( ch=='=' ) expectSemi=true;
             else if ( ch==',' && expectSemi ) {
                 result[i]= ';' ;
@@ -752,7 +752,7 @@ public class TimeParserGenerator {
         
         String[] ss = formatString.split("\\$");
         fc = new String[ss.length];
-        qualifiers= new String[ss.length];
+        modifiers= new String[ss.length];
         
         String[] delim = new String[ss.length + 1];
 
@@ -780,7 +780,7 @@ public class TimeParserGenerator {
                 lengths[i] = 0; // determine later by field type
             }
 
-            ss[i]= makeQualifiersCanonical(ss[i]);
+            ss[i]= makeModifiersCanonical(ss[i]);
             
             logger.log( Level.FINE, "ss[i]={0}", ss[i] );
             if ( ss[i].charAt(pp)!='(' ) {
@@ -794,7 +794,7 @@ public class TimeParserGenerator {
                 int semi= ss[i].indexOf(";", pp );
                 if ( semi != -1) {
                     fc[i] = ss[i].substring(pp + 1, semi );
-                    qualifiers[i]= ss[i].substring( semi+1,endIndex );
+                    modifiers[i]= ss[i].substring( semi+1,endIndex );
                 } else {
                     fc[i] = ss[i].substring(pp + 1, endIndex);
                 }
@@ -848,7 +848,7 @@ public class TimeParserGenerator {
                         pos += lengths[i];
                     }
                     FieldHandler fh= fieldHandlers.get(fc[i]);
-                    String args= qualifiers[i];
+                    String args= modifiers[i];
                     Map<String,String> argv= new HashMap();
                     if ( args!=null ) {
                         String[] ss2= args.split(";",-2);
@@ -888,8 +888,8 @@ public class TimeParserGenerator {
 
             int span=1;
 
-            if ( qualifiers[i]!=null ) {
-                String[] ss2= qualifiers[i].split(";");
+            if ( modifiers[i]!=null ) {
+                String[] ss2= modifiers[i].split(";");
                 for ( int i2=0; i2<ss2.length; i2++ ) {
                     boolean okay=false;
                     String qual= ss2[i2].trim();
@@ -1038,10 +1038,10 @@ public class TimeParserGenerator {
             StringBuilder canonical= new StringBuilder( delim[0] );
             for (int i = 1; i < ndigits; i++) { 
                 canonical.append("$");
-                if ( qualifiers[i]==null ) {
+                if ( modifiers[i]==null ) {
                     canonical.append(fc[i]); 
                 } else {
-                    canonical.append("(").append(fc[i]).append(";").append(qualifiers[i]).append(")");
+                    canonical.append("(").append(fc[i]).append(";").append(modifiers[i]).append(")");
                 }
                 canonical.append(delim[i]); 
             }
@@ -1091,9 +1091,9 @@ public class TimeParserGenerator {
      *
      * An effort has begun to try and unify to an agreeable specification for this.  See http://tsds.org/uri_templates
      * <pre>
-     *  $[fieldLength]<1-char code>  or
-     *  $[fieldLength](<code>)
-     *  $[fieldLength](<code>;qualifiers)
+     *  $<1-char code>  or
+     *  $(<code>)
+     *  $(<code>;modifiers)
      *
      *  fieldLength=0 --> makes field length indeterminate, deliminator must follow.
      *
@@ -1106,8 +1106,8 @@ public class TimeParserGenerator {
      *  $H   2-digit hour
      *  $M   2-digit minute
      *  $S   2-digit second
-     *  $(milli)  3-digit milliseconds
-     *  $(ignore) skip this field
+     *  $(milli)  3-digit milliseconds  (NOT STANDARD)
+     *  $(ignore) skip this field       (NOT STANDARD)
      *  $x   skip this field
      *  $(enum)  skip this field.  If id is specified, then id can be retrieved.
      *  $v   skip this field
@@ -1115,8 +1115,8 @@ public class TimeParserGenerator {
      *  $(subsec;places=6)  fractional seconds (6->microseconds)
      *  $(periodic;offset=0;start=2000-001;period=P1D)
      *
-     * Qualifiers:
-     *    span=<int>
+     * Modifiers:
+     *    span=<int>    (NOT STANDARD)
      *    delta=<int>
      *    Y=2004  Also for Y,m,d,H,M,S
      *
@@ -1124,15 +1124,15 @@ public class TimeParserGenerator {
      *      $(j;Y=2004) means the day-of-year, within the year 2004.
      *      $(H;Y=2004;j=117) means the hour of day 2004-117
      *      $(m;span=6) means the 6-month interval starting at the given month.
-     *
+     *     
      *  </pre>
-     *
+     * @see http://tsds.org/uri_templates
      * @param formatString the format string.
      * @return the time parser.
      */
     public static TimeParserGenerator create(String formatString) {
         HashMap map= new HashMap();
-        map.put("v",new IgnoreFieldHandler()); // note this is often replaced.
+        map.put("v",new IgnoreFieldHandler()); // note this is often replaced with a code that interprets the number.
         return new TimeParserGenerator(formatString,map);
     }
 
@@ -1144,16 +1144,16 @@ public class TimeParserGenerator {
      * @param formatString like $Y$m$dT$H
      * @param fieldName name for the special field, like "o"
      * @param handler handler for the special field, like OrbitFieldHandler
-     * @param moreHandler additional name/handler pairs.
+     * @param moreHandlers additional name/handler pairs.
      * @return the configured TimeParser, ready to use.
      */
-    public static TimeParserGenerator create(String formatString, String fieldName, FieldHandler handler, Object ... moreHandler  ) {
+    public static TimeParserGenerator create(String formatString, String fieldName, FieldHandler handler, Object ... moreHandlers  ) {
         HashMap map = new HashMap();
         map.put(fieldName, handler);
-        if ( moreHandler!=null ) {
-            for ( int i=0; i<moreHandler.length; i+=2 ) {
-                fieldName=  (String) moreHandler[i];
-                handler= (FieldHandler)moreHandler[i+1];
+        if ( moreHandlers!=null ) {
+            for ( int i=0; i<moreHandlers.length; i+=2 ) {
+                fieldName=  (String) moreHandlers[i];
+                handler= (FieldHandler)moreHandlers[i+1];
                 map.put( fieldName, handler );
             }
         }
@@ -1161,14 +1161,15 @@ public class TimeParserGenerator {
     }
 
     /**
-     * force the parser to look for delimiters.  This should be called immediately after 
+     * force the parser to look for delimiters.  This should be called 
+     * immediately after the object is created.
      */
     public void sloppyColumns() {
         this.lengths[0] = -1;
         for (int i = 1; i < this.offsets.length; i++) {
             this.offsets[i] = -1;
             this.lengths[i] = -1;
-        //TODO: check for delims
+            //TODO: check for empty delims to make sure this is valid
         }
     }
 
@@ -1176,7 +1177,7 @@ public class TimeParserGenerator {
      * parse the string, which presumably contains a time matching the
      * spec.  A reference to the TimeParser is returned so operations can be
      * chained together:<code>
-     *   tp.parse("2014-01-06T02").getTime( Units.us2000 )
+     *   tp.parse("2014-01-06T02").getTimeRange( Units.us2000 )
      * </code>
      * Since this the TimeParser has a state, it is not safe to use simultaneously
      * by multiple threads.   Each thread should create its own parser.
@@ -1202,8 +1203,9 @@ public class TimeParserGenerator {
     
     /**
      * attempt to parse the string.  The parser itself is returned so that
-     * so expressions can be chained like so:
+     * so expressions can be chained like so:<code>
      *    parser.parse("2009-jan").getTimeRange()
+     * </code>
      * @param timeString
      * @param extra map that is passed into field handlers
      * @return the TimeParser, call getTimeRange or getTime to get result.
@@ -1350,7 +1352,7 @@ public class TimeParserGenerator {
      * return the pad for the spec, like "underscore" "space" "zero" or "none"
      * For "none", space is returned, and clients allowing special behavior should check for this.
      * @param args
-     * @return the char, or (char)0.
+     * @return the char
      */
     private static char getPad(Map<String, String> args) {
         String spad= args.get("pad");
@@ -1432,7 +1434,7 @@ public class TimeParserGenerator {
 
     /**
      * peek at the regular expression used.
-     * @return 
+     * @return the regular expression used
      */
     public String getRegex() {
         return this.regex;
@@ -1512,11 +1514,11 @@ public class TimeParserGenerator {
 
             }
             if (handlers[idigit] < 10) {
-                String qual= qualifiers[idigit];
+                String qual= modifiers[idigit];
                 int digit;
                 int span=1;
                 if ( qual!=null ) {
-                    Pattern p= Pattern.compile("span=(\\d+)"); // TODO: multiple qualifiers
+                    Pattern p= Pattern.compile("span=(\\d+)"); // TODO: multiple modifiers
                     Matcher m= p.matcher(qual);
                     if ( m.matches() ) {
                         span= Integer.parseInt(m.group(1));
@@ -1692,7 +1694,7 @@ public class TimeParserGenerator {
         testTimeParser1( "$Y-$m-$dT$H:$M:$S.$(subsec,places=6)", "2000-01-01T00:00:00.000001", "2000-001T00:00:00.000001/PT.000001S");
         testTimeParser1( "$Y-$m-$dT$H:$M:$S.$(subsec,places=6)", "2000-01-01T00:00:05.000001", "2000-001T00:00:05.000001/PT.000001S");
         TimeParserGenerator tp= TimeParserGenerator.create("$Y$m$d_v$v.dat");
-        System.err.println( tp.parse("20130618_v4.05.dat").getTimeRange() );
+        System.err.println( TimeUtil.formatISO8601Range( tp.parse("20130618_v4.05.dat").getTimeRange() ) );
         System.err.println( makeCanonical( "%Y-%m-%dT%H:%M:%S.%{milli}Z" ) );
     }
 }
