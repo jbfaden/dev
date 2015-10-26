@@ -11,13 +11,14 @@ public class TimeStruct {
      * year containing the time datum
      */
     public int year;
+    
     /**
      * month containing the time datum
      */
     public int month;
     
     /**
-     * day of month containing the time datum.  Note to support 
+     * day of month containing the time datum.  Note, to support 
      * day of year (doy), month can be set to 1 and this to the day of year.
      */
     public int day;
@@ -26,22 +27,24 @@ public class TimeStruct {
      * hour containing the time datum
      */
     public int hour;
+    
     /**
      * minute containing the time datum
      */
     public int minute;
+    
     /**
      * seconds since the last minute boundary of the time datum
      */
-    public int second; // remaining number of seconds past minute boundary
+    public int second; 
 
     /**
-     * additional milliseconds since minute boundary
+     * additional milliseconds
      */
     public int millis;
 
     /**
-     * additional nanoseconds since minute boundary
+     * additional nanoseconds
      */
     public int nanos;
 
@@ -89,7 +92,7 @@ public class TimeStruct {
      */
     public TimeStruct add(TimeStruct offset) {
         if (offset.isLocation && this.isLocation) {
-            throw new IllegalArgumentException("can't add two times!");
+            throw new IllegalArgumentException("can't add two time locations!");
         }
         TimeStruct result = new TimeStruct();
 
@@ -136,7 +139,7 @@ public class TimeStruct {
     /**
      * creates a TimeStruct from the seven-element array
      * [ year, month, day, hour, minute, second, nanoseconds ].
-     * When time[0] is less than 1000, this will be flagged as a time duration.
+     * When time[0] is less than 100, this will be flagged as a time duration.
      * @param time the time decomposed in a seven element array
      * @return the TimeStruct.
      */
