@@ -148,12 +148,12 @@ public class TimeParserGenerator {
          * be used later.  However if a time is specified for a year before the first orbit of a spacecraft, then an exception
          * should be thrown because there is an error that the developer is going to have to deal with.
          * 
-         * @param startTime
-         * @param timeWidth
-         * @param length, -1 or the length of the field.
+         * @param startTime the start time for the field, which the FieldHandler may often ignore.
+         * @param timeWidth the time width of the field, which the FieldHandler may often ignore.
+         * @param length, -1 or the length of the field, which the FieldHandler may often ignore.
          * @param extra extra data, such as version numbers, are passed in here.
          * @return the string representing the time range specified.
-         * @throws IllegalArgumentException
+         * @throws IllegalArgumentException when the parameters in extra are incorrect.
          */
         public abstract String format( TimeStruct startTime, TimeStruct timeWidth, int length, Map<String,String> extra ) throws IllegalArgumentException;
 
@@ -306,9 +306,10 @@ public class TimeParserGenerator {
     private char startTimeOnly= 0;
 
     /**
-     * true if the flag (startTimeOnly) was set in the spec. This is a hint to clients (FileStorageModel) using the time that
-     * it shouldn't infer that the time is bounded.
-     * @return
+     * true if the flag (startTimeOnly) was set in the spec. This is a 
+     * hint to clients (FileStorageModel) using the time that it shouldn't 
+     * infer that the time is bounded.
+     * @return true if the flag (startTimeOnly) was set in the spec.
      */
     public boolean isStartTimeOnly() {
         return ( startTimeOnly>0 );
@@ -1068,7 +1069,7 @@ public class TimeParserGenerator {
     /**
      * Provide standard means of indicating this appears to be a spec by
      * looking for something that would assert the year.
-     * @param spec
+     * @param spec the template specification
      * @return true if the string appears to be a spec.
      */
     public static boolean isSpec(String spec) {
@@ -1211,10 +1212,10 @@ public class TimeParserGenerator {
      * so expressions can be chained like so:<code>
      *    parser.parse("2009-jan").getTimeRange()
      * </code>
-     * @param timeString
+     * @param timeString the string to parse using the template.
      * @param extra map that is passed into field handlers
-     * @return the TimeParser, call getTimeRange or getTime to get result.
-     * @throws ParseException
+     * @return the TimeParserGenerator, call getTimeRange or getTime to get result.
+     * @throws ParseException when the string cannot be parsed.
      */
     public synchronized TimeParserGenerator parse(String timeString, Map<String,String> extra ) throws ParseException {
         
@@ -1619,13 +1620,13 @@ public class TimeParserGenerator {
     }
     
     /**
-     * return the field handler for the id.  For example, enum
+     * return the field handler for the code.  For example, enum
      * returns the field handler handling enumerations.  Note there 
      * is currently only one field handler for each type, so for example
      * two enumerations are not allowed.
      * 
-     * @param code
-     * @return the field handler.
+     * @param code the field code, such as enum.
+     * @return the field handler for this code.
      */    
     public FieldHandler getFieldHandlerByCode( String code ) {
         return fieldHandlers.get(code);
@@ -1673,7 +1674,7 @@ public class TimeParserGenerator {
     /**
      * test time parsing when the format is known.  This time parser is much faster than the time parser of Test009, which must
      * infer the format as it parses.
-     * @throws Exception
+     * @throws Exception any of the various exceptions that can occur when testing.
      */
     public static void testTimeParser() throws Exception {
         Logger.getLogger("datum.timeparser").setLevel(Level.ALL);

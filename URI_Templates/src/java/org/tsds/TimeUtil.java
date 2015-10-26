@@ -121,7 +121,11 @@ public class TimeUtil {
 
     /**
      * returns a 7 element array with [year,mon,day,hour,min,sec,nanos].
-     * @param stringIn
+     * For example, <ul>
+     * <li>P1D for 1 day returns [ 0,0,1,0,0,0 ]
+     * <li>P1Y2M10DT2H30M  is 1 year, 2 months, 10 days, 2 hours and 30 minutes.
+     * </ul>
+     * @param stringIn the string containing a ISO8601 duration 
      * @return 7-element array with [year,mon,day,hour,min,sec,nanos]
      * @throws ParseException if the string does not appear to be valid.
      */
@@ -154,7 +158,7 @@ public class TimeUtil {
      * http://en.wikipedia.org/wiki/ISO_8601#Time_intervals
      * @param stringIn the ISO8601 time.
      * @return null or a two-element array of TimeStructs.
-     * @throws java.text.ParseException
+     * @throws java.text.ParseException if the string cannot be parsed.
      */
     public static TimeStruct[] parseISO8601Range( String stringIn ) throws ParseException {
 

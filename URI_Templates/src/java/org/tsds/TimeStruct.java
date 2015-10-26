@@ -108,9 +108,10 @@ public class TimeStruct {
     }
 
     /**
-     * return the difference of two time durations, or two time locations.
-     * @param offset
-     * @return 
+     * return the difference of two time durations, 
+     * or two time locations, or a time location and duration.
+     * @param offset the difference for each component.
+     * @return duration or time location.
      */
     public TimeStruct subtract( TimeStruct offset ) {
         if ( !this.isLocation && offset.isLocation) {
@@ -127,16 +128,17 @@ public class TimeStruct {
         result.millis = this.millis - offset.millis;
         result.nanos = this.nanos - offset.nanos;
 
-        result.isLocation = false;
+        result.isLocation = this.isLocation && !offset.isLocation;
 
         return result;
     }
         
     /**
      * creates a TimeStruct from the seven-element array
-     * [ year, month, day, hour, minute, second, nanos ]
-     * @param time
-     * @return 
+     * [ year, month, day, hour, minute, second, nanoseconds ].
+     * When time[0] is less than 1000, this will be flagged as a time duration.
+     * @param time the time decomposed in a seven element array
+     * @return the TimeStruct.
      */
     public static TimeStruct create( int[] time ) {
         if ( time[0]>100 && time[0]<1000 ) throw new IllegalArgumentException("time[0] must be 100 or less for durations, or more than 1000 for time locations.");
@@ -157,8 +159,8 @@ public class TimeStruct {
     
     /**
      * return the components in a seven-element array
-     * [ year, month, day, hour, minute, second, nanos ]
-     * @return the array
+     * [ year, month, day, hour, minute, second, nanoseconds ].
+     * @return the array [ year, month, day, hour, minute, second, nanoseconds ].
      */
     public int[] components() {
         normalize();
@@ -252,10 +254,10 @@ public class TimeStruct {
     }
 
     /**
-     * return true if this is before stop for locations, or less than
-     * for durations.  This may have the side effect of normalizing the
-     * two.
-     * @param stop
+     * return true if this is before stop for locations, 
+     * or less than for durations.  This may have the side effect of 
+     * normalizing the two.
+     * @param stop another time location or duration.
      * @return return true if this is before stop for locations
      */
     public boolean lt(TimeStruct stop) {

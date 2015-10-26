@@ -39,7 +39,7 @@ public class HtmlUtil {
      * @param urlStream stream containing the URL content.
      * @param childCheck only return links to URLs "under" the url.
      * @return list of URIs referred to in the page.
-     * @throws IOException
+     * @throws IOException when the website cannot be read.
      */
     public static URL[] getDirectoryListing( URL url, InputStream urlStream, boolean childCheck ) throws IOException {
         // search the input stream for links
