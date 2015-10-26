@@ -1404,18 +1404,8 @@ public class TimeParserGenerator {
     }
     
     /**
-     * Returns the implicit interval as a DatumRange.
-     * For example, "Jan 1, 2003" would have a getTimeDatum of "Jan 1, 2003 00:00:00",
-     * and getDatumRange() would go from midnight to midnight.
-     * This will try to create MonthDatumRanges when possible, to keep it abstract,
-     * so for example, 
-     * <blockquote><pre>{@code
-     *tr= tp.getTimeRange()  // "Jan 2015"
-     *tr= tr.next()          // "Feb 2015", not 31 days starting Feb 1
-     *}</pre></blockquote>
-     * 
-     * This accesses time, timeWidth, orbitDatumRange, startTime.
-     * @return the DatumRange
+     * Returns the implicit interval as a two-element array of TimeStructs.
+     * @return a two-element array of TimeStructs
      */
     public TimeStruct[] getTimeRange() {
         if ( !lock.equals("") ) throw new IllegalArgumentException("someone is messing with the parser on a different thread "+lock+ " this thread is "+Thread.currentThread().getName() );

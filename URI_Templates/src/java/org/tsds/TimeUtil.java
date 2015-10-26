@@ -145,7 +145,7 @@ public class TimeUtil {
      * </ul>
      * http://en.wikipedia.org/wiki/ISO_8601#Time_intervals
      * @param stringIn the iso8601 time.
-     * @return null or a DatumRange
+     * @return null or a two-element array of TimeStructs.
      * @throws java.text.ParseException
      */
     public static TimeStruct[] parseISO8601Range( String stringIn ) throws ParseException {
