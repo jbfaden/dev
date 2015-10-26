@@ -12,7 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- *
+ * Utilities for working with websites, such as getting directory listings.
  * @author jbf
  */
 public class HtmlUtil {

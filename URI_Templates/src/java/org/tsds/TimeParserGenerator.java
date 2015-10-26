@@ -28,8 +28,9 @@ import java.util.regex.Pattern;
  * This class is not thread-safe, make sure that only one thread is accessing 
  * an instance at a time.
  * 
+ * See https://saturn.physics.uiowa.edu/svn/das2/dasCore/community/autoplot2011/trunk/dasCoreDatum/src/org/das2/datum/TimeParser.java}
+ * 
  * @author faden@cottagesystems.com
- * @see https://saturn.physics.uiowa.edu/svn/das2/dasCore/community/autoplot2011/trunk/dasCoreDatum/src/org/das2/datum/TimeParser.java
  */
 public class TimeParserGenerator {
     
@@ -314,7 +315,7 @@ public class TimeParserGenerator {
     }
 
     /**
-     * $(subsec;places=6)  "36" -> "36 microseconds"
+     * $(subsec;places=6)  "36" &rarr; "36 microseconds"
      */
     public static class SubsecFieldHandler extends TimeParserGenerator.FieldHandler {
 
@@ -356,7 +357,7 @@ public class TimeParserGenerator {
     }
     
     /**
-     * $(hrinterval;names=a,b,c,d)  "b" -> "06:00/12:00"
+     * $(hrinterval;names=a,b,c,d)  "b" &rarr; "06:00/12:00"
      */
     public static class HrintervalFieldHandler extends TimeParserGenerator.FieldHandler {
 
@@ -1093,12 +1094,13 @@ public class TimeParserGenerator {
      *
      * An effort has begun to try and unify to an agreeable specification for this.  See http://tsds.org/uri_templates
      * <pre>
-     *  $<1-char code>  or
-     *  $(<code>)
-     *  $(<code>;modifiers)
+     *  $CODE  or
+     *  $(CODE)
+     *  $(CODE;modifiers)
      *
-     *  fieldLength=0 --> makes field length indeterminate, deliminator must follow.
-     *
+     *  fieldLength=0 &rarr; makes field length indeterminate, deliminator must follow.
+     *  
+     *  Where CODE is from the group:
      *  $Y   4-digit year
      *  $y   2-digit year
      *  $j   3-digit day of year
@@ -1111,15 +1113,15 @@ public class TimeParserGenerator {
      *  $(milli)  3-digit milliseconds  (NOT STANDARD)
      *  $(ignore) skip this field       (NOT STANDARD)
      *  $x   skip this field
-     *  $(enum)  skip this field.  If id is specified, then id can be retrieved.
+     *  $(enum;values=A,B,C,id=ID)  skip this field.  If id is specified, then the value can be retrieved.
      *  $v   skip this field
      *  $(hrinterval;values=0,1,2,3)  enumeration of part of day
-     *  $(subsec;places=6)  fractional seconds (6->microseconds)
+     *  $(subsec;places=6)  fractional seconds (6 &rarr; microseconds)
      *  $(periodic;offset=0;start=2000-001;period=P1D)
      *
      * Modifiers:
-     *    span=<int>    (NOT STANDARD)
-     *    delta=<int>
+     *    span=INTEGER    (NOT STANDARD)
+     *    delta=INTEGER
      *    Y=2004  Also for Y,m,d,H,M,S
      *
      *   For example:
@@ -1127,8 +1129,8 @@ public class TimeParserGenerator {
      *      $(H;Y=2004;j=117) means the hour of day 2004-117
      *      $(m;span=6) means the 6-month interval starting at the given month.
      *     
-     *  </pre>
-     * @see http://tsds.org/uri_templates
+     * </pre>
+     * See http://tsds.org/uri_templates
      * @param formatString the format string.
      * @return the time parser.
      */
@@ -1407,10 +1409,10 @@ public class TimeParserGenerator {
      * and getDatumRange() would go from midnight to midnight.
      * This will try to create MonthDatumRanges when possible, to keep it abstract,
      * so for example, 
-     * <blockquote><pre><small>{@code
+     * <blockquote><pre>{@code
      *tr= tp.getTimeRange()  // "Jan 2015"
      *tr= tr.next()          // "Feb 2015", not 31 days starting Feb 1
-     *}</small></pre></blockquote>
+     *}</pre></blockquote>
      * 
      * This accesses time, timeWidth, orbitDatumRange, startTime.
      * @return the DatumRange
@@ -1445,7 +1447,7 @@ public class TimeParserGenerator {
     /**
      * The TimeParser can be used to format times as well.  The resolution
      * or span implicitly defines the end time.
-     * @param start
+     * @param start beginning of the interval
      * @return formatted string.
      */
     public String format( TimeStruct start ) {    

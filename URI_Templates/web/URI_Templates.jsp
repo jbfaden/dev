@@ -34,6 +34,7 @@
         <a href="#" onclick="example('http://cdaweb.gsfc.nasa.gov/sp_phys/data/omni/hourly/$Y/omni2_h0_mrg1hr_$Y$(m;delta=6)01_v$v.cdf','2000/P3Y');">B</a>
         <a href="#" onclick="example('http://autoplot.org/data/agg/hyd/$Y/po_h0_hyd_$Y$m$d_v$v.cdf','1999/2001');">C</a>
         <a href="#" onclick="example('http://papco.org/~jbf/powerMeter/$Y/$m/$d/$H$M$(S,sparse).jpg','2015-05-01/P1D');">D</a>
+        <a href="#" onclick="example('http://data.org/data_$Y_$j_$H$M$S.$(subsec;places=1)','2015-05-01/P1D');">E</a>
         <br>
         <textarea rows="1" cols="120" id="resourceURI3" name="resourceURI" >http://autoplot.org/data/versioning/data_$Y_$m_$d_v$v.qds</textarea><br>
         <br>Enter ISO8601 Time Range limiting the results printed: <br>

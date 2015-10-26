@@ -12,7 +12,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- *
+ * Utilities for time handling, such as parsing ISO8601 times and
+ * time ranges.
  * @author jbf
  */
 public class TimeUtil {
@@ -241,7 +242,7 @@ public class TimeUtil {
     }
     
     /**
-     * format ISO8601 duration string, for example [1,0,0,1,0,0,0] -> P1YT1H
+     * format ISO8601 duration string, for example [1,0,0,1,0,0,0] &rarr; P1YT1H
      * @param t 6 or 7-element array with [year,mon,day,hour,min,sec,nanos]
      * @return the formatted ISO8601 duration
      */
@@ -466,7 +467,7 @@ public class TimeUtil {
      * @param YY  Gregorian year
      * @param MM  Gregorian month
      * @param DD Gregorian day
-     * @return 
+     * @return the Julian day.
      */
     public static int julianDayIMCCE( int YY, int MM, int DD ) {
         int GGG = 1;
@@ -488,7 +489,7 @@ public class TimeUtil {
      *Break the Julian day apart into month, day year.  This is based on
      *http://en.wikipedia.org/wiki/Julian_day (GNU Public License), and 
      *was introduced when toTimeStruct failed when the year was 1886.
-     *@see julianDay( int year, int mon, int day )
+     *@see #julianDayIMCCE(int, int, int) 
      *@param julian the (integer) number of days that have elapsed since the initial epoch at noon Universal Time (UT) Monday, January 1, 4713 BC
      *@return a TimeStruct with the month, day and year fields set.
      */
