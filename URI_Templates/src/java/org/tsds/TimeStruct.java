@@ -153,7 +153,7 @@ public class TimeStruct {
         result.second = time[5];
         int nanos= time[6];
         result.millis = nanos/1000000;
-        nanos-= result.millis*1000000;
+        nanos-= result.millis*1000000; 
         result.nanos = nanos;
         result.isLocation= time[0]>=1000;
         return result;
