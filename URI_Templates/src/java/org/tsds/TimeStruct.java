@@ -153,7 +153,7 @@ public class TimeStruct {
         result.second = time[5];
         int nanos= time[6];
         result.millis = nanos/1000000;
-        nanos-= result.millis*1000;
+        nanos-= result.millis*1000000;
         result.nanos = nanos;
         result.isLocation= time[0]>=1000;
         return result;
@@ -186,21 +186,41 @@ public class TimeStruct {
             this.millis+= 1;
             this.nanos-= 1000000;
         }
+        while ( this.nanos<0 ) {
+            this.millis-= 1;
+            this.nanos+= 1000000;
+        }
         while ( this.millis>=1000 ) {
             this.second+= 1;
             this.millis-= 1000;
+        }
+        while ( this.millis<0 ) {
+            this.second-= 1;
+            this.millis+= 1000;
         }
         while ( this.second>=60 ) { // TODO: leap seconds
             this.minute+= 1;
             this.second-= 60;
         }
+        while ( this.second<0 ) { // TODO: leap seconds
+            this.minute-= 1;
+            this.second+= 60;
+        }
         while ( this.minute>=60 ) {
             this.hour+= 1;
             this.minute-= 60;
         }
+        while ( this.minute<0 ) {
+            this.hour-= 1;
+            this.minute+= 60;
+        }
         while ( this.hour>=23 ) {
             this.day+= 1;
             this.hour-= 24;
+        }
+        while ( this.hour<0 ) {
+            this.day-= 1;
+            this.hour+= 24;
         }
         // Irregular month lengths make it impossible to do this nicely.  Either 
         // months should be incremented or days should be incremented, but not
@@ -215,10 +235,22 @@ public class TimeStruct {
                 daysInMonth= TimeUtil.daysInMonth( this.month, this.year );
             }
         }
-        
+        if ( this.day==0 ) { // handle borrow when it is no more than one day.
+            this.month=- 1;
+            if ( this.month==0 ) {
+                this.month= 12;
+                this.year-= 1;
+            }
+            int daysInMonth= TimeUtil.daysInMonth( this.month, this.year );
+            this.day= daysInMonth;
+        }
         while ( this.month>12 ) {
             this.year+= 1;
             this.month-= 12;
+        }
+        if ( this.month<0 ) { // handle borrow when it is no more than one year.
+            this.year+= 1;
+            this.month+= 12;
         }
         return this;
     }
