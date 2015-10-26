@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package org.tsds;
 
 import java.io.IOException;
@@ -23,8 +19,8 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet for creating URIs to match the spec.  This will generate
  * as many of the directories as possible, and list when $v (versions), 
- * $x (ignore), and the sparse modifier is found.
- * @author jbf
+ * $x (ignore), and the sparse modifier are found.
+ * @author faden@cottagesystems.com
  */
 public class URITemplatesServlet extends HttpServlet {
 

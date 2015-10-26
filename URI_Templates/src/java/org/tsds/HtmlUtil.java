@@ -13,11 +13,17 @@ import java.util.regex.Pattern;
 
 /**
  * Utilities for working with websites, such as getting directory listings.
- * @author jbf
+ * @author jeremy-faden@uiowa.edu
  */
 public class HtmlUtil {
     
     private static final Logger logger= Logger.getLogger("org.tsds.htmlutil");
+    
+    /**
+     * this class should not be instantiated.
+     */
+    private HtmlUtil() { 
+    }
     
     /**
      * Get the listing of the web directory, returning links that are "under" the given URL.

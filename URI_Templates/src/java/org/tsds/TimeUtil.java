@@ -13,12 +13,20 @@ import java.util.regex.Pattern;
 
 /**
  * Utilities for time handling, such as parsing ISO8601 times and
- * time ranges.
- * @author jbf
+ * time ranges.  Times are handled in TimeStruct, which is a structure
+ * of integer year, month, day, ..., second, millisecond, and nanosecond 
+ * elements.
+ * @author faden@cottagesystems.com
  */
 public class TimeUtil {
     
     private static final Pattern time1, time2, time3, time4, time5;
+    
+    /**
+     * this class should not be instantiated.
+     */
+    private TimeUtil() { 
+    }
     
     static {
         String d= "[-:]"; // delim
@@ -144,7 +152,7 @@ public class TimeUtil {
      *   <li>2012-100T02:00/03:45
      * </ul>
      * http://en.wikipedia.org/wiki/ISO_8601#Time_intervals
-     * @param stringIn the iso8601 time.
+     * @param stringIn the ISO8601 time.
      * @return null or a two-element array of TimeStructs.
      * @throws java.text.ParseException
      */
@@ -201,7 +209,6 @@ public class TimeUtil {
      * format the two time structs that are the start and end of a range.
      * @param timeRange two-element array of time structs.
      * @return the formatted time range.
-     * TODO: this can be more efficient.
      */
     public static String formatISO8601Range(TimeStruct[] timeRange) {
         
@@ -403,7 +410,7 @@ public class TimeUtil {
     };
     
     /**
-     * returns 1..12 for the English month name.  (Sorry, rest of world...)
+     * returns 1,2,...,12 for the English month name.  (Sorry, rest of world...)
      *
      * @param s the three-letter month name, jan,feb,...,nov,dec
      * @return 1,2,...,11,12 for the English month name
@@ -419,7 +426,7 @@ public class TimeUtil {
     }
     
     /**
-     * returns "jan", "jeb", ... for month number (1..12).
+     * returns "jan", "feb", ..., "dec" for month number (1,2,...,12).
      * @param mon integer from 1 to 12.
      * @return three character English month name.
      */
@@ -436,8 +443,8 @@ public class TimeUtil {
     /**
      * return the number of days in the month of the year.  Note the 
      * result is not valid for years less than 1600 or so.  
-     * @param month the month (1..12)
-     * @param year the year (1000..8999)
+     * @param month the month (1,2,...,12)
+     * @param year the year (valid years are 1000-8999)
      * @return the number of days in the month.
      */
     public static int daysInMonth(int month, int year) {
@@ -461,7 +468,8 @@ public class TimeUtil {
     }
         
     /**
-     * calculation of julianDay based on http://www.imcce.fr/en/grandpublic/temps/jour_julien.php
+     * calculation of julianDay based on 
+     * http://www.imcce.fr/en/grandpublic/temps/jour_julien.php
      * This is slightly slower because of a cusp at 1582, but is accurate
      * before these times.
      * @param YY  Gregorian year
@@ -469,7 +477,7 @@ public class TimeUtil {
      * @param DD Gregorian day
      * @return the Julian day.
      */
-    public static int julianDayIMCCE( int YY, int MM, int DD ) {
+    public static int julianDay( int YY, int MM, int DD ) {
         int GGG = 1;
         if( YY < 1582 ) GGG = 0;
         if( YY <= 1582 && MM < 10 ) GGG = 0;
@@ -489,7 +497,7 @@ public class TimeUtil {
      *Break the Julian day apart into month, day year.  This is based on
      *http://en.wikipedia.org/wiki/Julian_day (GNU Public License), and 
      *was introduced when toTimeStruct failed when the year was 1886.
-     *@see #julianDayIMCCE(int, int, int) 
+     *@see #julianDay(int, int, int) 
      *@param julian the (integer) number of days that have elapsed since the initial epoch at noon Universal Time (UT) Monday, January 1, 4713 BC
      *@return a TimeStruct with the month, day and year fields set.
      */

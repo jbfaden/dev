@@ -435,7 +435,7 @@ public class TimeParserGenerator {
             String s= args.get("start");
             if ( s==null ) return "periodic field needs start";
             start= TimeUtil.parseISO8601(s);
-            julday= TimeUtil.julianDayIMCCE( start[0], start[1], start[2] );
+            julday= TimeUtil.julianDay( start[0], start[1], start[2] );
             start[0]= 0;
             start[1]= 0;
             start[2]= 0;
@@ -499,7 +499,7 @@ public class TimeParserGenerator {
 
         @Override
         public String format(TimeStruct startTime, TimeStruct timeWidth, int length, Map<String, String> extra) throws IllegalArgumentException {
-            int jd= TimeUtil.julianDayIMCCE(startTime.year, startTime.month, startTime.day );
+            int jd= TimeUtil.julianDay(startTime.year, startTime.month, startTime.day );
             if ( period[1]!=0 || period[3]!=0 || period[4]!=0 || period[5]!=0 || period[6]!=0) {
                 throw new IllegalArgumentException("under implemented, only integer number of days supported for formatting.");
             }
@@ -1148,7 +1148,7 @@ public class TimeParserGenerator {
      * @param formatString like $Y$m$dT$H
      * @param fieldName name for the special field, like "o"
      * @param handler handler for the special field, like OrbitFieldHandler
-     * @param moreHandlers additional name/handler pairs.
+     * @param moreHandlers additional name/handler pairs.  E.g. string2, fieldHandler2, string3, fieldHandler3
      * @return the configured TimeParser, ready to use.
      */
     public static TimeParserGenerator create(String formatString, String fieldName, FieldHandler handler, Object ... moreHandlers  ) {
@@ -1165,8 +1165,9 @@ public class TimeParserGenerator {
     }
 
     /**
-     * force the parser to look for delimiters.  This should be called 
-     * immediately after the object is created.
+     * force the parser to look for delimiters, and no field has a 
+     * prescribed width.  This should be called immediately after the object 
+     * is created.
      */
     public void sloppyColumns() {
         this.lengths[0] = -1;
