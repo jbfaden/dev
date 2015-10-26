@@ -1449,7 +1449,7 @@ public class TimeParserGenerator {
      * @return formatted string.
      */
     public String format( TimeStruct start ) {    
-        return format( start, null );
+        return format( start, null,new HashMap() );
     }
     
     /**
