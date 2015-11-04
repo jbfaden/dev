@@ -25,7 +25,6 @@ public class URITemplates {
      * @param args 
      */
     public static void main( String[] args ) {
-        args= new String[] { "http://papco.org/~jbf/powerMeter/$Y/$m/$d/$H$M$(S,sparse).jpg","2015-05-01/P1D" };
         if ( args.length==0 ) {
             System.err.println("Usage: java -jar org.tsds.URITemplates <template> <timerange>");
             System.exit(1);
