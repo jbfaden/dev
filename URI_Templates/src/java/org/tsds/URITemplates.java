@@ -27,6 +27,7 @@ public class URITemplates {
     public static void main( String[] args ) {
         if ( args.length==0 ) {
             System.err.println("Usage: java -jar org.tsds.URITemplates <template> <timerange>");
+            System.err.println("  java -cp URITemplates.jar org.tsds.URITemplates 'http://papco.org/~jbf/powerMeter/$Y/$m/$d/$H$M$(S,sparse).jpg' '2015-05-01/P1D'" );
             System.exit(1);
         }
         generateParse(args[0], args[1], System.out );
