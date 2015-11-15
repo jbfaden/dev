@@ -57,7 +57,7 @@ public class TimeStruct {
     @Override
     public String toString() {
         if (isLocation) {
-            return String.format("%4d/%02d/%02d %02d:%02d:%06.3f", year, month, day, hour, minute, second + millis / 1000. + nanos / 1000000000.);
+            return String.format("%4d/%02d/%02dT%02d:%02d:%06.3f", year, month, day, hour, minute, second + millis / 1000. + nanos / 1000000000.);
         } else {
             int nanosl;
             nanosl = this.nanos;
