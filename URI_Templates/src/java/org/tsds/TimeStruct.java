@@ -178,8 +178,6 @@ public class TimeStruct {
      * return this time struct, after normalizing
      * all the components, so no component is 
      * greater than its expected range.
-     * Note that this doesn't support borrowing, where fields are equal to
-     * negative numbers.
      * @return the normalized TimeStruct.
      */
     public TimeStruct normalize() {
