@@ -178,6 +178,7 @@ public class TimeStruct {
      * return this time struct, after normalizing
      * all the components, so no component is 
      * greater than its expected range.
+     * Note that leap seconds are not accounted for.  TODO: account for them.
      * @return the normalized TimeStruct.
      */
     public TimeStruct normalize() {
