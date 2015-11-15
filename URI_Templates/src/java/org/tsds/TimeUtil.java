@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
  */
 public class TimeUtil {
     
-    private static final Pattern time1, time2, time3, time4, time5;
+    private static final Pattern time1, time2, time3, time4, time5, time6;
     
     /**
      * this class should not be instantiated.
@@ -33,17 +33,20 @@ public class TimeUtil {
         String i4= "(\\d\\d\\d\\d)";
         String i3= "(\\d+)";
         String i2= "(\\d\\d)";
+        String tz= "((\\+|\\-)(\\d\\d)(:?(\\d\\d))?)"; // Note UTC allows U+2212 as well as dash.
 
         String iso8601time= i4 + d + i2 + d + i2 + "T" + i2 + d + i2 + "((" + d + i2 + "(\\." + i3 + ")?)?)Z?" ;  // "2012-03-27T12:22:36.786Z"
         String iso8601time2= i4 + i2 + i2 + "T" + i2 + i2 + "(" + i2 + ")?Z?" ;
         String iso8601time3= i4 + d + i3 + "T" + i2 + d + i2 + "(" + i2 + ")?Z?" ;
         String iso8601time4= i4 + d + i2 + d + i2 + "Z?" ;
         String iso8601time5= i4 + d + i3 + "Z?" ;
+        String iso8601time6= i4 + d + i2 + d + i2 + "T" + i2 + d + i2 + "((" + d + i2 + "(\\." + i3 + ")?)?)"+tz+"?" ;  // "2014-09-02T10:55:10-05:00"
         time1= Pattern.compile(iso8601time);
         time2= Pattern.compile(iso8601time2);
         time3= Pattern.compile(iso8601time3);
         time4= Pattern.compile(iso8601time4);
         time5= Pattern.compile(iso8601time5);
+        time6= Pattern.compile(iso8601time6);
     }
     
     private static int getInt( String val, int deft ) {
@@ -107,6 +110,29 @@ public class TimeUtil {
                         m= time5.matcher(str);
                         if ( m.matches() ) {
                             return new int[] { Integer.parseInt( m.group(1) ), 1, Integer.parseInt( m.group(2) ), 0, 0, 0, 0 };
+                        } else {
+                            m= time6.matcher(str);
+                            if ( m.matches() ) {
+                                String sf= m.group(10);
+                                if ( sf!=null && sf.length()>9 ) throw new IllegalArgumentException("too many digits in nanoseconds part");
+                                int nanos= sf==null ? 0 : ( Integer.parseInt(sf) * (int)Math.pow( 10, ( 9 - sf.length() ) ) );
+                                String plusMinus= m.group(12);
+                                String tzHours= m.group(13);
+                                String tzMinutes= m.group(15);
+                                int[] result;
+                                if ( plusMinus.charAt(0)=='+') {
+                                    result= new int[] { Integer.parseInt( m.group(1) ), Integer.parseInt( m.group(2) ), Integer.parseInt( m.group(3) ), 
+                                        getInt( m.group(4), 0 ) - getInt( tzHours,0 ), getInt( m.group(5), 0 )- getInt( tzMinutes, 0 ),
+                                        getInt( m.group(8), 0), nanos };
+                                } else {
+                                    result= new int[] { Integer.parseInt( m.group(1) ), Integer.parseInt( m.group(2) ), Integer.parseInt( m.group(3) ), 
+                                        getInt( m.group(4), 0 ) + getInt( tzHours,0 ), getInt( m.group(5), 0 ) + getInt( tzMinutes, 0 ),
+                                        getInt( m.group(8), 0) , nanos };
+                                }
+                                TimeStruct ts= TimeStruct.create(result);
+                                ts.normalize();
+                                return ts.components();
+                            }
                         }
                     }
                 }
