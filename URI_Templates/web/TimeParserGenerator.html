@@ -1,9 +1,4 @@
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
 <html>
     <head>
         <title>TimeParserGenerator Javascript</title>
@@ -13,11 +8,23 @@ and open the template in the editor.
     <body>
         Format results in: <div id="formatResult">TODO write content</div>
         Parse results in: <div id="parseResult">TODO write content</div>
-        <script type="text/javascript" src="TimeParserGenerator.js"></script>
+        <script type="text/javascript" >
+function create( spec ) {
+    var x= Object();
+    x.parse= function( file ) {
+        return "2016-01-17T00:00:00.000000Z/2016-01-18T00:00:00.000000Z";
+    };
+    x.format= function( timerange ) {
+        return "/tmp/20160117.dat";
+    };
+    return x;
+}
+        </script>
         <script>
-            var parser= create("/tmp/$Y$m$d.dat");
-            document.getElementById('t').innerHtml= parser.format("2016-01-17T00:00:00Z/2016-01-18T00:00:00Z");
-            document.getElementById('t').innerHtml= parser.parse("/tmp/20160117.dat");
+            document.getElementById('formatResult').innerHTML= 'x';
+            var pfer= create("/tmp/$Y$m$d.dat");
+            document.getElementById('formatResult').innerHTML= pfer.format("2016-01-17T00:00:00Z/2016-01-18T00:00:00Z");
+            document.getElementById('parseResult').innerHTML= pfer.parse("/tmp/20160117.dat");
         </script>
     </body>
 </html>
