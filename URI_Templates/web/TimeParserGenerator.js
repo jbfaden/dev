@@ -22,6 +22,121 @@ function makeCanonical( timerange ) {
 }
 
 /**
+ * private method for copying time object.
+ * @param {TimeStruct} src
+ * @param {TimeStruct} dst
+ */
+function copyTime( src, dst ) {
+    dst.year = src.year;
+    dst.month = src.month;
+    dst.day = src.day;
+    dst.hour = src.hour;
+    dst.minute = src.minute;
+    dst.second = src.second;
+    dst.millis = src.millis;
+    dst.nanos = src.nanos;
+    dst.isLocation= src.isLocation;
+}
+
+/**
+ * format the time.
+ * @param {TimeStruct} ts
+ * @returns {String} "0000-01-01T00:00:00.000000"
+ */
+function formatTime( ts ) {   
+    return sprintf( "%04d-%02d-%02dT%02d:%02d:%02d.%06d", ts.year, ts.month, ts.day, ts.hour, ts.minute, ts.second, ts.millis*1000 + ts.nanos/1000 );
+}
+
+
+/**
+ * private method also creates the object
+ * @param {TimeStruct} src
+ * @return {TimeStruct} new time that is a copy of src.
+ */
+function copyTime( src ) {
+    dst= {};
+    copyTime( src, dst );
+    return dst;
+}
+
+/**
+ * 
+ * @param {TimeStruct} location
+ * @param {TimeStruct} duration
+ * @returns {TimeStruct}
+ */
+function add( location, duration ) {
+    dst= {};   
+    dst.year = location.year + duration.year;
+    dst.month = location.month + duration.month;
+    dst.day = location.day + duration.day;
+    dst.hour = location.hour + duration.hour;
+    dst.minute = location.minute + duration.minute;
+    dst.second = location.second + duration.second;
+    dst.millis = location.millis + duration.millis;
+    dst.nanos = location.nanos + duration.nanos;
+    dst.isLocation= location.isLocation || duration.isLocation;
+    return dst;
+}
+
+/**
+ * create a decomposed time, with separate fields for years, months, etc.
+ * @param {boolean} isLocation true if it is a location, false if it is a duration.
+ * @returns {TimeStruct}
+ */
+function createTimeStruct( isLocation ) {
+    ts= {};
+    /**
+     * year containing the time datum
+     */
+    ts.year= isLocation ? 9000 : 0 ;
+    
+    /**
+     * month containing the time datum
+     */
+    ts.month= isLocation ? 1 : 0;
+    
+    /**
+     * day of month containing the time datum.  Note, to support 
+     * day of year (doy), month can be set to 1 and this to the day of year.
+     */
+    ts.day= isLocation ? 1 : 0;
+
+    /**
+     * hour containing the time datum
+     */
+    ts.hour= 0;
+    
+    /**
+     * minute containing the time datum
+     */
+    ts.minute= 0;
+    
+    /**
+     * seconds since the last minute boundary of the time datum
+     */
+    ts.second= 0;
+
+    /**
+     * additional milliseconds
+     */
+    ts.millis=0;
+
+    /**
+     * additional nanoseconds
+     */
+    ts.nanos= 0;
+    
+    /**
+     * flag indicating if this is a time duration or a particular instance in
+     * time.
+     */
+    ts.isLocation = isLocation;
+    
+    return ts;
+}
+
+/**
  * 
  * @param {String} spec
  * @param {String} file
@@ -30,17 +145,47 @@ function makeCanonical( timerange ) {
 function parse( spec, file ) {
     spec= setup(spec);
     n= spec.numberOfFields;
-    buf= new Int32Array( new ArrayBuffer(53*4) );
+    
+    startTime= createTimeStruct(true);
+    time= startTime;
     
     for ( i=0; i<n; i++ ) {
         if ( spec.parseOffsets[i]!==-1 ) {
-            buf[spec.formatOffsets[i]]= file.substring( spec.parseOffsets[i], spec.parseOffsets[i] + spec.lengths[i] );
+            field= parseInt( file.substring( spec.parseOffsets[i], spec.parseOffsets[i] + spec.lengths[i] ) );
+            switch ( spec.fieldCodes[i] ) {
+                case "Y":
+                    time.year= field;
+                    break;
+                case "m":
+                    time.month= field;
+                    break;
+                case "d":
+                    time.day= field;
+                    break;
+                case "H":
+                    time.hour= field;
+                    break;
+                case "M":
+                    time.minute= field;
+                    break;
+                case "S":
+                    time.second= field;
+                    break;
+                case "subsec":
+                    mult= Math.pow( 10, 9-spec.fieldModifiers[i].places );
+                    time.nanos= mult * field;
+                default:
+                    throw "unsupported field code: "+spec.fieldCodes[i];
+            }            
         } else {
             throw "variable length and odd fields not yet implemented";
         }
     }
     
-    return sprintf( "%04d-%02d-%02dT%02d:%02d:%02d.%06d/%04d-%02d-%02dT%02d:%02d:%02d.%06d", buf[0], buf[4], buf[7], buf[10], buf[11], buf[14], buf[17], buf[0], buf[4], buf[7], buf[10], buf[11], buf[14], buf[17] );
+    stopTime= add( startTime, spec.timeWidth );
+    
+    return formatTime(startTime) + "/" + formatTime(stopTime);
+    
 }
 
 /**
@@ -75,57 +220,126 @@ function format( spec, timerange ) {
  * @returns {undefined}
  */
 function setup( spec ) {
-    var fc= {};              // field codes
-    var delims={};          // constant characters between fields.
-    var beginEndOffset={};  // 26 for end fields, 0 for start fields
-    var lengths={};         // number of characters in field, -1 for unknown.
+    var fieldCodes= {};      // field codes
+    var fieldModifiers= {};  // modifiers for any field.
+    var delims={};           // constant characters between fields.
+    var beginEndOffset={};   // 26 for end fields, 0 for start fields
+    var lengths={};          // number of characters in field, -1 for unknown.
     var parseOffsets={};     // offset into filename we are parsing.
     var formatOffsets={};    // offset into 26-character canonical format.
+    var deltas={};           // step, usually one, of this unit.
     ss= spec.split( '$' );
     position= ss[0].length;
+    
+    timeWidth= createTimeStruct()
+    smallestField= 0;
+            
     for ( i=0; i<ss.length-1; i++ ) { 
         s= ss[i+1];
         if ( s.charAt(0)==='(' ) {
-            throw "parenthesis not yet implemented";
+            index= s.indexOf(')');
+            fcparams= s.substring(1,index);
+            delims[i]= s.substring(index+1);
+            fcparamsSplit= fcparams.split(";");
+            fieldCodes[i]= fcparamsSplit[0];
+            deltas[i]= 1; // see below where this might be updated
+            fieldModifiers[i]= {};
+            for ( k=1; k<fcparamsSplit.length; k++ ) {
+                paramVal= fcparamsSplit[k].split("=");
+                modifier= paramVal[0];
+                value= paramVal[1];
+                fieldModifiers[i][modifier]= value;
+                if ( modifier==="delta" ) deltas[i]= parseInt(value);
+            }
+            //throw "parenthesis not yet implemented";
+        } else {
+            fieldCodes[i]= s.charAt(0);
+            delims[i]= s.substring(1);
+            deltas[i]= 1;
         }
-        fc[i]= s.charAt(0);
-        delims[i]= s.substring(1);
         parseOffsets[i]= position;
         beginEndOffset[i]= 0;
-        lengths[i]= fc[i]==="Y" ? 4 : 2 ;
-        switch ( fc[i] ) {
+        lengths[i]= fieldCodes[i]==="Y" ? 4 : 2 ;
+        switch ( fieldCodes[i] ) {
             case "Y":
                 formatOffsets[i]= 0;
                 break;
             case "m":
                 formatOffsets[i]= 5;
+                if ( smallestField<=5 ) {
+                    smallestField= 5;
+                    smallestFieldDelta= deltas[i];
+                }
                 break;
             case "d":
                 formatOffsets[i]= 8;
+                if ( smallestField<=8 ) {
+                    smallestField= 8;
+                    smallestFieldDelta= deltas[i];
+                }
                 break;
             case "H":
                 formatOffsets[i]= 11;
+                if ( smallestField<=11 ) {
+                    smallestField= 11;
+                    smallestFieldDelta= deltas[i];
+                }
                 break;
             case "M":
                 formatOffsets[i]= 14;
+                if ( smallestField<=14 ) {
+                    smallestField= 14;
+                    smallestFieldDelta= deltas[i];
+                }
                 break;
             case "S":
                 formatOffsets[i]= 17;
+                if ( smallestField<=17 ) {
+                    smallestField= 17;
+                    smallestFieldDelta= deltas[i];
+                }
                 break;
             default:
-                throw "unsupported field code: "+fc[i];
+                throw "unsupported field code: "+fieldCodes[i];
         }
         position += lengths[i];
-        position += delims[i];
+        position += delims[i].length;
     }
+    
+    timeWidth= createTimeStruct(false);
+    switch ( smallestField ) {
+        case 0:
+            timeWidth.year= smallestFieldDelta;
+            break;
+        case 5:
+            timeWidth.month= smallestFieldDelta;
+            break;
+        case 8:
+            timeWidth.day= smallestFieldDelta;
+            break;
+        case 11:
+            timeWidth.hour= smallestFieldDelta;
+            break;
+        case 14:
+            timeWidth.minute= smallestFieldDelta;
+            break;
+        case 17:
+            timeWidth.second= smallestFieldDelta;
+            break;
+    }
+    
     return {
         prefix:ss[0],
         numberOfFields:i,
-        fieldcodes:fc,
+        fieldCodes:fieldCodes,
+        fieldModifiers:fieldModifiers,
         parseOffsets:parseOffsets,
         formatOffsets:formatOffsets,
         lengths:lengths,
         delims:delims,
+        deltas:deltas,
+        context:null, 
+        timeWidth:timeWidth,
         beginEndOffsets:beginEndOffset
     };
 }
