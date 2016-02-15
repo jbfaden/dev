@@ -3,8 +3,8 @@
  * processing.  The result will have 26*2+1 characters:
  * YYYY-mm-ddTHH:MM:SS.ssssss/YYYY-mm-ddTHH:MM:SS.ssssss
  * Note no Z's!
- * @param {String} timerange
- * @returns {String} 53-character ASCII string.
+ * @param {String} timerange a time range such as YYYY-mm-ddTHH:MM/YYYY-mm-ddTHH:MM
+ * @returns {String} 53-character ASCII string, in the format YYYY-mm-ddTHH:MM:SS.ssssss/YYYY-mm-ddTHH:MM:SS.ssssss
  */
 function makeCanonical( timerange ) {
     l= Math.floor( timerange.length / 2 );
