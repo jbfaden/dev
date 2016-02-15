@@ -174,6 +174,7 @@ function parse( spec, file ) {
                 case "subsec":
                     mult= Math.pow( 10, 9-spec.fieldModifiers[i].places );
                     time.nanos= mult * field;
+                    break;
                 default:
                     throw "unsupported field code: "+spec.fieldCodes[i];
             }            
@@ -231,17 +232,22 @@ function setup( spec ) {
     ss= spec.split( '$' );
     position= ss[0].length;
     
-    timeWidth= createTimeStruct()
+    timeWidth= createTimeStruct();
     smallestField= 0;
             
     for ( i=0; i<ss.length-1; i++ ) { 
         s= ss[i+1];
+        lengths[i]= -1; // we will update this, probably.
         if ( s.charAt(0)==='(' ) {
             index= s.indexOf(')');
             fcparams= s.substring(1,index);
             delims[i]= s.substring(index+1);
             fcparamsSplit= fcparams.split(";");
+            
             fieldCodes[i]= fcparamsSplit[0];
+            if ( fcparamsSplit[0].indexOf(",")>-1 ) {
+                throw "fieldCode contains comma: "+fcparamsSplit[0];
+            }
             deltas[i]= 1; // see below where this might be updated
             fieldModifiers[i]= {};
             for ( k=1; k<fcparamsSplit.length; k++ ) {
@@ -250,6 +256,7 @@ function setup( spec ) {
                 value= paramVal[1];
                 fieldModifiers[i][modifier]= value;
                 if ( modifier==="delta" ) deltas[i]= parseInt(value);
+                if ( modifier==="places" ) lengths[i]= parseInt(value);
             }
             //throw "parenthesis not yet implemented";
         } else {
@@ -259,7 +266,9 @@ function setup( spec ) {
         }
         parseOffsets[i]= position;
         beginEndOffset[i]= 0;
-        lengths[i]= fieldCodes[i]==="Y" ? 4 : 2 ;
+        if ( lengths[i]===-1 ) {
+            lengths[i]= fieldCodes[i]==="Y" ? 4 : 2 ;
+        }
         switch ( fieldCodes[i] ) {
             case "Y":
                 formatOffsets[i]= 0;
@@ -296,6 +305,13 @@ function setup( spec ) {
                 formatOffsets[i]= 17;
                 if ( smallestField<=17 ) {
                     smallestField= 17;
+                    smallestFieldDelta= deltas[i];
+                }
+                break;
+            case "subsec":
+                formatOffsets[i]= 20;
+                if ( smallestField<=20 ) {
+                    smallestField= 20;
                     smallestFieldDelta= deltas[i];
                 }
                 break;
