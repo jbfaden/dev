@@ -1,6 +1,7 @@
 
 package org.das2.sdi;
 
+import org.das2.datum.Units;
 import org.virbo.dataset.AbstractDataSet;
 import org.virbo.dataset.AbstractRank1DataSet;
 import org.virbo.dataset.MutablePropertyDataSet;
@@ -13,7 +14,7 @@ import sdi.data.SimpleBinnedData2D;
  * @see org.virbo.dataset.examples.Schemes#simpleSpectrogram() 
  */
 public class SimpleBinnedData2DAdapter {
-    protected static MutablePropertyDataSet getX( SimpleBinnedData2D data ) {
+    protected static MutablePropertyDataSet getX( SimpleBinnedData2D data) {
         AbstractRank1DataSet result= new AbstractRank1DataSet( data.sizeX() ) {
             @Override
             public double value(int i) {
@@ -37,7 +38,7 @@ public class SimpleBinnedData2DAdapter {
         return result;
     }
     
-    protected static MutablePropertyDataSet getY( SimpleBinnedData2D data ) {
+    protected static MutablePropertyDataSet getY( SimpleBinnedData2D data) {
         AbstractRank1DataSet result= new AbstractRank1DataSet( data.sizeY() ) {
             @Override
             public double value(int i) {
@@ -56,6 +57,7 @@ public class SimpleBinnedData2DAdapter {
                 return data.getYBin(i).getReference() - data.getYBin(i).getMin();
             }
         };
+
         result.putProperty( QDataSet.BIN_MINUS, binMinus );
         result.putProperty( QDataSet.BIN_PLUS, binPlus );
         return result;

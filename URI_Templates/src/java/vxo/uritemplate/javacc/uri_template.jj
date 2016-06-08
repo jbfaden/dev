@@ -1,0 +1,144 @@
+options
+{
+  DEBUG_TOKEN_MANAGER=false;
+  JDK_VERSION = "1.5";
+  static = false;
+  VISITOR=true;
+  MULTI=true;
+}
+
+PARSER_BEGIN(URISpec)
+package vxo.uritemplate.javacc;
+import java.io.*;
+
+public class URISpec
+{
+
+}
+
+PARSER_END(URISpec)
+
+
+SimpleNode TemplateURI() : {}
+{
+
+   ( PlainText() |  EncodedElement() )+
+   Eof()
+
+   { return jjtThis; }
+}
+
+void Eof() : {}
+{
+   <EOF>
+}
+
+void PlainText() : {Token t;}
+{
+   t=<TEXT>
+   { 
+      // Un-escape any double marker instances.
+      // I.e., if the text contains $$ or %%, replace with $ or % respectively.
+      String s0 =  t.image;
+      String s1 = s0.replace("$$","$");
+      String s2 = s1.replace("%%","%");
+      jjtThis.value = s2;
+   }
+}
+
+void EncodedElement() : {}
+{
+   
+   Dollar() (
+                 SingleCharCode()
+               | OpenParen() ExtendedCode() CloseParen()
+            )
+}
+
+void Dollar() : {Token t;}
+{
+   <DOLLAR>
+}
+
+void OpenParen() : {Token t;} 
+{
+   <OPEN_PAREN>
+}
+
+void CloseParen() : {Token t;} 
+{
+   <CLOSE_PAREN>
+}
+
+
+void SingleCharCode() : {Token t;}
+{
+   t=<CODE_CHARACTER>    { jjtThis.value = t.image; }
+}
+
+void ExtendedCode() : { Token t; }
+{
+   MultiCharacterCode()
+          (
+             CodeToModSep() ModifierName() (NameValueSeparator() ModifierValue())?
+          )*
+}
+
+void MultiCharacterCode() : {Token t;}
+{
+   t=<VALID_IDENTIFIER>    { jjtThis.value = t.image; }
+}
+
+void CodeToModSep() : {}
+{
+   <CODE_TO_MOD_SEPARATOR>
+}
+
+void ModifierName() : {Token t;}
+{
+   t=<VALID_IDENTIFIER>   { jjtThis.value = t.image; }
+}
+
+void NameValueSeparator() : {}
+{
+   <NAME_VALUE_SEPARATOR>
+}
+
+void ModifierValue() : {Token t;}
+{
+     t=<DATE_VALUE_WITH_UNITS> { jjtThis.value = t.image; }
+  |  t=<INTEGER>               { jjtThis.value = t.image; }
+  |  t=<VALID_IDENTIFIER>      { jjtThis.value = t.image; }
+  |  t=<ALPHA_NUMERIC>         { jjtThis.value = t.image; }
+  |  t=<SINGLE_QUOTED_STRING>  { jjtThis.value = t.image; }
+
+}
+
+TOKEN :
+{
+  < TEXT : ("$$" | (~["$"]))+ >
+| < DOLLAR :  "$" > : DATE_CODE_LEVEL1
+}
+
+<DATE_CODE_LEVEL1>
+TOKEN :
+{
+  < OPEN_PAREN : "(" > : DATE_CODE_LEVEL2
+| < CODE_CHARACTER : ["a" - "z" , "A" - "Z"] > : DEFAULT
+}
+
+<DATE_CODE_LEVEL2>
+TOKEN :
+{
+  < CLOSE_PAREN : ")" > : DEFAULT
+| < VALID_IDENTIFIER : [ "a" - "z", "A" - "Z", "_" ] ([ "a" - "z", "A" - "Z" , "0" - "9", "_" ])* >
+| < DATE_VALUE_WITH_UNITS : <INTEGER><ALLOWED_DATE_UNITS_CODE> >
+| < INTEGER : (<DIGIT>)+ >
+| < ALPHA_NUMERIC : ([ "a" - "z", "A" - "Z" , "0" - "9", "_", ":", "-" ])+ >
+| < CODE_TO_MOD_SEPARATOR : ";" >
+| < NAME_VALUE_SEPARATOR : "=" >
+| < SINGLE_QUOTED_STRING : "'" ( "\\'" | ~["'"])+ "'" >
+| < #DIGIT : ["0"-"9"] >
+| < #ALLOWED_DATE_UNITS_CODE : ["Y","m","d","h","M","S"] >
+
+}

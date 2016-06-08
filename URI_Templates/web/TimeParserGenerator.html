@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TimeParserGenerator Javascript</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        Format results in: <div id="formatResult">TODO write content</div>
+        Parse results in: <div id="parseResult">TODO write content</div>
+        <script type="text/javascript" src="TimeParserGenerator.js">
+        </script>
+        <script>
+            document.getElementById('parseResult').innerHTML= setup("/tmp/$Y$m$d.dat");
+            //x= createTimeStruct()
+            //document.getElementById('formatResult').innerHTML= x;
+            //document.getElementById('formatResult').innerHTML= 'x';
+            //document.getElementById('formatResult').innerHTML= makeCanonical("2016-01-17T00:00:00/2016-01-18T00:00:00");;
+            //document.getElementById('formatResult').innerHTML= sprintf("%05d",2);
+            document.getElementById('parseResult').innerHTML= parse("/tmp/$Y$m$d.dat", "/tmp/20160117.dat");
+            document.getElementById('parseResult').innerHTML= parse("/tmp/$Y$m$(d;delta=3).dat", "/tmp/20160117.dat");
+            document.getElementById('parseResult').innerHTML= parse("/tmp/$Y$m$d_$(Y,delta=3).dat", "/tmp/20160117.dat");
+            document.getElementById('formatResult').innerHTML= format("/tmp/$Y$m$d.dat", "2016-01-17T00:00:00/2016-01-18T00:00:00" );
+            //document.getElementById('formatResult').innerHTML= format("/tmp/$Y$m$d.dat", "2016-01-17T00:00:00Z/2016-01-18T00:00:00Z" );
+            //document.getElementById('formatResult').innerHTML= format("/tmp/$Y$m$d_$H$M$S.dat", "2016-01-17T23:24:25/2016-01-17T23:40:41" );
+        </script>
+    </body>
+</html>
