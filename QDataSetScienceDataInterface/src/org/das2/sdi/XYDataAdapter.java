@@ -34,6 +34,7 @@ public class XYDataAdapter extends SimpleXYDataAdapter {
         y.putProperty( QDataSet.DELTA_MINUS, Adapter.getUPAdapter( y, xydata.getYUncertProvider(), false ) );
         y.putProperty( QDataSet.DELTA_PLUS, Adapter.getUPAdapter( y, xydata.getYUncertProvider(), true ) );
         y.putProperty( QDataSet.WEIGHTS, Adapter.getWeights( y, xydata.getFillDetector() ) );
+        y.putProperty( QDataSet.TITLE, meta.getName());
         return y;
     }
 

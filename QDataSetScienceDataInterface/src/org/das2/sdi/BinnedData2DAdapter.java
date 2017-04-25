@@ -54,9 +54,10 @@ public class BinnedData2DAdapter extends SimpleBinnedData2DAdapter {
         dep1.putProperty( QDataSet.UNITS, yUnits);
         dep1.putProperty( QDataSet.LABEL, md.getYLabel() );
         dep1.putProperty( QDataSet.NAME, md.getYName() );
-        ds.putProperty( QDataSet.UNITS, Units.lookupUnits( md.getZUnits().getName() ) );
+        ds.putProperty( QDataSet.UNITS, zUnits );
         ds.putProperty( QDataSet.LABEL, md.getZLabel() );
         ds.putProperty( QDataSet.NAME, md.getZName() );
+        ds.putProperty( QDataSet.TITLE, md.getName());
 
         
         return ds;
