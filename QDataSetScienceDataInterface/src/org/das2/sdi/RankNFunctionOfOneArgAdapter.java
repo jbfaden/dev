@@ -14,6 +14,12 @@ import sdi.data.XYMetadata;
 import sdi.functions.ScalarFunctionOfOneArg;
 
 public class RankNFunctionOfOneArgAdapter {
+	private static final Boolean LOCK_OBJECT = new Boolean(false);
+
+	public static Boolean getLockObject() {
+		return LOCK_OBJECT;
+	}
+
 	public static QFunction adapt(Iterable<? extends ScalarFunctionOfOneArg> funcsOfOneArg, QDataSet exampleInput) {
 		if (funcsOfOneArg == null) throw new NullPointerException();
 		if (!funcsOfOneArg.iterator().hasNext()) throw new IllegalArgumentException();
@@ -25,7 +31,7 @@ public class RankNFunctionOfOneArgAdapter {
 				if (rank > 1) throw new IllegalArgumentException("Arguments to QFunction.value must have rank 0 or 1");
 				QDataSet arg = rank == 0 ? parm : parm.slice(0);
 		        BundleDataSet outbds= BundleDataSet.createRank0Bundle();
-		        synchronized (this) {
+		        synchronized (getLockObject()) {
 		        	for (ScalarFunctionOfOneArg each: funcsOfOneArg) {
 		        		XYMetadata md = each.get();
 		        		Units yUnits = getUnits(md.getYUnits());
