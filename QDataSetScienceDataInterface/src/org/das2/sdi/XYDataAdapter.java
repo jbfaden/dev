@@ -2,8 +2,9 @@
 package org.das2.sdi;
 
 import org.das2.datum.Units;
-import org.virbo.dataset.MutablePropertyDataSet;
-import org.virbo.dataset.QDataSet;
+import org.das2.qds.MutablePropertyDataSet;
+import org.das2.qds.QDataSet;
+
 import sdi.data.XYData;
 import sdi.data.XYMetadata;
 

@@ -1,14 +1,15 @@
 package org.das2.sdi;
 
 import java.awt.Color;
+
 import org.das2.datum.Units;
-import org.virbo.dataset.AbstractQFunction;
-import org.virbo.dataset.BundleDataSet;
-import org.virbo.dataset.DRank0DataSet;
-import org.virbo.dataset.DataSetUtil;
-import org.virbo.dataset.QDataSet;
-import org.virbo.dataset.QFunction;
-import org.virbo.dsops.Ops;
+import org.das2.qds.AbstractQFunction;
+import org.das2.qds.BundleDataSet;
+import org.das2.qds.DRank0DataSet;
+import org.das2.qds.DataSetUtil;
+import org.das2.qds.QDataSet;
+import org.das2.qds.QFunction;
+import org.das2.qds.ops.Ops;
 
 import sdi.data.XYMetadata;
 import sdi.functions.ScalarFunctionOfOneArg;

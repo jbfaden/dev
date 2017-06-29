@@ -2,6 +2,7 @@
 package org.das2.sdi;
 
 import java.util.Optional;
+
 import sdi.data.Bin;
 import sdi.data.BinnedData1D;
 import sdi.data.BinnedData2D;

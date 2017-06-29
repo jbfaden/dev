@@ -2,9 +2,10 @@
 package org.das2.sdi;
 
 import org.das2.datum.Units;
-import org.virbo.dataset.MutablePropertyDataSet;
-import org.virbo.dataset.QDataSet;
-import org.virbo.dsops.Ops;
+import org.das2.qds.MutablePropertyDataSet;
+import org.das2.qds.QDataSet;
+import org.das2.qds.ops.Ops;
+
 import sdi.data.XYZData;
 import sdi.data.XYZMetadata;
 

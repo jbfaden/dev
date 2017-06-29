@@ -1,11 +1,12 @@
 
 package org.das2.sdi;
 
-import org.virbo.dataset.DataSetUtil;
-import org.virbo.dataset.QDataSet;
-import org.virbo.dataset.SemanticOps;
-import org.virbo.dataset.examples.Schemes;
-import org.virbo.dsops.Ops;
+import org.das2.qds.DataSetUtil;
+import org.das2.qds.QDataSet;
+import org.das2.qds.SemanticOps;
+import org.das2.qds.examples.Schemes;
+import org.das2.qds.ops.Ops;
+
 import sdi.data.Bin;
 import sdi.data.SimpleBinnedData2D;
 

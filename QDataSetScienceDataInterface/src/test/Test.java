@@ -4,18 +4,20 @@ package test;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.autoplot.ScriptContext;
 import org.das2.datum.Units;
+import org.das2.qds.DataSetOps;
+import org.das2.qds.QDataSet;
+import org.das2.qds.SemanticOps;
+import org.das2.qds.examples.Schemes;
+import org.das2.qds.ops.Ops;
 import org.das2.sdi.Adapter;
 import org.das2.sdi.BinnedData2DAdapter;
 import org.das2.sdi.Operations;
 import org.das2.sdi.XYDataAdapter;
 import org.das2.sdi.XYZDataAdapter;
-import org.virbo.autoplot.ScriptContext;
-import org.virbo.dataset.DataSetOps;
-import org.virbo.dataset.QDataSet;
-import org.virbo.dataset.SemanticOps;
-import org.virbo.dataset.examples.Schemes;
-import org.virbo.dsops.Ops;
+
 import sdi.data.BinnedData1D;
 import sdi.data.BinnedData2D;
 import sdi.data.ContiguousBinnedData1D;
@@ -360,7 +362,7 @@ class Test {
     }
     
     public static void test9() {
-        try {
+//        try {
             QDataSet sample= Ops.randn(300);
             QDataSet hist= Ops.autoHistogram(sample);
             ScriptContext.createGui();
@@ -369,9 +371,10 @@ class Test {
             for ( int i=0; i<ds.size(); i++ ) {
                 System.err.printf(" %3d: %f - %f %d\n", i, ds.getXBinLo(i), i==ds.size()-1 ? ds.getLastXBinHi() : ds.getXBinLo(i+1), (int)ds.getY(i) );
             }
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    // This code evidently no longer throws interruptions? -Jon V. 2017-06-29
+//        } catch (InterruptedException ex) {
+//            Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
+//        }
         
     }
     
