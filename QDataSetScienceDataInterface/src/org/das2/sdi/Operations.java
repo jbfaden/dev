@@ -121,6 +121,15 @@ public class Operations {
         }
     }
             
+    public static Optional<FillDetector> sliceFillDetectorAtY( final Optional<FillDetector2D> ofill, final int jSlice ) {
+        if ( ofill.isPresent() ) {
+            final FillDetector2D fillDetector1= ofill.get();
+            return Optional.of( (FillDetector) (int i) -> fillDetector1.isFill(i, jSlice) );
+        } else {
+            return Optional.empty();
+        }
+    }
+            
         
     public static Optional<UncertaintyProvider> sliceUncertAtX( final Optional<UncertaintyProvider2D> uncert, final int iSlice ) {
         if ( uncert.isPresent() ) {
@@ -139,9 +148,27 @@ public class Operations {
             return Optional.empty();
         }
     }
-            
+
+    public static Optional<UncertaintyProvider> sliceUncertAtY( final Optional<UncertaintyProvider2D> uncert, final int jSlice ) {
+        if ( uncert.isPresent() ) {
+            final UncertaintyProvider2D uncert1= uncert.get();
+            return Optional.of( new UncertaintyProvider() {
+                @Override
+                public double getUncertPlus(int i) {
+                    return uncert1.getUncertPlus( i, jSlice );
+                }
+                @Override
+                public double getUncertMinus(int i) {
+                    return uncert1.getUncertMinus( i, jSlice );
+                }
+            });
+        } else {
+            return Optional.empty();
+        }
+    }
+
     /**
-     * Slice the 2-D data at the index.
+     * Slice the 2-D data at the provided "i" index.
      * @param ds the dataset.
      * @param iSlice the index.
      * @return the slice in a BinnedData1D
@@ -178,6 +205,49 @@ public class Operations {
             @Override
             public double getY(int i) {
                 return ds.getZ( iSlice, i );
+            }
+            
+        };
+    }
+
+    /**
+     * Slice the 2-D data at the provided "j" index.
+     * @param ds the dataset.
+     * @param jSlice the index.
+     * @return the slice in a BinnedData1D
+     */
+    public static BinnedData1D sliceAtY( BinnedData2D ds, final int jSlice ) {
+        
+        return new BinnedData1D() {
+
+            @Override
+            public Optional<FillDetector> getFillDetector() {
+                return sliceFillDetectorAtY( ds.getFillDetector(), jSlice );
+            }
+
+            @Override
+            public Optional<UncertaintyProvider> getYUncertProvider() {
+                return sliceUncertAtY( ds.getZUncertProvider(), jSlice );
+            }
+
+            @Override
+            public XYMetadata getMetadata() {
+                return sliceMetadataOnY( ds.getMetadata() );
+            }
+
+            @Override
+            public int size() {
+                return ds.sizeX();
+            }
+
+            @Override
+            public Bin getXBin(int i) {
+                return ds.getXBin(i);
+            }
+
+            @Override
+            public double getY(int i) {
+                return ds.getZ( i, jSlice );
             }
             
         };
