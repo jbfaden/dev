@@ -59,4 +59,8 @@ public class ForwardingBinnedData2D implements BinnedData2D {
 	public XYZMetadata getMetadata() {
 		return data.getMetadata();
 	}
+
+	protected BinnedData2D getInputData() {
+		return data;
+	}
 }
