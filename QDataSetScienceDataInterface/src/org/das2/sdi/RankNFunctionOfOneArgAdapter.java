@@ -61,7 +61,7 @@ public class RankNFunctionOfOneArgAdapter {
 
 	public static Units getUnits(sdi.data.Units name) {
 		try {
-	        return Units.getByName(name.getName());
+	        return Units.getByName(name.getName().trim());
 		} catch (@SuppressWarnings("unused") Exception e) {
 			return Units.dimensionless;
 		}
