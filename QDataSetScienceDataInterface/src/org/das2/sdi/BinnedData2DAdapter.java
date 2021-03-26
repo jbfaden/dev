@@ -1,31 +1,66 @@
 
 package org.das2.sdi;
 
+import java.util.Optional;
+
 import org.das2.datum.Units;
+import org.das2.qds.AbstractDataSet;
 import org.das2.qds.MutablePropertyDataSet;
 import org.das2.qds.QDataSet;
 
 import sdi.data.BinnedData2D;
+import sdi.data.FillDetector2D;
+import sdi.data.SimpleBinnedData2D;
 import sdi.data.XYZMetadata;
 
 /**
- * Adapts BinnedData2D to QDataSet
+ * Adapts {@link BinnedData2D} to an equivalent {@link QDataSet}.
  * 
  * @author faden@cottagesystems.com
  */
 public class BinnedData2DAdapter extends SimpleBinnedData2DAdapter {
 
   /**
-   * return a QDataSet for BinnedData1D
+   * Return a {@link QDataSet} for an input instance of type {@link BinnedData2D}. This method returns
+   * the result of calling {@link #adapt(BinnedData2D, Double)}, passing null for the fill argument.
    * 
-   * @param data the BinnedData1D
-   * @return a QDataSet
+   * @param data the BinnedData2D
+   * @return an equivalent QDataSet
    */
   public static QDataSet adapt(BinnedData2D data) {
+    return adapt(data, null);
+  }
+
+  /**
+   * Return a {@link QDataSet} for an input instance of type {@link BinnedData2D}. If the input data's
+   * optional "Fill" detector (returned by the {@link BinnedData2D#getFillDetector()} method) is
+   * present, the output data set will return one specific special value whenever Fill is detected by
+   * the detector. The special value used is controlled by the specified fill argument.
+   * <p>
+   * If the specified fill argument is non-null, its value is used as the special "Fill" value. If the
+   * fill argument is null, {@link QDataSet#DEFAULT_FILL_VALUE} will be used instead.
+   * <p>
+   * The fill argument is also always assigned to the output data set's {@link QDataSet#FILL_VALUE}
+   * property AS-IS, whether or not it is null, and whether or not the fill detector is present. This
+   * gives the caller complete control over the output data set's Fill handling.
+   * 
+   * @param data the BinnedData2D
+   * @param fill the value to return if fill is detected, and to use for the
+   *        {@link QDataSet#FILL_VALUE} property
+   * @return a QDataSet
+   */
+  public static QDataSet adapt(BinnedData2D data, Double fill) {
 
     MutablePropertyDataSet dep0 = getX(data);
     MutablePropertyDataSet dep1 = getY(data);
-    MutablePropertyDataSet ds = getZ(data);
+
+    MutablePropertyDataSet ds;
+    Optional<FillDetector2D> fillDetector = data.getFillDetector();
+    if (fillDetector.isPresent()) {
+      ds = getZ(data, fillDetector.get(), fill);
+    } else {
+      ds = getZ(data);
+    }
 
     XYZMetadata md = data.getMetadata();
     Units xUnits = Units.lookupUnits(md.getXUnits().getName());
@@ -60,9 +95,36 @@ public class BinnedData2DAdapter extends SimpleBinnedData2DAdapter {
     ds.putProperty(QDataSet.LABEL, md.getZLabel());
     ds.putProperty(QDataSet.NAME, md.getZName());
     ds.putProperty(QDataSet.TITLE, md.getName());
-
+    ds.putProperty(QDataSet.FILL_VALUE, fill);
 
     return ds;
+  }
+
+  protected static MutablePropertyDataSet getZ(SimpleBinnedData2D data, FillDetector2D fillDetector, Double fill) {
+    double fillToUse = fill != null ? fill.doubleValue() : QDataSet.DEFAULT_FILL_VALUE;
+
+    return new AbstractDataSet() {
+      @Override
+      public int rank() {
+        return 2;
+      }
+
+      @Override
+      public double value(int i, int j) {
+        return fillDetector.isFill(i, j) ? fillToUse : data.getZ(i, j);
+      }
+
+      @Override
+      public int length() {
+        return data.sizeX();
+      }
+
+      @SuppressWarnings("unused")
+      @Override
+      public int length(int i) {
+        return data.sizeY();
+      }
+    };
   }
 
   private static void addUnits(Object property, Units u) {
