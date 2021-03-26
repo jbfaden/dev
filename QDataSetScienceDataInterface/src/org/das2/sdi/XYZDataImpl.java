@@ -2,7 +2,9 @@
 package org.das2.sdi;
 
 import java.util.Optional;
-import org.virbo.dataset.QDataSet;
+
+import org.das2.qds.QDataSet;
+
 import sdi.data.FillDetector;
 import sdi.data.UncertaintyProvider;
 import sdi.data.XYZData;

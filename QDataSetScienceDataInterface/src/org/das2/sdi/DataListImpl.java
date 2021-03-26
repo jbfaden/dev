@@ -1,9 +1,9 @@
 
 package org.das2.sdi;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ArrayList;
 
 /**
  * Example implementation of DataList wraps an unmodifiableList.

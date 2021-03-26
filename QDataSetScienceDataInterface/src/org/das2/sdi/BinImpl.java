@@ -1,7 +1,8 @@
 
 package org.das2.sdi;
 
-import org.virbo.dataset.QDataSet;
+import org.das2.qds.QDataSet;
+
 import sdi.data.Bin;
 
 /**

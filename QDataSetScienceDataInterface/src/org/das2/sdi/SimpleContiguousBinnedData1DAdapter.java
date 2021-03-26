@@ -1,9 +1,10 @@
 package org.das2.sdi;
 
-import org.virbo.dataset.AbstractDataSet;
-import org.virbo.dataset.AbstractRank1DataSet;
-import org.virbo.dataset.MutablePropertyDataSet;
-import org.virbo.dataset.QDataSet;
+import org.das2.qds.AbstractDataSet;
+import org.das2.qds.AbstractRank1DataSet;
+import org.das2.qds.MutablePropertyDataSet;
+import org.das2.qds.QDataSet;
+
 import sdi.data.SimpleContiguousBinnedData1D;
 
 

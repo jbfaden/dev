@@ -2,12 +2,14 @@
 package org.das2.sdi;
 
 import java.util.Optional;
-import org.virbo.dataset.AbstractRank1DataSet;
-import org.virbo.dataset.MutablePropertyDataSet;
-import org.virbo.dataset.QDataSet;
-import org.virbo.dataset.SemanticOps;
-import org.virbo.dataset.WeightsDataSet;
-import org.virbo.dsops.Ops;
+
+import org.das2.qds.AbstractRank1DataSet;
+import org.das2.qds.MutablePropertyDataSet;
+import org.das2.qds.QDataSet;
+import org.das2.qds.SemanticOps;
+import org.das2.qds.WeightsDataSet;
+import org.das2.qds.ops.Ops;
+
 import sdi.data.BinnedData1D;
 import sdi.data.BinnedData2D;
 import sdi.data.ContiguousBinnedData1D;

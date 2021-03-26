@@ -3,7 +3,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/guava-18.0.jar"/>
-	<classpathentry kind="lib" path="lib/Autoplot.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ScienceDataInterfaces"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/autoplot"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

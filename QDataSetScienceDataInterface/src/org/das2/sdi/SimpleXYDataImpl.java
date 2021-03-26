@@ -1,8 +1,9 @@
 
 package org.das2.sdi;
 
-import org.virbo.dataset.QDataSet;
-import org.virbo.dataset.SemanticOps;
+import org.das2.qds.QDataSet;
+import org.das2.qds.SemanticOps;
+
 import sdi.data.SimpleXYData;
 
 /**
