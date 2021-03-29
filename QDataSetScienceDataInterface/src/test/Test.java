@@ -5,7 +5,7 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.autoplot.ScriptContext;
+//import org.autoplot.ScriptContext;
 import org.das2.datum.Units;
 import org.das2.qds.DataSetOps;
 import org.das2.qds.QDataSet;
@@ -365,8 +365,8 @@ class Test {
 //        try {
             QDataSet sample= Ops.randn(300);
             QDataSet hist= Ops.autoHistogram(sample);
-            ScriptContext.createGui();
-            ScriptContext.plot(hist);
+//            ScriptContext.createGui();
+//            ScriptContext.plot(hist);
             ContiguousBinnedData1D ds= Adapter.adaptContiguousBinnedData1D( hist );
             for ( int i=0; i<ds.size(); i++ ) {
                 System.err.printf(" %3d: %f - %f %d\n", i, ds.getXBinLo(i), i==ds.size()-1 ? ds.getLastXBinHi() : ds.getXBinLo(i+1), (int)ds.getY(i) );
