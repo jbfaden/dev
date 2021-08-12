@@ -4,6 +4,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/guava-18.0.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ScienceDataInterfaces"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/autoplot"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/das2java"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
